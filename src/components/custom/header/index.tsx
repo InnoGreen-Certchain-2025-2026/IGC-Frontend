@@ -3,11 +3,11 @@ import { Link } from "react-router";
 
 export default function Header() {
   const navLinks = [
-    { name: "Home", href: "/landing-page" },
-    { name: "About Us", href: "#about" },
-    { name: "Service", href: "#service" },
-    { name: "Plans", href: "#plans" },
-    { name: "Contact", href: "#contact" },
+    { name: "Trang Chủ", href: "/landing-page" },
+    { name: "Giới Thiệu", href: "#about" },
+    { name: "Dịch Vụ", href: "#service" },
+    { name: "Gói Dịch Vụ", href: "#plans" },
+    { name: "Liên Hệ", href: "#contact" },
   ];
 
   return (
@@ -42,10 +42,10 @@ export default function Header() {
         {/* Auth Buttons */}
         <div className="flex items-center space-x-3">
           <Button variant="ghost" asChild className="text-blue-700 hover:text-blue-800 hover:bg-blue-50">
-            <Link to="/auth-page">Login</Link>
+            <Link to="/auth-page">Đăng Nhập</Link>
           </Button>
           <Button className="bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-100 px-6 font-semibold" asChild>
-            <Link to="/auth-page">Get Started</Link>
+            <Link to="/auth-page">Bắt Đầu</Link>
           </Button>
         </div>
       </div>

@@ -10,16 +10,16 @@ export default function Footer() {
           <div className="flex items-center space-x-2">
              <span className="text-xl font-bold text-blue-900 italic">IGC</span>
              <span className="text-gray-400">|</span>
-             <p className="text-sm text-gray-500">InnoGreen Certchain Platform</p>
+             <p className="text-sm text-gray-500">Nền Tảng Chứng Chỉ InnoGreen</p>
           </div>
           
           <div className="flex space-x-6 text-sm text-gray-500">
-            <Link to="#" className="hover:text-blue-600 transition-colors">Privacy Policy</Link>
-            <Link to="#" className="hover:text-blue-600 transition-colors">Terms of Service</Link>
+            <Link to="#" className="hover:text-blue-600 transition-colors">Chính Sách Bảo Mật</Link>
+            <Link to="#" className="hover:text-blue-600 transition-colors">Điều Khoản Dịch Vụ</Link>
           </div>
 
           <p className="text-sm text-gray-400">
-            &copy; {currentYear} IGC. All rights reserved.
+            &copy; {currentYear} IGC. Bảo lưu mọi quyền.
           </p>
         </div>
       </div>
