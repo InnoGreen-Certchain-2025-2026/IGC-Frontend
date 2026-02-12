@@ -11,20 +11,17 @@ export default function LandingPage() {
       
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative w-full py-24 lg:py-32 overflow-hidden bg-blue-50/50">
-          {/* Background Image - Using img tag for better visibility */}
+        <section className="relative w-full py-24 lg:py-32 overflow-hidden">
+          {/* Background Image */}
           <img 
             src="/homepage-hero-bg.png" 
             alt="World Map Background"
-            className="absolute inset-0 z-0 w-full h-full object-cover opacity-100"
+            className="absolute inset-0 z-[1] w-full h-full object-cover"
           />
-          <div className="absolute inset-0 z-0 bg-white/60" />
+          {/* Light overlay for text readability */}
+          <div className="absolute inset-0 z-[2] bg-white/30" />
 
-
-
-
-          
-          <div className="container relative z-10 mx-auto px-4 flex flex-col items-center text-center">
+          <div className="container relative z-[3] mx-auto px-4 flex flex-col items-center text-center">
             <h1 className="text-4xl md:text-6xl font-extrabold text-[#006666] tracking-tight mb-6 leading-tight max-w-4xl">
               Search and Verify <br />
               <span className="text-[#004d4d]">IGC Certification & More</span>
