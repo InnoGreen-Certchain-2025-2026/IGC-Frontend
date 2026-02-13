@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/features/hooks";
 import { logout } from "@/features/auth/authSlice";
+import { logoutApi } from "@/services/authService";
 import { getAvatarFallback } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -22,7 +23,12 @@ export default function UserMenu() {
   const navigate = useNavigate();
   const { name, email, avatarUrl } = useAppSelector((state) => state.auth);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await logoutApi();
+    } catch {
+      // still clear local state even if API fails
+    }
     dispatch(logout());
     navigate("/auth", { replace: true });
   };

@@ -1,8 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { executeLogin } from "./authThunk";
+import { fetchMe } from "../user/userThunk";
+import type { DefaultAuthResponse } from "@/types/auth/DefaultAuthResponse";
 
 export interface AuthState {
-  accessToken: string | null;
   email: string | null;
   name: string | null;
   avatarUrl: string | null;
@@ -12,7 +13,6 @@ export interface AuthState {
 }
 
 const initialState: AuthState = {
-  accessToken: null,
   email: null,
   name: null,
   avatarUrl: null,
@@ -26,7 +26,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout(state) {
-      state.accessToken = null;
+      localStorage.removeItem("access_token");
       state.email = null;
       state.name = null;
       state.avatarUrl = null;
@@ -37,6 +37,13 @@ const authSlice = createSlice({
     clearError(state) {
       state.error = null;
     },
+    setTokens(state, action: PayloadAction<DefaultAuthResponse>) {
+      const { accessToken, userSessionResponse } = action.payload;
+      localStorage.setItem("access_token", accessToken);
+      state.email = userSessionResponse.email;
+      state.name = userSessionResponse.name;
+      state.avatarUrl = userSessionResponse.avatarUrl;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -46,7 +53,7 @@ const authSlice = createSlice({
       })
       .addCase(executeLogin.fulfilled, (state, action) => {
         const { accessToken, userSessionResponse } = action.payload;
-        state.accessToken = accessToken;
+        localStorage.setItem("access_token", accessToken);
         state.email = userSessionResponse.email;
         state.name = userSessionResponse.name;
         state.avatarUrl = userSessionResponse.avatarUrl;
@@ -57,9 +64,23 @@ const authSlice = createSlice({
       .addCase(executeLogin.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ?? "Đã có lỗi xảy ra";
+      })
+      .addCase(fetchMe.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchMe.fulfilled, (state, action) => {
+        state.email = action.payload.email;
+        state.name = action.payload.name;
+        state.avatarUrl = action.payload.avatarUrl;
+        state.loading = false;
+      })
+      .addCase(fetchMe.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ?? "Không thể tải thông tin người dùng";
       });
   },
 });
 
-export const { logout, clearError } = authSlice.actions;
+export const { logout, clearError, setTokens } = authSlice.actions;
 export default authSlice.reducer;

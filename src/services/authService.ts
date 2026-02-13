@@ -26,3 +26,11 @@ export const registerApi = async (
   );
 };
 
+export const logoutApi = async (): Promise<void> => {
+  await axios.post(
+    `${BASE_URL}/auth/logout`,
+    null,
+    { withCredentials: true }
+  );
+};
+
