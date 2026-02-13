@@ -1,7 +1,6 @@
 import { createBrowserRouter, Navigate } from "react-router";
 import LandingPage from "@/pages/public-route-pages/landing-page";
 import AuthPage from "@/pages/public-route-pages/auth-page";
-import AdminDashboard from "@/pages/app-route-pages/admin-dashboard";
 
 import ProtectedRoute from "@/components/custom/protected-route/ProtectedRoute";
 import PublicOnlyRoute from "@/components/custom/protected-route/PublicOnlyRoute";
@@ -9,7 +8,9 @@ import PublicOnlyRoute from "@/components/custom/protected-route/PublicOnlyRoute
 import UserDashboardLayout from "@/pages/app-route-pages/user-dashboard/UserDashboardLayout";
 import GeneralPage from "@/pages/app-route-pages/user-dashboard/general";
 import CertificatesPage from "@/pages/app-route-pages/user-dashboard/certificates";
-import AccountPage from "@/pages/app-route-pages/user-dashboard/account";
+import AccountLayout from "@/pages/app-route-pages/user-dashboard/account/AccountLayout";
+import ProfilePage from "@/pages/app-route-pages/user-dashboard/account/profile";
+import SecurityPage from "@/pages/app-route-pages/user-dashboard/account/security";
 
 export const router = createBrowserRouter([
   /* Redirect root */
@@ -37,10 +38,16 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <GeneralPage /> },
           { path: "certificates", element: <CertificatesPage /> },
-          { path: "account", element: <AccountPage /> },
+          {
+            path: "account",
+            element: <AccountLayout />,
+            children: [
+              { path: "profile", element: <ProfilePage /> },
+              { path: "security", element: <SecurityPage /> },
+            ],
+          },
         ],
       },
-      { path: "/admin-dashboard", element: <AdminDashboard /> },
     ],
   },
 
