@@ -42,13 +42,14 @@ export default function Header() {
         {/* Auth Buttons */}
         <div className="flex items-center space-x-3">
           <Button variant="ghost" asChild className="text-blue-700 hover:text-blue-800 hover:bg-blue-50">
-            <Link to="/auth-page">Đăng Nhập</Link>
+            <Link to="/auth?mode=sign-in">Đăng Nhập</Link>
           </Button>
           <Button className="bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-100 px-6 font-semibold" asChild>
-            <Link to="/auth-page">Bắt Đầu</Link>
+            <Link to="/auth?mode=sign-up">Đăng Ký</Link>
           </Button>
         </div>
       </div>
     </header>
   );
 }
+
