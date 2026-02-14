@@ -33,7 +33,7 @@ export default function AuthPage() {
   const [regPhone, setRegPhone] = useState("");
   const [regAddress, setRegAddress] = useState("");
   const [regDob, setRegDob] = useState("2010-01-01");
-  const [regGender, setRegGender] = useState("other");
+  const [regGender, setRegGender] = useState("MALE");
 
   // Password visibility
   const [showLoginPassword, setShowLoginPassword] = useState(false);
@@ -75,7 +75,7 @@ export default function AuthPage() {
           phoneNumber: regPhone,
           address: regAddress,
           dob: regDob,
-          gender: regGender.toUpperCase() as "MALE" | "FEMALE" | "OTHER",
+          gender: regGender as any,
           password: regPassword,
         })
       ).unwrap();
@@ -303,9 +303,9 @@ export default function AuthPage() {
                           <SelectValue placeholder="Chọn" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="male">Nam</SelectItem>
-                          <SelectItem value="female">Nữ</SelectItem>
-                          <SelectItem value="other">Khác</SelectItem>
+                          <SelectItem value="MALE">Nam</SelectItem>
+                          <SelectItem value="FEMALE">Nữ</SelectItem>
+                          <SelectItem value="OTHER">Khác</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>

@@ -11,9 +11,9 @@ import { Eye, EyeOff } from "lucide-react";
  */
 export default function SecurityPage() {
   const [form, setForm] = useState({
-    currentPassword: "",
+    oldPassword: "",
     newPassword: "",
-    confirmPassword: "",
+    confirmedNewPassword: "",
   });
 
   const [showCurrent, setShowCurrent] = useState(false);
@@ -38,15 +38,14 @@ export default function SecurityPage() {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Current password */}
           <div className="space-y-1.5">
-            <Label htmlFor="currentPassword">Mật khẩu hiện tại</Label>
+            <Label htmlFor="oldPassword">Mật khẩu hiện tại <span className="text-red-500">*</span></Label>
             <div className="relative">
               <Input
-                id="currentPassword"
-                name="currentPassword"
+                id="oldPassword"
+                name="oldPassword"
                 type={showCurrent ? "text" : "password"}
-                value={form.currentPassword}
+                value={form.oldPassword}
                 onChange={handleChange}
-                placeholder="Nhập mật khẩu hiện tại"
                 className="pr-10"
               />
               <button
@@ -61,7 +60,7 @@ export default function SecurityPage() {
 
           {/* New password */}
           <div className="space-y-1.5">
-            <Label htmlFor="newPassword">Mật khẩu mới</Label>
+            <Label htmlFor="newPassword">Mật khẩu mới <span className="text-red-500">*</span></Label>
             <div className="relative">
               <Input
                 id="newPassword"
@@ -69,7 +68,6 @@ export default function SecurityPage() {
                 type={showNew ? "text" : "password"}
                 value={form.newPassword}
                 onChange={handleChange}
-                placeholder="Nhập mật khẩu mới"
                 className="pr-10"
               />
               <button
@@ -84,15 +82,14 @@ export default function SecurityPage() {
 
           {/* Confirm new password */}
           <div className="space-y-1.5">
-            <Label htmlFor="confirmPassword">Nhập lại mật khẩu mới</Label>
+            <Label htmlFor="confirmedNewPassword">Nhập lại mật khẩu mới <span className="text-red-500">*</span></Label>
             <div className="relative">
               <Input
-                id="confirmPassword"
-                name="confirmPassword"
+                id="confirmedNewPassword"
+                name="confirmedNewPassword"
                 type={showConfirm ? "text" : "password"}
-                value={form.confirmPassword}
+                value={form.confirmedNewPassword}
                 onChange={handleChange}
-                placeholder="Nhập lại mật khẩu mới"
                 className="pr-10"
               />
               <button
