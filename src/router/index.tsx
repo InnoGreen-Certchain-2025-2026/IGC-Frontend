@@ -11,6 +11,7 @@ import CertificatesPage from "@/pages/app-route-pages/certificates";
 import AccountLayout from "@/pages/app-route-pages/account/AccountLayout";
 import ProfilePage from "@/pages/app-route-pages/account/profile";
 import SecurityPage from "@/pages/app-route-pages/account/security";
+import OrganizationsPage from "@/pages/app-route-pages/organizations";
 
 export const router = createBrowserRouter([
   /* Redirect root */
@@ -38,6 +39,7 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <GeneralPage /> },
           { path: "certificates", element: <CertificatesPage /> },
+          { path: "organizations", element: <OrganizationsPage /> },
           {
             path: "account",
             element: <AccountLayout />,

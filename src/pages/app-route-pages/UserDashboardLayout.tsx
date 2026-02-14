@@ -8,6 +8,7 @@ import {
   Check,
   Settings,
   Plus,
+  Building2,
 } from "lucide-react";
 import {
   Popover,
@@ -17,7 +18,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import UserMenu from "@/components/custom/user-menu/UserMenu";
 
-const NAV_ITEMS = [
+const MAIN_NAV_ITEMS = [
   {
     to: "/user-dashboard",
     label: "Chung",
@@ -28,6 +29,15 @@ const NAV_ITEMS = [
     to: "/user-dashboard/certificates",
     label: "Danh sách bằng cấp",
     icon: ScrollText,
+    end: false,
+  },
+];
+
+const BOTTOM_NAV_ITEMS = [
+  {
+    to: "/user-dashboard/organizations",
+    label: "Tổ chức",
+    icon: Building2,
     end: false,
   },
   {
@@ -48,6 +58,7 @@ function usePageTitle(): string {
   const { pathname } = useLocation();
   if (pathname.includes("/certificates")) return "Danh sách bằng cấp";
   if (pathname.includes("/account")) return "Tài khoản người dùng";
+  if (pathname.includes("/organizations")) return "Quản lý tổ chức";
   return "Tổng quan";
 }
 
@@ -139,8 +150,10 @@ export default function UserDashboardLayout() {
 
         {/* Navigation */}
         <nav className="flex-1 px-3 py-2 flex flex-col gap-0.5">
-          <span className="text-[0.7rem] uppercase tracking-wider text-white/45 px-2 pt-3 pb-1.5 font-semibold">Danh mục</span>
-          {NAV_ITEMS.map((item) => (
+          <span className="text-[0.7rem] uppercase tracking-wider text-white/45 px-2 pt-3 pb-1.5 font-semibold">
+            Danh mục
+          </span>
+          {MAIN_NAV_ITEMS.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
@@ -157,6 +170,29 @@ export default function UserDashboardLayout() {
               {item.label}
             </NavLink>
           ))}
+
+          {/* Bottom section */}
+          <div className="mt-auto pt-4 flex flex-col gap-0.5">
+            <span className="text-[0.7rem] uppercase tracking-wider text-white/45 px-2 pb-1.5 font-semibold">
+              Cài đặt
+            </span>
+            {BOTTOM_NAV_ITEMS.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) =>
+                  `flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium no-underline transition-all duration-150 [&>svg]:w-[18px] [&>svg]:h-[18px] [&>svg]:flex-shrink-0 ${
+                    isActive
+                      ? "bg-white/18 text-white font-semibold"
+                      : "text-white/78 hover:bg-white/10 hover:text-white"
+                  }`
+                }
+              >
+                <item.icon />
+                {item.label}
+              </NavLink>
+            ))}
+          </div>
         </nav>
 
         <div className="px-4 py-3 border-t border-white/12 text-[0.7rem] text-white/40 text-center">
