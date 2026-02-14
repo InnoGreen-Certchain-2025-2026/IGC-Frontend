@@ -5,12 +5,12 @@ import AuthPage from "@/pages/public-route-pages/auth-page";
 import ProtectedRoute from "@/components/custom/protected-route/ProtectedRoute";
 import PublicOnlyRoute from "@/components/custom/protected-route/PublicOnlyRoute";
 
-import UserDashboardLayout from "@/pages/app-route-pages/user-dashboard/UserDashboardLayout";
-import GeneralPage from "@/pages/app-route-pages/user-dashboard/general";
-import CertificatesPage from "@/pages/app-route-pages/user-dashboard/certificates";
-import AccountLayout from "@/pages/app-route-pages/user-dashboard/account/AccountLayout";
-import ProfilePage from "@/pages/app-route-pages/user-dashboard/account/profile";
-import SecurityPage from "@/pages/app-route-pages/user-dashboard/account/security";
+import UserDashboardLayout from "@/pages/app-route-pages/UserDashboardLayout";
+import GeneralPage from "@/pages/app-route-pages/general";
+import CertificatesPage from "@/pages/app-route-pages/certificates";
+import AccountLayout from "@/pages/app-route-pages/account/AccountLayout";
+import ProfilePage from "@/pages/app-route-pages/account/profile";
+import SecurityPage from "@/pages/app-route-pages/account/security";
 
 export const router = createBrowserRouter([
   /* Redirect root */

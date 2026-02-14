@@ -3,13 +3,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { updatePasswordApi } from "@/services/authService";
+import { toast } from "sonner";
 
 /**
  * Security sub-page under Account.
  * Allows the user to change their password.
  */
 export default function SecurityPage() {
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     oldPassword: "",
     newPassword: "",
@@ -24,9 +27,34 @@ export default function SecurityPage() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: dispatch change password thunk
+    
+    if (!form.oldPassword || !form.newPassword || !form.confirmedNewPassword) {
+      toast.error("Vui lòng nhập đầy đủ tất cả thông tin.");
+      return;
+    }
+
+    if (form.newPassword !== form.confirmedNewPassword) {
+      toast.error("Mật khẩu mới và nhập lại mật khẩu không khớp.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await updatePasswordApi(form);
+      toast.success("Cập nhật mật khẩu thành công!");
+      setForm({
+        oldPassword: "",
+        newPassword: "",
+        confirmedNewPassword: "",
+      });
+    } catch (error: any) {
+      const message = error.response?.data?.errorMessage || "Cập nhật mật khẩu thất bại";
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -103,7 +131,16 @@ export default function SecurityPage() {
           </div>
 
           <div className="pt-2">
-            <Button type="submit">Cập nhật</Button>
+            <Button type="submit" disabled={loading} className="min-w-[120px]">
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Đang lưu...
+                </>
+              ) : (
+                "Cập nhật"
+              )}
+            </Button>
           </div>
         </form>
       </CardContent>

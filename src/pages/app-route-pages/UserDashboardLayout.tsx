@@ -38,9 +38,9 @@ const NAV_ITEMS = [
   },
 ];
 
-/** Dummy workspace list */
-const WORKSPACES = [
-  { id: "personal", label: "Không gian cá nhân" },
+/** Dummy organization list */
+const ORGANIZATIONS = [
+  { id: "personal", label: "Cá nhân" },
 ];
 
 /** Returns a page title based on the current pathname */
@@ -56,11 +56,11 @@ function usePageTitle(): string {
  * Deep-blue sidebar with navigation + white content area rendering child routes.
  */
 export default function UserDashboardLayout() {
-  const [activeWorkspace, setActiveWorkspace] = useState("personal");
-  const [wsOpen, setWsOpen] = useState(false);
+  const [activeOrganization, setActiveOrganization] = useState("personal");
+  const [orgOpen, setOrgOpen] = useState(false);
   const pageTitle = usePageTitle();
 
-  const currentWs = WORKSPACES.find((w) => w.id === activeWorkspace);
+  const currentOrg = ORGANIZATIONS.find((w) => w.id === activeOrganization);
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -71,16 +71,16 @@ export default function UserDashboardLayout() {
           <span>IGC Platform</span>
         </div>
 
-        {/* Workspace selector */}
+        {/* Organization selector */}
         <div className="px-4 pt-4 pb-2">
           <label className="block text-[0.7rem] uppercase tracking-wider text-white/55 mb-1.5 font-semibold">
-            Không gian làm việc
+            Tổ chức
           </label>
-          <Popover open={wsOpen} onOpenChange={setWsOpen}>
+          <Popover open={orgOpen} onOpenChange={setOrgOpen}>
             <PopoverTrigger asChild>
               <button className="w-full bg-white/10 border border-white/15 text-white rounded-lg px-3 py-2 text-sm cursor-pointer transition-colors duration-150 flex items-center justify-between gap-2 hover:bg-white/18 focus:bg-white/18">
                 <span className="overflow-hidden text-ellipsis whitespace-nowrap">
-                  {currentWs?.label ?? "Chọn không gian"}
+                  {currentOrg?.label ?? "Chọn tổ chức"}
                 </span>
                 <ChevronsUpDown className="h-4 w-4 opacity-60 flex-shrink-0" />
               </button>
@@ -94,28 +94,28 @@ export default function UserDashboardLayout() {
               {/* Header */}
               <div className="px-3 py-2.5">
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  Chuyển không gian
+                  Chuyển tổ chức
                 </p>
               </div>
               <Separator />
 
-              {/* Workspace list */}
+              {/* Organization list */}
               <div className="py-1">
-                {WORKSPACES.map((ws) => (
+                {ORGANIZATIONS.map((org) => (
                   <button
-                    key={ws.id}
+                    key={org.id}
                     onClick={() => {
-                      setActiveWorkspace(ws.id);
-                      setWsOpen(false);
+                      setActiveOrganization(org.id);
+                      setOrgOpen(false);
                     }}
                     className="flex items-center gap-2.5 w-full px-3 py-2 text-sm text-gray-700 bg-transparent border-none cursor-pointer text-left transition-colors duration-100 hover:bg-gray-100"
                   >
-                    {activeWorkspace === ws.id ? (
+                    {activeOrganization === org.id ? (
                       <Check className="h-4 w-4 text-blue-600 flex-shrink-0" />
                     ) : (
                       <span className="h-4 w-4 flex-shrink-0" />
                     )}
-                    <span>{ws.label}</span>
+                    <span>{org.label}</span>
                   </button>
                 ))}
               </div>
@@ -126,11 +126,11 @@ export default function UserDashboardLayout() {
               <div className="py-1">
                 <button className="flex items-center gap-2.5 w-full px-3 py-2 text-[0.82rem] font-medium text-gray-500 bg-transparent border-none cursor-pointer text-left transition-all duration-100 hover:bg-gray-100 hover:text-gray-900">
                   <Settings className="h-4 w-4" />
-                  Quản lý không gian làm việc
+                  Quản lý tổ chức
                 </button>
                 <button className="flex items-center gap-2.5 w-full px-3 py-2 text-[0.82rem] font-medium text-gray-500 bg-transparent border-none cursor-pointer text-left transition-all duration-100 hover:bg-gray-100 hover:text-gray-900">
                   <Plus className="h-4 w-4" />
-                  Tạo không gian làm việc
+                  Tạo tổ chức mới
                 </button>
               </div>
             </PopoverContent>
