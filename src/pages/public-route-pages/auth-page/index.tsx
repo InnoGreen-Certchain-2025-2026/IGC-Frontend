@@ -30,7 +30,9 @@ export default function AuthPage() {
   const [regName, setRegName] = useState("");
   const [regEmail, setRegEmail] = useState("");
   const [regPassword, setRegPassword] = useState("");
-  const [regDob, setRegDob] = useState("2000-01-01");
+  const [regPhone, setRegPhone] = useState("");
+  const [regAddress, setRegAddress] = useState("");
+  const [regDob, setRegDob] = useState("2010-01-01");
   const [regGender, setRegGender] = useState("other");
 
   // Password visibility
@@ -60,8 +62,8 @@ export default function AuthPage() {
   };
 
   const handleRegister = async () => {
-    if (!regName || !regEmail || !regPassword) {
-      toast.error("Vui lòng nhập đầy đủ họ tên, email và mật khẩu.");
+    if (!regName || !regEmail || !regPassword || !regPhone || !regAddress || !regDob || !regGender) {
+      toast.error("Vui lòng nhập đầy đủ tất cả thông tin.");
       return;
     }
     setRegisterLoading(true);
@@ -70,8 +72,11 @@ export default function AuthPage() {
         executeRegister({
           name: regName,
           email: regEmail,
+          phoneNumber: regPhone,
+          address: regAddress,
+          dob: regDob,
+          gender: regGender.toUpperCase() as "MALE" | "FEMALE" | "OTHER",
           password: regPassword,
-          dob: regDob || undefined,
         })
       ).unwrap();
       toast.success("Đăng ký thành công! Vui lòng đăng nhập.");
@@ -200,11 +205,10 @@ export default function AuthPage() {
               {activeTab === "sign-in" ? (
                 <div className="space-y-6">
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-xs font-bold uppercase tracking-wider text-gray-400">Email công việc</Label>
+                    <Label htmlFor="email" className="text-xs font-bold uppercase tracking-wider text-gray-400">Email công việc <span className="text-red-500">*</span></Label>
                     <Input
                       id="email"
                       type="email"
-                      placeholder="name@company.com"
                       value={loginEmail}
                       onChange={(e) => setLoginEmail(e.target.value)}
                       className="h-12 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl"
@@ -212,7 +216,7 @@ export default function AuthPage() {
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <Label htmlFor="password" className="text-xs font-bold uppercase tracking-wider text-gray-400">Mật khẩu</Label>
+                      <Label htmlFor="password" className="text-xs font-bold uppercase tracking-wider text-gray-400">Mật khẩu <span className="text-red-500">*</span></Label>
                       <button className="text-xs font-bold text-blue-600 hover:text-blue-700">Quên mật khẩu?</button>
                     </div>
                     <div className="relative">
@@ -244,29 +248,46 @@ export default function AuthPage() {
               ) : (
                 <div className="space-y-5">
                   <div className="space-y-2">
-                    <Label htmlFor="fullname" className="text-xs font-bold uppercase tracking-wider text-gray-400">Họ và tên</Label>
+                    <Label htmlFor="fullname" className="text-xs font-bold uppercase tracking-wider text-gray-400">Họ và tên <span className="text-red-500">*</span></Label>
                     <Input
                       id="fullname"
-                      placeholder="Nguyễn Văn A"
                       value={regName}
                       onChange={(e) => setRegName(e.target.value)}
                       className="h-11 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="reg-email" className="text-xs font-bold uppercase tracking-wider text-gray-400">Email</Label>
+                    <Label htmlFor="reg-email" className="text-xs font-bold uppercase tracking-wider text-gray-400">Email <span className="text-red-500">*</span></Label>
                     <Input
                       id="reg-email"
                       type="email"
-                      placeholder="name@example.com"
                       value={regEmail}
                       onChange={(e) => setRegEmail(e.target.value)}
                       className="h-11 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl"
                     />
                   </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="reg-phone" className="text-xs font-bold uppercase tracking-wider text-gray-400">Số điện thoại <span className="text-red-500">*</span></Label>
+                    <Input
+                      id="reg-phone"
+                      type="tel"
+                      value={regPhone}
+                      onChange={(e) => setRegPhone(e.target.value)}
+                      className="h-11 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="reg-address" className="text-xs font-bold uppercase tracking-wider text-gray-400">Địa chỉ <span className="text-red-500">*</span></Label>
+                    <Input
+                      id="reg-address"
+                      value={regAddress}
+                      onChange={(e) => setRegAddress(e.target.value)}
+                      className="h-11 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl"
+                    />
+                  </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="dob" className="text-xs font-bold uppercase tracking-wider text-gray-400">Ngày sinh</Label>
+                      <Label htmlFor="dob" className="text-xs font-bold uppercase tracking-wider text-gray-400">Ngày sinh <span className="text-red-500">*</span></Label>
                       <Input 
                         id="dob" 
                         type="date" 
@@ -276,7 +297,7 @@ export default function AuthPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="gender" className="text-xs font-bold uppercase tracking-wider text-gray-400">Giới tính</Label>
+                      <Label htmlFor="gender" className="text-xs font-bold uppercase tracking-wider text-gray-400">Giới tính <span className="text-red-500">*</span></Label>
                       <Select value={regGender} onValueChange={setRegGender}>
                         <SelectTrigger id="gender" className="h-11 border-gray-200 focus:border-blue-500 rounded-xl">
                           <SelectValue placeholder="Chọn" />
@@ -291,7 +312,7 @@ export default function AuthPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="reg-password" className="text-xs font-bold uppercase tracking-wider text-gray-400">Mật khẩu</Label>
+                    <Label htmlFor="reg-password" className="text-xs font-bold uppercase tracking-wider text-gray-400">Mật khẩu <span className="text-red-500">*</span></Label>
                     <div className="relative">
                       <Input
                         id="reg-password"

@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 /**
  * Profile sub-page under Account.
@@ -16,10 +17,15 @@ export default function ProfilePage() {
     name: name ?? "",
     address: "",
     dob: "",
+    gender: "OTHER",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleGenderChange = (value: string) => {
+    setForm((prev) => ({ ...prev, gender: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -36,7 +42,7 @@ export default function ProfilePage() {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Name */}
           <div className="space-y-1.5">
-            <Label htmlFor="name">Họ và tên</Label>
+            <Label htmlFor="name">Họ và tên <span className="text-red-500">*</span></Label>
             <Input
               id="name"
               name="name"
@@ -48,7 +54,7 @@ export default function ProfilePage() {
 
           {/* Address */}
           <div className="space-y-1.5">
-            <Label htmlFor="address">Địa chỉ</Label>
+            <Label htmlFor="address">Địa chỉ <span className="text-red-500">*</span></Label>
             <Input
               id="address"
               name="address"
@@ -59,15 +65,32 @@ export default function ProfilePage() {
           </div>
 
           {/* Date of birth */}
-          <div className="space-y-1.5">
-            <Label htmlFor="dob">Ngày sinh</Label>
-            <Input
-              id="dob"
-              name="dob"
-              type="date"
-              value={form.dob}
-              onChange={handleChange}
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="dob">Ngày sinh <span className="text-red-500">*</span></Label>
+              <Input
+                id="dob"
+                name="dob"
+                type="date"
+                value={form.dob}
+                onChange={handleChange}
+              />
+            </div>
+
+            {/* Gender */}
+            <div className="space-y-1.5">
+              <Label htmlFor="gender">Giới tính <span className="text-red-500">*</span></Label>
+              <Select value={form.gender} onValueChange={handleGenderChange}>
+                <SelectTrigger id="gender">
+                  <SelectValue placeholder="Chọn giới tính" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="MALE">Nam</SelectItem>
+                  <SelectItem value="FEMALE">Nữ</SelectItem>
+                  <SelectItem value="OTHER">Khác</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="pt-2">
