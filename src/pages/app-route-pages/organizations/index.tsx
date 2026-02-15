@@ -1,4 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Plus, Building2, MailOpen } from "lucide-react";
 import { EmptyState } from "@/components/custom/empty-state/EmptyState";
@@ -8,6 +9,7 @@ import { EmptyState } from "@/components/custom/empty-state/EmptyState";
  * Features tabs for "My Organizations" and "Invitations".
  */
 export default function OrganizationsPage() {
+  const navigate = useNavigate();
   return (
     <div className="space-y-6">
       <header className="flex items-center justify-between">
@@ -26,7 +28,11 @@ export default function OrganizationsPage() {
         <TabsContent value="my-organizations" className="space-y-4">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-lg font-semibold">Danh sách tổ chức</h3>
-            <Button size="sm" className="gap-2">
+            <Button 
+              size="sm" 
+              className="gap-2"
+              onClick={() => navigate("/user-dashboard/organizations/create")}
+            >
               <Plus className="h-4 w-4" />
               Tạo tổ chức
             </Button>
@@ -37,7 +43,7 @@ export default function OrganizationsPage() {
             title="Chưa có tổ chức nào"
             description="Bạn chưa tham gia hoặc sở hữu tổ chức nào. Hãy tạo một tổ chức mới để bắt đầu."
             actionLabel="Tạo tổ chức ngay"
-            onAction={() => console.log("Create org")}
+            onAction={() => navigate("/user-dashboard/organizations/create")}
           />
         </TabsContent>
 

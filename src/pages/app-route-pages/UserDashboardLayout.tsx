@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useLocation } from "react-router";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router";
 import { useState } from "react";
 import {
   LayoutDashboard,
@@ -67,6 +67,7 @@ function usePageTitle(): string {
  * Deep-blue sidebar with navigation + white content area rendering child routes.
  */
 export default function UserDashboardLayout() {
+  const navigate = useNavigate();
   const [activeOrganization, setActiveOrganization] = useState("personal");
   const [orgOpen, setOrgOpen] = useState(false);
   const pageTitle = usePageTitle();
@@ -135,11 +136,23 @@ export default function UserDashboardLayout() {
 
               {/* Actions */}
               <div className="py-1">
-                <button className="flex items-center gap-2.5 w-full px-3 py-2 text-[0.82rem] font-medium text-gray-500 bg-transparent border-none cursor-pointer text-left transition-all duration-100 hover:bg-gray-100 hover:text-gray-900">
+                <button 
+                  onClick={() => {
+                    navigate("/user-dashboard/organizations");
+                    setOrgOpen(false);
+                  }}
+                  className="flex items-center gap-2.5 w-full px-3 py-2 text-[0.82rem] font-medium text-gray-500 bg-transparent border-none cursor-pointer text-left transition-all duration-100 hover:bg-gray-100 hover:text-gray-900"
+                >
                   <Settings className="h-4 w-4" />
                   Quản lý tổ chức
                 </button>
-                <button className="flex items-center gap-2.5 w-full px-3 py-2 text-[0.82rem] font-medium text-gray-500 bg-transparent border-none cursor-pointer text-left transition-all duration-100 hover:bg-gray-100 hover:text-gray-900">
+                <button 
+                  onClick={() => {
+                    navigate("/user-dashboard/organizations/create");
+                    setOrgOpen(false);
+                  }}
+                  className="flex items-center gap-2.5 w-full px-3 py-2 text-[0.82rem] font-medium text-gray-500 bg-transparent border-none cursor-pointer text-left transition-all duration-100 hover:bg-gray-100 hover:text-gray-900"
+                >
                   <Plus className="h-4 w-4" />
                   Tạo tổ chức mới
                 </button>
