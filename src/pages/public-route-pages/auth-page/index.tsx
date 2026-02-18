@@ -54,7 +54,9 @@ export default function AuthPage() {
   const [regPhone, setRegPhone] = useState("");
   const [regAddress, setRegAddress] = useState("");
   const [regDob, setRegDob] = useState("2010-01-01");
-  const [regGender, setRegGender] = useState("MALE");
+  const [regGender, setRegGender] = useState<"MALE" | "FEMALE" | "OTHER">(
+    "MALE",
+  );
 
   // Password visibility
   const [showLoginPassword, setShowLoginPassword] = useState(false);
@@ -79,8 +81,8 @@ export default function AuthPage() {
       ).unwrap();
       toast.success("Đăng nhập thành công!");
       navigate("/user-dashboard");
-    } catch (err: any) {
-      toast.error(err || "Đăng nhập thất bại");
+    } catch (err: unknown) {
+      toast.error((err as string) || "Đăng nhập thất bại");
     }
   };
 
@@ -106,7 +108,7 @@ export default function AuthPage() {
           phoneNumber: regPhone,
           address: regAddress,
           dob: regDob,
-          gender: regGender as any,
+          gender: regGender,
           password: regPassword,
         }),
       ).unwrap();
@@ -115,8 +117,8 @@ export default function AuthPage() {
       // Pre-fill login email
       setLoginEmail(regEmail);
       setLoginPassword("");
-    } catch (err: any) {
-      toast.error(err || "Đăng ký thất bại");
+    } catch (err: unknown) {
+      toast.error((err as string) || "Đăng ký thất bại");
     } finally {
       setRegisterLoading(false);
     }
@@ -176,7 +178,7 @@ export default function AuthPage() {
                 },
               ].map((item, i) => (
                 <div key={i} className="flex items-start space-x-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-blue-800/50 flex items-center justify-center text-blue-400">
+                  <div className="shrink-0 w-12 h-12 rounded-lg bg-blue-800/50 flex items-center justify-center text-blue-400">
                     {item.icon}
                   </div>
                   <div>
@@ -219,7 +221,7 @@ export default function AuthPage() {
         {/* Auth Form Container */}
         <div className="flex-1 flex items-center justify-center p-8">
           <Card className="w-full max-w-md border-none shadow-2xl shadow-blue-500/5 bg-white overflow-hidden rounded-2xl">
-            <div className="h-2 bg-gradient-to-r from-blue-600 to-blue-400" />
+            <div className="h-2 bg-linear-to-r from-blue-600 to-blue-400" />
             <CardHeader className="space-y-2 pt-8 text-center">
               <CardTitle className="text-3xl font-black text-blue-900 tracking-tight">
                 {activeTab === "sign-in" ? "Đăng Nhập" : "Đăng Ký"}
@@ -403,7 +405,12 @@ export default function AuthPage() {
                       >
                         Giới tính <span className="text-red-500">*</span>
                       </Label>
-                      <Select value={regGender} onValueChange={setRegGender}>
+                      <Select
+                        value={regGender}
+                        onValueChange={(val) =>
+                          setRegGender(val as "MALE" | "FEMALE" | "OTHER")
+                        }
+                      >
                         <SelectTrigger
                           id="gender"
                           className="h-11 border-gray-200 focus:border-blue-500 rounded-xl"
