@@ -1,7 +1,7 @@
 import axios, { type InternalAxiosRequestConfig, type AxiosError } from "axios";
 import type { DefaultAuthResponse } from "@/types/auth/DefaultAuthResponse";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -32,11 +32,9 @@ let refreshPromise: Promise<string> | null = null;
 
 const performRefreshToken = async (): Promise<string> => {
   try {
-    const response = await axios.post(
-      `${BASE_URL}/auth/refresh`,
-      null,
-      { withCredentials: true },
-    );
+    const response = await axios.post(`${BASE_URL}/auth/refresh`, null, {
+      withCredentials: true,
+    });
 
     const payload = response.data.data as DefaultAuthResponse;
 
