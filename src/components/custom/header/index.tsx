@@ -15,9 +15,11 @@ export default function Header() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <Link to="/landing-page" className="flex items-center space-x-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 text-white shadow-lg shadow-blue-200">
-            <span className="text-xl font-bold italic">G</span>
-          </div>
+          <img
+            src="/favicon/web-logo.png"
+            alt="IGC Logo"
+            className="h-10 w-10 object-contain"
+          />
           <span className="text-2xl font-black tracking-tighter text-blue-900 border-l-2 border-blue-100 pl-3 ml-1">
             IGC
           </span>
@@ -41,10 +43,17 @@ export default function Header() {
 
         {/* Auth Buttons */}
         <div className="flex items-center space-x-3">
-          <Button variant="ghost" asChild className="text-blue-700 hover:text-blue-800 hover:bg-blue-50">
+          <Button
+            variant="ghost"
+            asChild
+            className="text-blue-700 hover:text-blue-800 hover:bg-blue-50"
+          >
             <Link to="/auth?mode=sign-in">Đăng Nhập</Link>
           </Button>
-          <Button className="bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-100 px-6 font-semibold" asChild>
+          <Button
+            className="bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-100 px-6 font-semibold"
+            asChild
+          >
             <Link to="/auth?mode=sign-up">Đăng Ký</Link>
           </Button>
         </div>
@@ -52,4 +61,3 @@ export default function Header() {
     </header>
   );
 }
-

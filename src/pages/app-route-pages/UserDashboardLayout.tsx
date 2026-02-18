@@ -49,9 +49,7 @@ const BOTTOM_NAV_ITEMS = [
 ];
 
 /** Dummy organization list */
-const ORGANIZATIONS = [
-  { id: "personal", label: "Cá nhân" },
-];
+const ORGANIZATIONS = [{ id: "personal", label: "Cá nhân" }];
 
 /** Returns a page title based on the current pathname */
 function usePageTitle(): string {
@@ -79,7 +77,11 @@ export default function UserDashboardLayout() {
       {/* ── Sidebar ── */}
       <aside className="w-[272px] min-w-[272px] bg-gradient-to-b from-[#002B5B] to-[#001D3D] text-white flex flex-col overflow-y-auto">
         <div className="flex items-center gap-2.5 px-5 pt-6 pb-4 text-lg font-bold tracking-tight border-b border-white/12">
-          <div className="w-9 h-9 bg-white/18 rounded-[10px] flex items-center justify-center text-base">🔗</div>
+          <img
+            src="/favicon/web-logo.png"
+            alt="IGC Logo"
+            className="h-9 w-9 object-contain"
+          />
           <span>IGC Platform</span>
         </div>
 
@@ -136,7 +138,7 @@ export default function UserDashboardLayout() {
 
               {/* Actions */}
               <div className="py-1">
-                <button 
+                <button
                   onClick={() => {
                     navigate("/user-dashboard/organizations");
                     setOrgOpen(false);
@@ -146,7 +148,7 @@ export default function UserDashboardLayout() {
                   <Settings className="h-4 w-4" />
                   Quản lý tổ chức
                 </button>
-                <button 
+                <button
                   onClick={() => {
                     navigate("/user-dashboard/organizations/create");
                     setOrgOpen(false);
