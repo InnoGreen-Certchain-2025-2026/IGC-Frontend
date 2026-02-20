@@ -29,7 +29,7 @@ export default function PaginationBar({
   onPageChange,
   maxVisible = 5,
 }: PaginationBarProps) {
-  if (totalPages <= 1) return null;
+  if (totalPages <= 0) return null;
 
   /** Build the list of page numbers to show (0-indexed). */
   const getPageNumbers = (): (number | "ellipsis")[] => {
