@@ -5,24 +5,42 @@ import type { UserSessionResponse } from "../types/user/UserSessionResponse";
 import type { UpdateProfileRequest } from "@/types/user/UpdateProfileRequest";
 
 export const getMeApi = async (): Promise<ApiResponse<UserSessionResponse>> => {
-  const response = await axiosInstance.get<ApiResponse<UserSessionResponse>>(
-    "/users/me",
-  );
+  const response =
+    await axiosInstance.get<ApiResponse<UserSessionResponse>>("/users/me");
   return response.data;
 };
 
-export const getUserProfileApi = async (): Promise<ApiResponse<UserProfileResponse>> => {
-  const response = await axiosInstance.get<ApiResponse<UserProfileResponse>>(
-    "/users/me/profile",
-  );
+export const getUserProfileApi = async (): Promise<
+  ApiResponse<UserProfileResponse>
+> => {
+  const response =
+    await axiosInstance.get<ApiResponse<UserProfileResponse>>(
+      "/users/me/profile",
+    );
   return response.data;
 };
 
-export const updateUserProfileApi = async (data: UpdateProfileRequest): Promise<void> => {
-  const response = await axiosInstance.post(
-    "/users/me/profile",
-    data
-  );
+export const updateUserProfileApi = async (
+  data: UpdateProfileRequest,
+): Promise<void> => {
+  const response = await axiosInstance.post("/users/me/profile", data);
   return response.data;
 };
 
+export const updateUserAvatarApi = async (
+  file: File,
+): Promise<ApiResponse<void>> => {
+  const formData = new FormData();
+  formData.append("avatar", file);
+
+  const response = await axiosInstance.post<ApiResponse<void>>(
+    "/users/me/avatar",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    },
+  );
+  return response.data;
+};

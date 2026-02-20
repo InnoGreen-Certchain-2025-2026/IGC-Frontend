@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAppSelector } from "@/features/hooks";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getAvatarFallback } from "@/lib/utils";
+import { getAvatarFallback, getS3Url } from "@/lib/utils";
 
 /**
  * User account / profile page.
@@ -20,7 +20,9 @@ export default function AccountPage() {
         </CardHeader>
         <CardContent className="flex items-center gap-6">
           <Avatar className="h-20 w-20">
-            {avatarUrl && <AvatarImage src={avatarUrl} alt={name ?? ""} />}
+            {avatarUrl && (
+              <AvatarImage src={getS3Url(avatarUrl)} alt={name ?? ""} />
+            )}
             <AvatarFallback className="bg-blue-100 text-blue-700 text-2xl font-bold">
               {getAvatarFallback(name)}
             </AvatarFallback>

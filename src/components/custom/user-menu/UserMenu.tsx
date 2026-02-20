@@ -2,7 +2,7 @@ import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/features/hooks";
 import { logout } from "@/features/auth/authSlice";
 import { logoutApi } from "@/services/authService";
-import { getAvatarFallback } from "@/lib/utils";
+import { getAvatarFallback, getS3Url } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -38,13 +38,17 @@ export default function UserMenu() {
       <DropdownMenuTrigger asChild>
         <button className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-[10px] border border-gray-200 bg-white cursor-pointer transition-all duration-150 hover:bg-gray-100 hover:border-gray-300">
           <Avatar className="h-8 w-8">
-            {avatarUrl && <AvatarImage src={avatarUrl} alt={name ?? ""} />}
+            {avatarUrl && (
+              <AvatarImage src={getS3Url(avatarUrl)} alt={name ?? ""} />
+            )}
             <AvatarFallback className="bg-blue-100 text-blue-700 text-sm font-semibold">
               {getAvatarFallback(name)}
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col items-start leading-tight">
-            <span className="text-[0.82rem] font-semibold text-gray-900">{name ?? "Người dùng"}</span>
+            <span className="text-[0.82rem] font-semibold text-gray-900">
+              {name ?? "Người dùng"}
+            </span>
             <span className="text-[0.7rem] text-gray-500">{email ?? ""}</span>
           </div>
           <ChevronDown className="h-4 w-4 text-gray-400" />
@@ -62,7 +66,10 @@ export default function UserMenu() {
           Tài khoản
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600">
+        <DropdownMenuItem
+          onClick={handleLogout}
+          className="text-red-600 focus:text-red-600"
+        >
           <LogOut className="mr-2 h-4 w-4" />
           Đăng xuất
         </DropdownMenuItem>

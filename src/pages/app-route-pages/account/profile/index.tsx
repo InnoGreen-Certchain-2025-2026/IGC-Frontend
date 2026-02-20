@@ -1,14 +1,25 @@
 import { useState, useEffect } from "react";
+import type { AxiosError } from "axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { getUserProfileApi, updateUserProfileApi } from "@/services/userService";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  getUserProfileApi,
+  updateUserProfileApi,
+} from "@/services/userService";
 import { toast } from "sonner";
 import { useAppDispatch } from "@/features/hooks";
 import { fetchMe } from "@/features/user/userThunk";
 import { Loader2 } from "lucide-react";
+import type { UpdateProfileRequest } from "@/types/user/UpdateProfileRequest";
 
 /**
  * Profile sub-page under Account.
@@ -18,7 +29,7 @@ export default function ProfilePage() {
   const dispatch = useAppDispatch();
   const [updateLoading, setUpdateLoading] = useState(false);
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<UpdateProfileRequest>({
     name: "",
     phoneNumber: "",
     address: "",
@@ -40,7 +51,7 @@ export default function ProfilePage() {
             gender: gender ?? "OTHER",
           });
         }
-      } catch (error: any) {
+      } catch {
         toast.error("Không thể tải thông tin cá nhân");
       }
     };
@@ -53,19 +64,24 @@ export default function ProfilePage() {
   };
 
   const handleGenderChange = (value: string) => {
-    setForm((prev) => ({ ...prev, gender: value }));
+    setForm((prev) => ({
+      ...prev,
+      gender: value as "MALE" | "FEMALE" | "OTHER",
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setUpdateLoading(true);
     try {
-      await updateUserProfileApi(form as any);
+      await updateUserProfileApi(form);
       toast.success("Cập nhật hồ sơ thành công!");
       // Refresh global user state
       dispatch(fetchMe());
-    } catch (error: any) {
-      const message = error.response?.data?.errorMessage || "Cập nhật hồ sơ thất bại";
+    } catch (error) {
+      const axiosError = error as AxiosError<{ errorMessage?: string }>;
+      const message =
+        axiosError.response?.data?.errorMessage || "Cập nhật hồ sơ thất bại";
       toast.error(message);
     } finally {
       setUpdateLoading(false);
@@ -81,7 +97,9 @@ export default function ProfilePage() {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Name */}
           <div className="space-y-1.5">
-            <Label htmlFor="name">Họ và tên <span className="text-red-500">*</span></Label>
+            <Label htmlFor="name">
+              Họ và tên <span className="text-red-500">*</span>
+            </Label>
             <Input
               id="name"
               name="name"
@@ -93,7 +111,9 @@ export default function ProfilePage() {
 
           {/* Phone Number */}
           <div className="space-y-1.5">
-            <Label htmlFor="phoneNumber">Số điện thoại <span className="text-red-500">*</span></Label>
+            <Label htmlFor="phoneNumber">
+              Số điện thoại <span className="text-red-500">*</span>
+            </Label>
             <Input
               id="phoneNumber"
               name="phoneNumber"
@@ -105,7 +125,9 @@ export default function ProfilePage() {
 
           {/* Address */}
           <div className="space-y-1.5">
-            <Label htmlFor="address">Địa chỉ <span className="text-red-500">*</span></Label>
+            <Label htmlFor="address">
+              Địa chỉ <span className="text-red-500">*</span>
+            </Label>
             <Input
               id="address"
               name="address"
@@ -118,7 +140,9 @@ export default function ProfilePage() {
           {/* Date of birth */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label htmlFor="dob">Ngày sinh <span className="text-red-500">*</span></Label>
+              <Label htmlFor="dob">
+                Ngày sinh <span className="text-red-500">*</span>
+              </Label>
               <Input
                 id="dob"
                 name="dob"
@@ -130,7 +154,9 @@ export default function ProfilePage() {
 
             {/* Gender */}
             <div className="space-y-1.5">
-              <Label htmlFor="gender">Giới tính <span className="text-red-500">*</span></Label>
+              <Label htmlFor="gender">
+                Giới tính <span className="text-red-500">*</span>
+              </Label>
               <Select value={form.gender} onValueChange={handleGenderChange}>
                 <SelectTrigger id="gender">
                   <SelectValue placeholder="Chọn giới tính" />
@@ -145,7 +171,11 @@ export default function ProfilePage() {
           </div>
 
           <div className="pt-2">
-            <Button type="submit" disabled={updateLoading} className="min-w-[120px]">
+            <Button
+              type="submit"
+              disabled={updateLoading}
+              className="min-w-[120px]"
+            >
               {updateLoading ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
