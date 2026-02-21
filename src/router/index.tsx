@@ -5,27 +5,30 @@ import AuthPage from "@/pages/public-route-pages/auth-page";
 import ProtectedRoute from "@/components/custom/protected-route/ProtectedRoute";
 import PublicOnlyRoute from "@/components/custom/protected-route/PublicOnlyRoute";
 
-import UserDashboardLayout from "@/pages/app-route-pages/UserDashboardLayout";
-import GeneralPage from "@/pages/app-route-pages/general";
-import CertificatesPage from "@/pages/app-route-pages/certificates";
-import AccountLayout from "@/pages/app-route-pages/account/AccountLayout";
-import ProfilePage from "@/pages/app-route-pages/account/profile";
-import SecurityPage from "@/pages/app-route-pages/account/security";
-import OrganizationsPage from "@/pages/app-route-pages/organizations";
-import CreateOrganizationPage from "@/pages/app-route-pages/create-organization";
+// ── User Dashboard ──
+import UserDashboardLayout from "@/pages/app-route-pages/user-dashboard-pages/UserDashboardLayout";
+import GeneralPage from "@/pages/app-route-pages/user-dashboard-pages/general";
+import CertificatesPage from "@/pages/app-route-pages/user-dashboard-pages/certificates";
+import AccountLayout from "@/pages/app-route-pages/user-dashboard-pages/account/AccountLayout";
+import ProfilePage from "@/pages/app-route-pages/user-dashboard-pages/account/profile";
+import SecurityPage from "@/pages/app-route-pages/user-dashboard-pages/account/security";
+import OrganizationsPage from "@/pages/app-route-pages/user-dashboard-pages/organizations";
+import CreateOrganizationPage from "@/pages/app-route-pages/user-dashboard-pages/create-organization";
+
+// ── Organization Dashboard ──
+import OrgDashboardLayout from "@/pages/app-route-pages/org-dashboard-pages/OrgDashboardLayout";
+import OrgOverviewPage from "@/pages/app-route-pages/org-dashboard-pages/overview";
+import OrgMembersPage from "@/pages/app-route-pages/org-dashboard-pages/members";
+import OrgRolesPage from "@/pages/app-route-pages/org-dashboard-pages/roles";
+import OrgCertificatesPage from "@/pages/app-route-pages/org-dashboard-pages/certificates";
+import OrgSettingsPage from "@/pages/app-route-pages/org-dashboard-pages/settings";
 
 export const router = createBrowserRouter([
-  /* Redirect root */
-  {
-    path: "/",
-    element: <Navigate to="/landing-page" replace />,
-  },
-
   /* Public-only routes — authenticated users are redirected to dashboard */
   {
     element: <PublicOnlyRoute />,
     children: [
-      { path: "/landing-page", element: <LandingPage /> },
+      { path: "/", element: <LandingPage /> },
       { path: "/auth", element: <AuthPage /> },
     ],
   },
@@ -34,8 +37,9 @@ export const router = createBrowserRouter([
   {
     element: <ProtectedRoute />,
     children: [
+      /* ── User Dashboard ── */
       {
-        path: "/user-dashboard",
+        path: "/usr",
         element: <UserDashboardLayout />,
         children: [
           { index: true, element: <GeneralPage /> },
@@ -57,12 +61,25 @@ export const router = createBrowserRouter([
           },
         ],
       },
+
+      /* ── Organization Dashboard ── */
+      {
+        path: "/org/:orgId",
+        element: <OrgDashboardLayout />,
+        children: [
+          { index: true, element: <OrgOverviewPage /> },
+          { path: "members", element: <OrgMembersPage /> },
+          { path: "roles", element: <OrgRolesPage /> },
+          { path: "certificates", element: <OrgCertificatesPage /> },
+          { path: "settings", element: <OrgSettingsPage /> },
+        ],
+      },
     ],
   },
 
   /* Catch-all */
   {
     path: "*",
-    element: <Navigate to="/landing-page" replace />,
+    element: <Navigate to="/" replace />,
   },
 ]);

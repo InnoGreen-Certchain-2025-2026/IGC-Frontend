@@ -80,7 +80,7 @@ export default function AuthPage() {
         executeLogin({ email: loginEmail, password: loginPassword }),
       ).unwrap();
       toast.success("Đăng nhập thành công!");
-      navigate("/user-dashboard");
+      navigate("/usr");
     } catch (err: unknown) {
       toast.error((err as string) || "Đăng nhập thất bại");
     }
@@ -133,10 +133,7 @@ export default function AuthPage() {
         <div className="absolute bottom-0 left-0 -ml-24 -mb-24 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl" />
 
         <div className="relative z-10">
-          <Link
-            to="/landing-page"
-            className="flex items-center space-x-3 mb-16 group"
-          >
+          <Link to="/" className="flex items-center space-x-3 mb-16 group">
             <img
               src="/favicon/web-logo.png"
               alt="IGC Logo"
@@ -200,7 +197,7 @@ export default function AuthPage() {
       <div className="flex-1 flex flex-col bg-[#F8FAFC]">
         {/* Mobile Logo & Back Button */}
         <div className="lg:hidden p-6 flex items-center justify-between bg-white border-b border-gray-100">
-          <Link to="/landing-page" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2">
             <img
               src="/favicon/web-logo.png"
               alt="IGC Logo"
@@ -211,7 +208,7 @@ export default function AuthPage() {
             </span>
           </Link>
           <Link
-            to="/landing-page"
+            to="/"
             className="text-sm font-medium text-gray-500 flex items-center hover:text-blue-600"
           >
             <ArrowLeft className="w-4 h-4 mr-1" /> Trang chủ

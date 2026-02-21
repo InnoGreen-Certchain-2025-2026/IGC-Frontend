@@ -153,7 +153,7 @@ export default function OrganizationSelector() {
           <div className="py-1">
             <button
               onClick={() => {
-                navigate("/user-dashboard/organizations");
+                navigate("/usr/organizations");
                 setOrgOpen(false);
               }}
               className="flex items-center gap-2.5 w-full px-3 py-2 text-[0.82rem] font-medium text-gray-500 bg-transparent border-none cursor-pointer text-left transition-all duration-100 hover:bg-gray-100 hover:text-gray-900"
@@ -163,7 +163,7 @@ export default function OrganizationSelector() {
             </button>
             <button
               onClick={() => {
-                navigate("/user-dashboard/organizations/create");
+                navigate("/usr/organizations/create");
                 setOrgOpen(false);
               }}
               className="flex items-center gap-2.5 w-full px-3 py-2 text-[0.82rem] font-medium text-gray-500 bg-transparent border-none cursor-pointer text-left transition-all duration-100 hover:bg-gray-100 hover:text-gray-900"

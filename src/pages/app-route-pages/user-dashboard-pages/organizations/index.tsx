@@ -65,7 +65,7 @@ export default function OrganizationsPage() {
             <Button
               size="sm"
               className="gap-2"
-              onClick={() => navigate("/user-dashboard/organizations/create")}
+              onClick={() => navigate("/usr/organizations/create")}
             >
               <Plus className="h-4 w-4" />
               Tạo tổ chức
@@ -86,7 +86,7 @@ export default function OrganizationsPage() {
               title="Chưa có tổ chức nào"
               description="Bạn chưa tham gia hoặc sở hữu tổ chức nào. Hãy tạo một tổ chức mới để bắt đầu."
               actionLabel="Tạo tổ chức ngay"
-              onAction={() => navigate("/user-dashboard/organizations/create")}
+              onAction={() => navigate("/usr/organizations/create")}
             />
           )}
 
@@ -98,9 +98,7 @@ export default function OrganizationsPage() {
                   <OrganizationCard
                     key={org.id}
                     org={org}
-                    onClick={() =>
-                      navigate(`/user-dashboard/organizations/${org.id}`)
-                    }
+                    onClick={() => navigate(`/org/${org.id}`)}
                   />
                 ))}
               </div>

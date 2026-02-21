@@ -61,7 +61,7 @@ export default function UserMenu() {
           <p className="text-xs text-muted-foreground">{email ?? ""}</p>
         </div>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => navigate("/user-dashboard/account")}>
+        <DropdownMenuItem onClick={() => navigate("/usr/account")}>
           <User className="mr-2 h-4 w-4" />
           Tài khoản
         </DropdownMenuItem>

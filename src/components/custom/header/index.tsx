@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 export default function Header() {
   const navLinks = [
-    { name: "Trang Chủ", href: "/landing-page" },
+    { name: "Trang Chủ", href: "/" },
     { name: "Giới Thiệu", href: "#about" },
     { name: "Dịch Vụ", href: "#service" },
     { name: "Gói Dịch Vụ", href: "#plans" },
@@ -14,7 +14,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-blue-100 bg-white/80 backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
-        <Link to="/landing-page" className="flex items-center space-x-2">
+        <Link to="/" className="flex items-center space-x-2">
           <img
             src="/favicon/web-logo.png"
             alt="IGC Logo"

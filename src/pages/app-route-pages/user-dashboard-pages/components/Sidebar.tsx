@@ -9,13 +9,13 @@ import OrganizationSelector from "./OrganizationSelector";
 
 const MAIN_NAV_ITEMS = [
   {
-    to: "/user-dashboard",
+    to: "/usr",
     label: "Chung",
     icon: LayoutDashboard,
     end: true,
   },
   {
-    to: "/user-dashboard/certificates",
+    to: "/usr/certificates",
     label: "Danh sách bằng cấp",
     icon: ScrollText,
     end: false,
@@ -24,13 +24,13 @@ const MAIN_NAV_ITEMS = [
 
 const BOTTOM_NAV_ITEMS = [
   {
-    to: "/user-dashboard/organizations",
+    to: "/usr/organizations",
     label: "Tổ chức",
     icon: Building2,
     end: false,
   },
   {
-    to: "/user-dashboard/account",
+    to: "/usr/account",
     label: "Tài khoản người dùng",
     icon: UserCircle,
     end: false,

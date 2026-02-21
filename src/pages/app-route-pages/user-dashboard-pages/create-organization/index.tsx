@@ -129,7 +129,7 @@ export default function CreateOrganizationPage() {
     if (step > 1) {
       setStep(step - 1);
     } else {
-      navigate("/user-dashboard/organizations");
+      navigate("/usr/organizations");
     }
   };
 
@@ -194,7 +194,7 @@ export default function CreateOrganizationPage() {
     try {
       await createOrganizationApi(formData, logoFile);
       toast.success("Tạo tổ chức thành công!");
-      navigate("/user-dashboard/organizations");
+      navigate("/usr/organizations");
     } catch (error) {
       const axiosError = error as AxiosError<{ errorMessage?: string }>;
       const message =
