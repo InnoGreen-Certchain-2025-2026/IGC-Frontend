@@ -1,3 +1,5 @@
+import type { OrganizationRole } from "./OrganizationRole";
+
 export interface OrganizationSummaryResponse {
   id: number;
   name: string;
@@ -5,4 +7,5 @@ export interface OrganizationSummaryResponse {
   domain: string;
   logoUrl: string;
   description: string;
+  role: OrganizationRole;
 }

@@ -17,6 +17,11 @@ import { Separator } from "@/components/ui/separator";
 import { getUserBriefOrganizationsApi } from "@/services/organizationService";
 import type { OrganizationSummaryResponse } from "@/types/organization/OrganizationSummaryResponse";
 import { getS3Url } from "@/lib/utils";
+import { useAppDispatch, useAppSelector } from "@/features/hooks";
+import {
+  selectOrganization,
+  clearSelectedOrganization,
+} from "@/features/organization/organizationSlice";
 
 /**
  * Organization selector dropdown in the sidebar.
@@ -24,8 +29,12 @@ import { getS3Url } from "@/lib/utils";
  */
 export default function OrganizationSelector() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const selectedOrg = useAppSelector(
+    (state) => state.organization.selectedOrganization,
+  );
+
   const [orgOpen, setOrgOpen] = useState(false);
-  const [activeOrgId, setActiveOrgId] = useState<number | null>(null);
   const [organizations, setOrganizations] = useState<
     OrganizationSummaryResponse[]
   >([]);
@@ -44,7 +53,15 @@ export default function OrganizationSelector() {
       .finally(() => setLoading(false));
   }, []);
 
-  const currentOrg = organizations.find((o) => o.id === activeOrgId);
+  const handleSelectOrg = (org: OrganizationSummaryResponse) => {
+    dispatch(selectOrganization(org));
+    setOrgOpen(false);
+  };
+
+  const handleSelectPersonal = () => {
+    dispatch(clearSelectedOrganization());
+    setOrgOpen(false);
+  };
 
   return (
     <div className="px-4 pt-4 pb-2">
@@ -55,9 +72,9 @@ export default function OrganizationSelector() {
         <PopoverTrigger asChild>
           <button className="w-full bg-white/10 border border-white/15 text-white rounded-lg px-3 py-2 text-sm cursor-pointer transition-colors duration-150 flex items-center justify-between gap-2 hover:bg-white/18 focus:bg-white/18">
             <div className="flex items-center gap-2 overflow-hidden">
-              {currentOrg?.logoUrl ? (
+              {selectedOrg?.logoUrl ? (
                 <img
-                  src={getS3Url(currentOrg.logoUrl)}
+                  src={getS3Url(selectedOrg.logoUrl)}
                   alt=""
                   className="h-5 w-5 rounded object-cover shrink-0"
                 />
@@ -65,7 +82,7 @@ export default function OrganizationSelector() {
                 <Building2 className="h-4 w-4 opacity-60 shrink-0" />
               )}
               <span className="overflow-hidden text-ellipsis whitespace-nowrap">
-                {currentOrg?.name ?? "Cá nhân"}
+                {selectedOrg?.name ?? "Cá nhân"}
               </span>
             </div>
             <ChevronsUpDown className="h-4 w-4 opacity-60 shrink-0" />
@@ -95,13 +112,10 @@ export default function OrganizationSelector() {
               <>
                 {/* Personal (no org selected) */}
                 <button
-                  onClick={() => {
-                    setActiveOrgId(null);
-                    setOrgOpen(false);
-                  }}
+                  onClick={handleSelectPersonal}
                   className="flex items-center gap-2.5 w-full px-3 py-2 text-sm text-gray-700 bg-transparent border-none cursor-pointer text-left transition-colors duration-100 hover:bg-gray-100"
                 >
-                  {activeOrgId === null ? (
+                  {selectedOrg === null ? (
                     <Check className="h-4 w-4 text-blue-600 shrink-0" />
                   ) : (
                     <span className="h-4 w-4 shrink-0" />
@@ -114,13 +128,10 @@ export default function OrganizationSelector() {
                 {organizations.map((org) => (
                   <button
                     key={org.id}
-                    onClick={() => {
-                      setActiveOrgId(org.id);
-                      setOrgOpen(false);
-                    }}
+                    onClick={() => handleSelectOrg(org)}
                     className="flex items-center gap-2.5 w-full px-3 py-2 text-sm text-gray-700 bg-transparent border-none cursor-pointer text-left transition-colors duration-100 hover:bg-gray-100"
                   >
-                    {activeOrgId === org.id ? (
+                    {selectedOrg?.id === org.id ? (
                       <Check className="h-4 w-4 text-blue-600 shrink-0" />
                     ) : (
                       <span className="h-4 w-4 shrink-0" />

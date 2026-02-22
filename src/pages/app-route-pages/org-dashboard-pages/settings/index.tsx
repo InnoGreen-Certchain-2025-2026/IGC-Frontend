@@ -1,19 +1,21 @@
-import { useParams } from "react-router";
 import { Settings } from "lucide-react";
+import { useAppSelector } from "@/features/hooks";
 
 /**
  * Organization settings page.
  * Allows editing organization details and configuration.
  */
 export default function OrgSettingsPage() {
-  const { orgId } = useParams<{ orgId: string }>();
+  const selectedOrg = useAppSelector(
+    (state) => state.organization.selectedOrganization,
+  );
 
   return (
     <div className="space-y-6">
       <header>
         <h2 className="text-2xl font-bold tracking-tight">Cài đặt</h2>
         <p className="text-gray-500">
-          Quản lý thông tin và cấu hình cho tổ chức #{orgId}.
+          Quản lý thông tin và cấu hình cho tổ chức {selectedOrg?.name ?? ""}.
         </p>
       </header>
 

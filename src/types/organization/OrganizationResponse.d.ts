@@ -1,3 +1,5 @@
+import type { OrganizationRole } from "./OrganizationRole";
+
 export interface OrganizationResponse {
   id: number;
 
@@ -20,4 +22,7 @@ export interface OrganizationResponse {
 
   // THÔNG TIN DỊCH VỤ
   servicePlan: "FREE" | "PRO" | "ENTERPRISE";
+
+  // VAI TRÒ CỦA NGƯỜI GỌI
+  role: OrganizationRole;
 }

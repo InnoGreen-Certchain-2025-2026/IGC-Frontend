@@ -18,9 +18,9 @@ function useOrgPageTitle(): string {
  */
 export default function OrgDashboardLayout() {
   const pageTitle = useOrgPageTitle();
-  const { orgId } = useParams<{ orgId: string }>();
+  const { orgCode } = useParams<{ orgCode: string }>();
 
-  if (!orgId) return null;
+  if (!orgCode) return null;
 
   return (
     <div className="flex h-screen overflow-hidden">

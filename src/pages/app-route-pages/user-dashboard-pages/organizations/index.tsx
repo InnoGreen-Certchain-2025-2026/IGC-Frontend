@@ -9,6 +9,8 @@ import type { OrganizationSummaryResponse } from "@/types/organization/Organizat
 import PaginationBar from "@/components/custom/pagination/PaginationBar";
 import { getS3Url } from "@/lib/utils";
 import { useCallback } from "react";
+import { useAppDispatch } from "@/features/hooks";
+import { selectOrganization } from "@/features/organization/organizationSlice";
 
 /**
  * Organizations management page.
@@ -16,6 +18,7 @@ import { useCallback } from "react";
  */
 export default function OrganizationsPage() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const fetchOrgs = useCallback(
     (page: number, size: number) => getUserOrganizationsApi(page, size),
@@ -98,7 +101,10 @@ export default function OrganizationsPage() {
                   <OrganizationCard
                     key={org.id}
                     org={org}
-                    onClick={() => navigate(`/org/${org.id}`)}
+                    onClick={() => {
+                      dispatch(selectOrganization(org));
+                      navigate(`/org/${org.code}`);
+                    }}
                   />
                 ))}
               </div>

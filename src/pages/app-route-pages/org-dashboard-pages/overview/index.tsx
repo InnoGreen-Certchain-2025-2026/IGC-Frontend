@@ -1,12 +1,14 @@
-import { useParams } from "react-router";
 import { Users, ScrollText, ShieldCheck, TrendingUp } from "lucide-react";
+import { useAppSelector } from "@/features/hooks";
 
 /**
  * Organization overview page.
  * Displays key stats and quick links for the organization.
  */
 export default function OrgOverviewPage() {
-  const { orgId } = useParams<{ orgId: string }>();
+  const selectedOrg = useAppSelector(
+    (state) => state.organization.selectedOrganization,
+  );
 
   const stats = [
     {
@@ -40,7 +42,7 @@ export default function OrgOverviewPage() {
       <header>
         <h2 className="text-2xl font-bold tracking-tight">Tổng quan</h2>
         <p className="text-gray-500">
-          Xem tổng quan hoạt động của tổ chức #{orgId}.
+          Xem tổng quan hoạt động của tổ chức {selectedOrg?.name ?? ""}.
         </p>
       </header>
 

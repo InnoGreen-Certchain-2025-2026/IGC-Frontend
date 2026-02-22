@@ -64,7 +64,7 @@ export const router = createBrowserRouter([
 
       /* ── Organization Dashboard ── */
       {
-        path: "/org/:orgId",
+        path: "/org/:orgCode",
         element: <OrgDashboardLayout />,
         children: [
           { index: true, element: <OrgOverviewPage /> },

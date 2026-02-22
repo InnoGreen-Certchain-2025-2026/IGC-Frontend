@@ -7,11 +7,8 @@ import {
   Settings,
   ArrowLeft,
   Building2,
-  Loader2,
 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { getOrganizationByIdApi } from "@/services/organizationService";
-import type { OrganizationResponse } from "@/types/organization/OrganizationResponse";
+import { useAppSelector } from "@/features/hooks";
 import { getS3Url } from "@/lib/utils";
 
 const NAV_ITEMS = [
@@ -49,25 +46,14 @@ const NAV_ITEMS = [
 
 /**
  * Sidebar component for the organization dashboard.
- * Fetches org info and displays navigation links specific to managing an organization.
+ * Reads org info from the Redux store (selectedOrganization).
  */
 export default function OrgSidebar() {
   const navigate = useNavigate();
-  const { orgId } = useParams<{ orgId: string }>();
-  const [org, setOrg] = useState<OrganizationResponse | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!orgId) return;
-    getOrganizationByIdApi(Number(orgId))
-      .then((res) => {
-        if (res.data) setOrg(res.data);
-      })
-      .catch(() => {
-        // silently fail — layout header can still work
-      })
-      .finally(() => setLoading(false));
-  }, [orgId]);
+  const { orgCode } = useParams<{ orgCode: string }>();
+  const selectedOrg = useAppSelector(
+    (state) => state.organization.selectedOrganization,
+  );
 
   return (
     <aside className="w-[272px] min-w-[272px] bg-linear-to-b from-[#004D40] to-[#00251A] text-white flex flex-col overflow-y-auto">
@@ -83,33 +69,27 @@ export default function OrgSidebar() {
 
       {/* Organization info */}
       <div className="px-4 pt-4 pb-3 border-b border-white/12">
-        {loading ? (
-          <div className="flex items-center justify-center py-3">
-            <Loader2 className="h-5 w-5 animate-spin text-white/50" />
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-lg bg-white/15 flex items-center justify-center overflow-hidden shrink-0">
+            {selectedOrg?.logoUrl ? (
+              <img
+                src={getS3Url(selectedOrg.logoUrl)}
+                alt={selectedOrg.name}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <Building2 className="h-5 w-5 text-white/60" />
+            )}
           </div>
-        ) : (
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-lg bg-white/15 flex items-center justify-center overflow-hidden shrink-0">
-              {org?.logoUrl ? (
-                <img
-                  src={getS3Url(org.logoUrl)}
-                  alt={org.name}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <Building2 className="h-5 w-5 text-white/60" />
-              )}
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold truncate">
-                {org?.name ?? "Tổ chức"}
-              </p>
-              <p className="text-[0.7rem] text-white/50 truncate">
-                {org?.code ?? ""}
-              </p>
-            </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold truncate">
+              {selectedOrg?.name ?? "Tổ chức"}
+            </p>
+            <p className="text-[0.7rem] text-white/50 truncate">
+              {selectedOrg?.code ?? ""}
+            </p>
           </div>
-        )}
+        </div>
       </div>
 
       {/* Navigation */}
@@ -120,7 +100,7 @@ export default function OrgSidebar() {
         {NAV_ITEMS.map((item) => (
           <NavLink
             key={item.to}
-            to={`/org/${orgId}/${item.to}`}
+            to={`/org/${orgCode}/${item.to}`}
             end={item.end}
             className={({ isActive }) =>
               `flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium no-underline transition-all duration-150 [&>svg]:w-[18px] [&>svg]:h-[18px] [&>svg]:shrink-0 ${
