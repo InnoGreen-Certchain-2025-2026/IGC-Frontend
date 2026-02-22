@@ -11,8 +11,8 @@ import type { AxiosError } from "axios";
 import ImageCropperComponent from "@/components/custom/ImageCropperComponent";
 
 const TABS = [
-  { to: "/usr/account/profile", label: "Hồ sơ" },
-  { to: "/usr/account/security", label: "Bảo mật" },
+  { to: "/account/profile", label: "Hồ sơ" },
+  { to: "/account/security", label: "Bảo mật" },
 ];
 
 /**
@@ -31,8 +31,8 @@ export default function AccountLayout() {
   const [cropperSrc, setCropperSrc] = useState("");
 
   /* Redirect bare /account to /account/profile */
-  if (pathname === "/usr/account") {
-    return <Navigate to="/usr/account/profile" replace />;
+  if (pathname === "/account") {
+    return <Navigate to="/account/profile" replace />;
   }
 
   const handleAvatarClick = () => {

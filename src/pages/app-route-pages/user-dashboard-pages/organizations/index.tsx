@@ -136,6 +136,12 @@ export default function OrganizationsPage() {
 
 /* ── Organization Card ── */
 
+const ROLE_LABELS: Record<string, { label: string; color: string }> = {
+  OWNER: { label: "Chủ sở hữu", color: "bg-amber-100 text-amber-700" },
+  MODERATOR: { label: "Quản trị viên", color: "bg-blue-100 text-blue-700" },
+  MEMBER: { label: "Thành viên", color: "bg-gray-100 text-gray-600" },
+};
+
 function OrganizationCard({
   org,
   onClick,
@@ -143,6 +149,8 @@ function OrganizationCard({
   org: OrganizationSummaryResponse;
   onClick: () => void;
 }) {
+  const roleInfo = ROLE_LABELS[org.role] ?? ROLE_LABELS.MEMBER;
+
   return (
     <div
       onClick={onClick}
@@ -150,7 +158,7 @@ function OrganizationCard({
     >
       <div className="flex items-start gap-4 mb-3">
         {/* Logo */}
-        <div className="h-12 w-12 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+        <div className="h-12 w-12 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden shrink-0">
           {org.logoUrl ? (
             <img
               src={getS3Url(org.logoUrl)}
@@ -168,6 +176,13 @@ function OrganizationCard({
           </h4>
           <p className="text-xs text-gray-400 font-mono">{org.code}</p>
         </div>
+
+        {/* Role badge */}
+        <span
+          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[0.7rem] font-medium shrink-0 ${roleInfo.color}`}
+        >
+          {roleInfo.label}
+        </span>
       </div>
 
       {org.description && (

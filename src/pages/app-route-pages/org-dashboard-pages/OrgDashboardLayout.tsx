@@ -5,8 +5,9 @@ import OrgSidebar from "./components/OrgSidebar";
 /** Returns a page title based on the current pathname */
 function useOrgPageTitle(): string {
   const { pathname } = useLocation();
+  if (pathname.includes("/info")) return "Thông tin tổ chức";
   if (pathname.includes("/members")) return "Thành viên";
-  if (pathname.includes("/roles")) return "Vai trò & Quyền";
+  if (pathname.includes("/invites")) return "Lời mời";
   if (pathname.includes("/certificates")) return "Chứng chỉ";
   if (pathname.includes("/settings")) return "Cài đặt tổ chức";
   return "Tổng quan tổ chức";

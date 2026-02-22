@@ -56,11 +56,13 @@ export default function OrganizationSelector() {
   const handleSelectOrg = (org: OrganizationSummaryResponse) => {
     dispatch(selectOrganization(org));
     setOrgOpen(false);
+    navigate(`/org/${org.code}`);
   };
 
   const handleSelectPersonal = () => {
     dispatch(clearSelectedOrganization());
     setOrgOpen(false);
+    navigate("/usr");
   };
 
   return (

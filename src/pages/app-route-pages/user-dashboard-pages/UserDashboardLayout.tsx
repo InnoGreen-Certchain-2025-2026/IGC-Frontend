@@ -6,7 +6,6 @@ import Sidebar from "./components/Sidebar";
 function usePageTitle(): string {
   const { pathname } = useLocation();
   if (pathname.includes("/certificates")) return "Danh sách bằng cấp";
-  if (pathname.includes("/account")) return "Tài khoản người dùng";
   if (pathname.includes("/organizations")) return "Quản lý tổ chức";
   return "Tổng quan";
 }

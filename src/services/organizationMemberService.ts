@@ -1,5 +1,23 @@
 import axiosInstance from "@/lib/axiosInstance";
 import type { ApiResponse } from "@/types/base/ApiResponse";
+import type { PageResponse } from "@/types/base/PageResponse";
+import type { OrganizationMemberResponse } from "@/types/organization/OrganizationMemberResponse";
+
+/**
+ * Lấy danh sách thành viên của tổ chức (có phân trang).
+ */
+export const getOrganizationMembersApi = async (
+  organizationId: number,
+  page = 0,
+  size = 10,
+): Promise<ApiResponse<PageResponse<OrganizationMemberResponse>>> => {
+  const response = await axiosInstance.get<
+    ApiResponse<PageResponse<OrganizationMemberResponse>>
+  >(`/organizations/${organizationId}/members`, {
+    params: { page, size },
+  });
+  return response.data;
+};
 
 /**
  * Thăng cấp thành viên lên Moderator.
