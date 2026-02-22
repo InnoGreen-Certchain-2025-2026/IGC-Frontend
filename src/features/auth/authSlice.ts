@@ -4,6 +4,7 @@ import { fetchMe } from "../user/userThunk";
 import type { DefaultAuthResponse } from "@/types/auth/DefaultAuthResponse";
 
 export interface AuthState {
+  id: number | null;
   email: string | null;
   name: string | null;
   avatarUrl: string | null;
@@ -13,6 +14,7 @@ export interface AuthState {
 }
 
 const initialState: AuthState = {
+  id: null,
   email: null,
   name: null,
   avatarUrl: null,
@@ -27,6 +29,7 @@ const authSlice = createSlice({
   reducers: {
     logout(state) {
       localStorage.removeItem("access_token");
+      state.id = null;
       state.email = null;
       state.name = null;
       state.avatarUrl = null;
@@ -40,6 +43,7 @@ const authSlice = createSlice({
     setTokens(state, action: PayloadAction<DefaultAuthResponse>) {
       const { accessToken, userSessionResponse } = action.payload;
       localStorage.setItem("access_token", accessToken);
+      state.id = userSessionResponse.id;
       state.email = userSessionResponse.email;
       state.name = userSessionResponse.name;
       state.avatarUrl = userSessionResponse.avatarUrl;
@@ -54,6 +58,7 @@ const authSlice = createSlice({
       .addCase(executeLogin.fulfilled, (state, action) => {
         const { accessToken, userSessionResponse } = action.payload;
         localStorage.setItem("access_token", accessToken);
+        state.id = userSessionResponse.id;
         state.email = userSessionResponse.email;
         state.name = userSessionResponse.name;
         state.avatarUrl = userSessionResponse.avatarUrl;
@@ -70,6 +75,7 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchMe.fulfilled, (state, action) => {
+        state.id = action.payload.id;
         state.email = action.payload.email;
         state.name = action.payload.name;
         state.avatarUrl = action.payload.avatarUrl;

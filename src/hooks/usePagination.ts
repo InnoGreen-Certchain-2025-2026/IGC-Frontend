@@ -5,6 +5,7 @@ import type { ApiResponse } from "@/types/base/ApiResponse";
 interface UsePaginationOptions {
   initialPage?: number;
   initialSize?: number;
+  enabled?: boolean;
 }
 
 interface UsePaginationReturn<T> {
@@ -38,18 +39,50 @@ export function usePagination<T>(
   const [data, setData] = useState<T[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(options?.enabled !== false);
   const [error, setError] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+
+  // Sync loading state during render when dependencies change.
+  // This avoids cascading renders and the 'react-hooks/set-state-in-effect' warning.
+  const [prevDeps, setPrevDeps] = useState({
+    page,
+    size,
+    refreshKey,
+    enabled: options?.enabled,
+    fetchFn,
+  });
+
+  if (
+    page !== prevDeps.page ||
+    size !== prevDeps.size ||
+    refreshKey !== prevDeps.refreshKey ||
+    options?.enabled !== prevDeps.enabled ||
+    fetchFn !== prevDeps.fetchFn
+  ) {
+    setPrevDeps({
+      page,
+      size,
+      refreshKey,
+      enabled: options?.enabled,
+      fetchFn,
+    });
+    setLoading(options?.enabled !== false);
+    setError(null);
+  }
 
   const refresh = useCallback(() => {
     setRefreshKey((k) => k + 1);
   }, []);
 
   useEffect(() => {
+    // If not enabled, the fetching part is skipped.
+    // The loading state is already set to false during render.
+    if (options?.enabled === false) {
+      return;
+    }
+
     let cancelled = false;
-    setLoading(true);
-    setError(null);
 
     fetchFn(page, size)
       .then((res) => {
@@ -72,7 +105,7 @@ export function usePagination<T>(
     return () => {
       cancelled = true;
     };
-  }, [fetchFn, page, size, refreshKey]);
+  }, [fetchFn, page, size, refreshKey, options?.enabled]);
 
   return {
     data,

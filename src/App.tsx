@@ -24,13 +24,12 @@ function AppInner() {
     });
   }, [dispatch]);
 
-  // Fetch user info on app startup (page refresh)
+  // Fetch user info on app startup (page refresh) or after login
   useEffect(() => {
     if (isAuthenticated) {
       dispatch(fetchMe());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isAuthenticated, dispatch]);
 
   return (
     <PersistGate loading={null} persistor={persistor}>
