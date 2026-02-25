@@ -18,6 +18,9 @@ import OrgOverviewPage from "@/pages/app-route-pages/org-dashboard-pages/overvie
 import OrgMembersPage from "@/pages/app-route-pages/org-dashboard-pages/members";
 import OrgInfoPage from "@/pages/app-route-pages/org-dashboard-pages/info";
 import OrgCertificatesPage from "@/pages/app-route-pages/org-dashboard-pages/certificates";
+import OrgCertificatesListPage from "@/pages/app-route-pages/org-dashboard-pages/certificates/OrgCertificatesListPage";
+import OrgCreateCertificatePage from "@/pages/app-route-pages/org-dashboard-pages/certificates/OrgCreateCertificatePage";
+import OrgVerifyCertificatePage from "@/pages/app-route-pages/org-dashboard-pages/certificates/OrgVerifyCertificatePage";
 import OrgSettingsPage from "@/pages/app-route-pages/org-dashboard-pages/settings";
 import OrgInvitesPage from "@/pages/app-route-pages/org-dashboard-pages/invites";
 import MembersLayout from "@/pages/app-route-pages/org-dashboard-pages/members/MembersLayout";
@@ -74,7 +77,15 @@ export const router = createBrowserRouter([
               { path: "invites", element: <OrgInvitesPage /> },
             ],
           },
-          { path: "certificates", element: <OrgCertificatesPage /> },
+          {
+            path: "certificates",
+            element: <OrgCertificatesPage />,
+            children: [
+              { index: true, element: <OrgCertificatesListPage /> },
+              { path: "create", element: <OrgCreateCertificatePage /> },
+              { path: "verify", element: <OrgVerifyCertificatePage /> },
+            ],
+          },
           { path: "settings", element: <OrgSettingsPage /> },
         ],
       },
