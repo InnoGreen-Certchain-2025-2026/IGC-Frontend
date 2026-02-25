@@ -68,6 +68,31 @@ export const downloadCertificatePdfApi = async (
 };
 
 /**
+ * Download certificate file and return blob plus filename (from Content-Disposition header).
+ */
+export const downloadCertificateApi = async (
+  certificateId: string,
+): Promise<{ filename: string; blob: Blob }> => {
+  const response = await axiosInstance.get(
+    `/api/certificates/${certificateId}/download`,
+    {
+      responseType: "blob",
+    },
+  );
+  let filename = `${certificateId}.pdf`;
+  const disposition = response.headers["content-disposition"] as
+    | string
+    | undefined;
+  if (disposition) {
+    const match = disposition.match(/filename="?([^";]+)"?/);
+    if (match && match[1]) {
+      filename = match[1];
+    }
+  }
+  return { filename, blob: response.data };
+};
+
+/**
  * Retrieve certificates issued by a specific organization.
  */
 export const getCertificatesByOrganizationApi = async (
@@ -115,6 +140,32 @@ export const reactivateCertificateApi = async (
   return response.data;
 };
 
+/**
+ * Claim a certificate by its unique code. The backend figures out student from token.
+ */
+export const claimCertificateApi = async (
+  claimCode: string,
+): Promise<ApiResponse<CertificateResponse>> => {
+  const response = await axiosInstance.post<ApiResponse<CertificateResponse>>(
+    "/api/certificates/claim",
+    null,
+    { params: { claimCode } },
+  );
+  return response.data;
+};
+
+/**
+ * Fetch certificates belonging to the currently authenticated student.
+ */
+export const getMyCertificatesApi = async (): Promise<
+  ApiResponse<CertificateResponse[]>
+> => {
+  const response = await axiosInstance.get<ApiResponse<CertificateResponse[]>>(
+    "/api/certificates/my-certificates",
+  );
+  return response.data;
+};
+
 export interface OcrCertificateResponse {
   certificateId?: string;
   studentName?: string;
@@ -130,16 +181,14 @@ export interface OcrCertificateResponse {
  * Extract certificate information from uploaded image (OCR).
  */
 export const extractCertificateFromImageApi = async (
-    file: File,
+  file: File,
 ): Promise<ApiResponse<OcrCertificateResponse>> => {
   const formData = new FormData();
   formData.append("file", file);
 
-  const response = await axiosInstance.post<ApiResponse<OcrCertificateResponse>>(
-      "/api/certificates/upload",
-      formData
-  );
+  const response = await axiosInstance.post<
+    ApiResponse<OcrCertificateResponse>
+  >("/api/certificates/upload", formData);
 
   return response.data;
 };
-
