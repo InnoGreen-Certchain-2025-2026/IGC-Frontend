@@ -114,3 +114,32 @@ export const reactivateCertificateApi = async (
   );
   return response.data;
 };
+
+export interface OcrCertificateResponse {
+  certificateId?: string;
+  studentName?: string;
+  dateofBirth?: string;
+  major?: string;
+  graduationYear?: number;
+  gpa?: number;
+  certificateType?: string;
+  issueDate?: string;
+}
+
+/**
+ * Extract certificate information from uploaded image (OCR).
+ */
+export const extractCertificateFromImageApi = async (
+    file: File,
+): Promise<ApiResponse<OcrCertificateResponse>> => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await axiosInstance.post<ApiResponse<OcrCertificateResponse>>(
+      "/api/certificates/upload",
+      formData
+  );
+
+  return response.data;
+};
+
