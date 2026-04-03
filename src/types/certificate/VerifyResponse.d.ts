@@ -1,5 +1,3 @@
-import type { is } from "date-fns/locale";
-
 export interface VerifyResponse {
   exists: boolean;
   valid: boolean;

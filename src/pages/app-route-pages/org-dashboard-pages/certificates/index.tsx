@@ -8,9 +8,15 @@ export default function OrgCertificatesPage() {
   const { orgCode } = useParams<{ orgCode: string }>();
 
   const TABS = [
-    { to: `/org/${orgCode}/certificates`, label: "Danh sách", end: true },
-    { to: `/org/${orgCode}/certificates/create`, label: "Tạo chứng chỉ" },
-    { to: `/org/${orgCode}/certificates/verify`, label: "Xác thực" },
+    { to: `/org/${orgCode}/certificates`, label: "Tổng quan", end: true },
+    {
+      to: `/org/${orgCode}/certificates/create-draft`,
+      label: "Tạo bản nháp",
+    },
+    {
+      to: `/org/${orgCode}/certificates/verify`,
+      label: "Xác thực",
+    },
   ];
 
   return (

@@ -18,12 +18,14 @@ import OrgOverviewPage from "@/pages/app-route-pages/org-dashboard-pages/overvie
 import OrgMembersPage from "@/pages/app-route-pages/org-dashboard-pages/members";
 import OrgInfoPage from "@/pages/app-route-pages/org-dashboard-pages/info";
 import OrgCertificatesPage from "@/pages/app-route-pages/org-dashboard-pages/certificates";
-import OrgCertificatesListPage from "@/pages/app-route-pages/org-dashboard-pages/certificates/OrgCertificatesListPage";
-import OrgCreateCertificatePage from "@/pages/app-route-pages/org-dashboard-pages/certificates/OrgCreateCertificatePage";
-import OrgVerifyCertificatePage from "@/pages/app-route-pages/org-dashboard-pages/certificates/OrgVerifyCertificatePage";
 import OrgSettingsPage from "@/pages/app-route-pages/org-dashboard-pages/settings";
 import OrgInvitesPage from "@/pages/app-route-pages/org-dashboard-pages/invites";
 import MembersLayout from "@/pages/app-route-pages/org-dashboard-pages/members/MembersLayout";
+import CertificateManagementPage from "@/pages/certificates/CertificateManagementPage";
+import CreateDraftPage from "@/pages/certificates/CreateDraftPage";
+import ClaimVerificationPage from "@/pages/certificates/ClaimVerificationPage";
+import VerifyCertificateFilePage from "@/pages/certificates/VerifyCertificateFilePage";
+import OrgVerifyCertificatePage from "@/pages/app-route-pages/org-dashboard-pages/certificates/OrgVerifyCertificatePage";
 
 // ── Account (standalone) ──
 import AccountDashboardLayout from "@/pages/app-route-pages/account-pages/AccountDashboardLayout";
@@ -32,6 +34,19 @@ import ProfilePage from "@/pages/app-route-pages/user-dashboard-pages/account/pr
 import SecurityPage from "@/pages/app-route-pages/user-dashboard-pages/account/security";
 
 export const router = createBrowserRouter([
+  {
+    path: "/verify",
+    element: <VerifyCertificateFilePage />,
+  },
+  {
+    path: "/claim",
+    element: <ClaimVerificationPage />,
+  },
+  {
+    path: "/verify/file",
+    element: <VerifyCertificateFilePage />,
+  },
+
   /* Public-only routes — authenticated users are redirected to dashboard */
   {
     element: <PublicOnlyRoute />,
@@ -81,8 +96,8 @@ export const router = createBrowserRouter([
             path: "certificates",
             element: <OrgCertificatesPage />,
             children: [
-              { index: true, element: <OrgCertificatesListPage /> },
-              { path: "create", element: <OrgCreateCertificatePage /> },
+              { index: true, element: <CertificateManagementPage /> },
+              { path: "create-draft", element: <CreateDraftPage /> },
               { path: "verify", element: <OrgVerifyCertificatePage /> },
             ],
           },

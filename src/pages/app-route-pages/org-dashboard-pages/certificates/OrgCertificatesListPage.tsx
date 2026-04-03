@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useAppSelector } from "@/features/hooks";
 import { EmptyState } from "@/components/custom/empty-state/EmptyState";
@@ -18,18 +18,10 @@ export default function OrgCertificatesListPage() {
     (state) => state.organization.selectedOrganization,
   );
 
-  if (!selectedOrg?.id) {
-    return (
-      <div className="flex flex-col items-center justify-center py-24 gap-3">
-        <p className="text-gray-500">Không có tổ chức được chọn.</p>
-      </div>
-    );
-  }
-
   const [certs, setCerts] = useState<CertificateResponse[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchCertificates = async () => {
+  const fetchCertificates = useCallback(async () => {
     if (!selectedOrg?.id) return;
     setLoading(true);
     try {
@@ -43,11 +35,19 @@ export default function OrgCertificatesListPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedOrg?.id]);
 
   useEffect(() => {
     fetchCertificates();
-  }, [selectedOrg?.id]);
+  }, [fetchCertificates]);
+
+  if (!selectedOrg?.id) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 gap-3">
+        <p className="text-gray-500">Không có tổ chức được chọn.</p>
+      </div>
+    );
+  }
 
   if (loading) {
     return <div>Đang tải...</div>;

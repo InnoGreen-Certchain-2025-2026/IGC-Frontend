@@ -17,6 +17,7 @@ import type { CertificateResponse } from "@/types/certificate/CertificateRespons
 export default function GeneralPage() {
   const [certs, setCerts] = useState<CertificateResponse[]>([]);
   const [loading, setLoading] = useState(false);
+  const [claimSubmitting, setClaimSubmitting] = useState(false);
   const [claimCode, setClaimCode] = useState("");
 
   const loadCertificates = async () => {
@@ -37,15 +38,40 @@ export default function GeneralPage() {
   }, []);
 
   const handleClaim = async () => {
-    if (!claimCode) return;
+    const normalizedClaimCode = claimCode.trim();
+    if (!normalizedClaimCode) return;
+
+    setClaimSubmitting(true);
     try {
-      const res = await claimCertificateApi(claimCode);
-      toast.success("Đã thêm chứng chỉ: " + res.data.certificateId);
-      loadCertificates();
+      const res = await claimCertificateApi(normalizedClaimCode);
+      const errorCode = typeof res.errorCode === "number" ? res.errorCode : 0;
+
+      if (errorCode !== 0) {
+        toast.error(res.errorMessage || "Không thể nhận chứng chỉ");
+        return;
+      }
+
+      toast.success("Nhận chứng chỉ thành công");
       setClaimCode("");
+      await loadCertificates();
     } catch (err) {
-      console.error(err);
-      toast.error("Không thể claim chứng chỉ");
+      const errorMessage =
+        typeof err === "object" &&
+        err !== null &&
+        "response" in err &&
+        typeof err.response === "object" &&
+        err.response !== null &&
+        "data" in err.response &&
+        typeof err.response.data === "object" &&
+        err.response.data !== null &&
+        "errorMessage" in err.response.data &&
+        typeof err.response.data.errorMessage === "string"
+          ? err.response.data.errorMessage
+          : "Không thể nhận chứng chỉ";
+
+      toast.error(errorMessage);
+    } finally {
+      setClaimSubmitting(false);
     }
   };
 
@@ -89,11 +115,14 @@ export default function GeneralPage() {
           placeholder="Nhập mã claim"
           value={claimCode}
           onChange={(e) => setClaimCode(e.target.value)}
-          disabled={loading}
+          disabled={loading || claimSubmitting}
         />
-        <Button onClick={handleClaim} disabled={!claimCode || loading}>
+        <Button
+          onClick={handleClaim}
+          disabled={!claimCode.trim() || loading || claimSubmitting}
+        >
           <FileText className="w-4 h-4 mr-1" />
-          {loading ? "Đang xử lý" : "Claim"}
+          {claimSubmitting ? "Đang nhận bằng..." : "Nhận bằng"}
         </Button>
       </div>
 

@@ -1,4 +1,5 @@
 import axiosInstance from "@/lib/axiosInstance";
+import type { AxiosError } from "axios";
 import type { ApiResponse } from "@/types/base/ApiResponse";
 import type { CertificateRequest } from "@/types/certificate/CertificateRequest";
 import type { CertificateResponse } from "@/types/certificate/CertificateResponse";
@@ -25,10 +26,10 @@ export const verifyCertificateByFileApi = async (
   file: File,
 ): Promise<ApiResponse<VerifyResponse>> => {
   const formData = new FormData();
-  formData.append("file", file);
+  formData.append("pdfFile", file);
 
   const response = await axiosInstance.post<ApiResponse<VerifyResponse>>(
-    "/api/certificates/verify/by-file",
+    "/api/certificates/verify/file",
     formData,
     {
       headers: {
@@ -123,7 +124,7 @@ export const revokeCertificateApi = async (
   certificateId: string,
 ): Promise<ApiResponse<CertificateResponse>> => {
   const response = await axiosInstance.delete<ApiResponse<CertificateResponse>>(
-    `/api/certificates/${certificateId}`,
+    `/api/certificates/${certificateId}/revoke`,
   );
   return response.data;
 };
@@ -135,7 +136,7 @@ export const reactivateCertificateApi = async (
   certificateId: string,
 ): Promise<ApiResponse<CertificateResponse>> => {
   const response = await axiosInstance.post<ApiResponse<CertificateResponse>>(
-    `/api/certificates/${certificateId}/reactivate`,
+    `/api/certificates/${certificateId}/reissue`,
   );
   return response.data;
 };
@@ -146,12 +147,33 @@ export const reactivateCertificateApi = async (
 export const claimCertificateApi = async (
   claimCode: string,
 ): Promise<ApiResponse<CertificateResponse>> => {
-  const response = await axiosInstance.post<ApiResponse<CertificateResponse>>(
-    "/api/certificates/claim",
-    null,
-    { params: { claimCode } },
-  );
-  return response.data;
+  const encodedCode = encodeURIComponent(claimCode);
+  const claimEndpoints = [
+    `/api/certificates/claim/${encodedCode}`,
+    `/api/certificates/${encodedCode}/claim`,
+  ];
+
+  let lastError: unknown = null;
+
+  for (const endpoint of claimEndpoints) {
+    try {
+      const response =
+        await axiosInstance.post<ApiResponse<CertificateResponse>>(endpoint);
+      return response.data;
+    } catch (error) {
+      lastError = error;
+      const status = (error as AxiosError).response?.status;
+
+      // If endpoint doesn't exist, try the fallback path.
+      if (status === 404) {
+        continue;
+      }
+
+      throw error;
+    }
+  }
+
+  throw lastError;
 };
 
 /**

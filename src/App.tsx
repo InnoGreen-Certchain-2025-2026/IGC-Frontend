@@ -2,10 +2,13 @@ import { useEffect } from "react";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { RouterProvider } from "react-router";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { router } from "./router/index";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
+import { ErrorBoundary } from "@/components/common/ErrorBoundary";
+import { queryClient } from "@/lib/query/queryClient";
 import { persistor, store } from "./features/store";
 import { useAppDispatch, useAppSelector } from "./features/hooks";
 import { fetchMe } from "./features/user/userThunk";
@@ -53,7 +56,11 @@ function AppInner() {
 export default function App() {
   return (
     <Provider store={store}>
-      <AppInner />
+      <QueryClientProvider client={queryClient}>
+        <ErrorBoundary>
+          <AppInner />
+        </ErrorBoundary>
+      </QueryClientProvider>
     </Provider>
   );
 }

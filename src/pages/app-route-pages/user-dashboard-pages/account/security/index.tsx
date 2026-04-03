@@ -7,6 +7,25 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { updatePasswordApi } from "@/services/authService";
 import { toast } from "sonner";
 
+const getErrorMessage = (error: unknown, fallback: string): string => {
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "response" in error &&
+    typeof error.response === "object" &&
+    error.response !== null &&
+    "data" in error.response &&
+    typeof error.response.data === "object" &&
+    error.response.data !== null &&
+    "errorMessage" in error.response.data &&
+    typeof error.response.data.errorMessage === "string"
+  ) {
+    return error.response.data.errorMessage;
+  }
+
+  return fallback;
+};
+
 /**
  * Security sub-page under Account.
  * Allows the user to change their password.
@@ -29,7 +48,7 @@ export default function SecurityPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!form.oldPassword || !form.newPassword || !form.confirmedNewPassword) {
       toast.error("Vui lòng nhập đầy đủ tất cả thông tin.");
       return;
@@ -49,8 +68,8 @@ export default function SecurityPage() {
         newPassword: "",
         confirmedNewPassword: "",
       });
-    } catch (error: any) {
-      const message = error.response?.data?.errorMessage || "Cập nhật mật khẩu thất bại";
+    } catch (error: unknown) {
+      const message = getErrorMessage(error, "Cập nhật mật khẩu thất bại");
       toast.error(message);
     } finally {
       setLoading(false);
@@ -66,7 +85,9 @@ export default function SecurityPage() {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Current password */}
           <div className="space-y-1.5">
-            <Label htmlFor="oldPassword">Mật khẩu hiện tại <span className="text-red-500">*</span></Label>
+            <Label htmlFor="oldPassword">
+              Mật khẩu hiện tại <span className="text-red-500">*</span>
+            </Label>
             <div className="relative">
               <Input
                 id="oldPassword"
@@ -81,14 +102,20 @@ export default function SecurityPage() {
                 onClick={() => setShowCurrent(!showCurrent)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
-                {showCurrent ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {showCurrent ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
               </button>
             </div>
           </div>
 
           {/* New password */}
           <div className="space-y-1.5">
-            <Label htmlFor="newPassword">Mật khẩu mới <span className="text-red-500">*</span></Label>
+            <Label htmlFor="newPassword">
+              Mật khẩu mới <span className="text-red-500">*</span>
+            </Label>
             <div className="relative">
               <Input
                 id="newPassword"
@@ -103,14 +130,20 @@ export default function SecurityPage() {
                 onClick={() => setShowNew(!showNew)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
-                {showNew ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {showNew ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
               </button>
             </div>
           </div>
 
           {/* Confirm new password */}
           <div className="space-y-1.5">
-            <Label htmlFor="confirmedNewPassword">Nhập lại mật khẩu mới <span className="text-red-500">*</span></Label>
+            <Label htmlFor="confirmedNewPassword">
+              Nhập lại mật khẩu mới <span className="text-red-500">*</span>
+            </Label>
             <div className="relative">
               <Input
                 id="confirmedNewPassword"
@@ -125,7 +158,11 @@ export default function SecurityPage() {
                 onClick={() => setShowConfirm(!showConfirm)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
-                {showConfirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {showConfirm ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
               </button>
             </div>
           </div>
