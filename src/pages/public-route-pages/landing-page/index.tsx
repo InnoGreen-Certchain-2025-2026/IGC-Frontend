@@ -35,7 +35,7 @@ export default function LandingPage() {
                   initial={{ y: 30, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.8 }}
-                  className="text-6xl md:text-8xl font-black text-slate-900 leading-[1] tracking-tight"
+                  className="text-6xl md:text-8xl font-black text-slate-900 leading-none tracking-tight"
                 >
                   Xác minh <span className="text-gradient-trust">niềm tin</span> <br />
                   Kiến tạo giá trị thực
@@ -185,7 +185,7 @@ export default function LandingPage() {
                   transition={{ delay: i * 0.1 }}
                   className="bg-white rounded-[3.5rem] border border-slate-100 overflow-hidden shadow-2xl shadow-slate-200/50 hover-float group flex flex-col"
                 >
-                   <div className="aspect-[4/3] relative overflow-hidden bg-slate-50">
+                   <div className="aspect-4/3 relative overflow-hidden bg-slate-50">
                       <img 
                         src={item.image} 
                         alt={item.title} 
