@@ -54,6 +54,8 @@ export default function AuthPage() {
   const [regPassword, setRegPassword] = useState("");
   const [regPhone, setRegPhone] = useState("");
   const [regAddress, setRegAddress] = useState("");
+  const [regCitizenIdNumber, setRegCitizenIdNumber] = useState("");
+  const [regDob, setRegDob] = useState("");
   const [regGender, setRegGender] = useState<"MALE" | "FEMALE" | "OTHER">(
     "MALE",
   );
@@ -93,9 +95,15 @@ export default function AuthPage() {
       !regPassword ||
       !regPhone ||
       !regAddress ||
-      !regGender
+      !regGender ||
+      !regCitizenIdNumber ||
+      !regDob
     ) {
       toast.error("Vui lòng nhập đầy đủ tất cả thông tin.");
+      return;
+    }
+    if (regCitizenIdNumber.length !== 12) {
+      toast.error("CCCD phải có đúng 12 chữ số.");
       return;
     }
     setRegisterLoading(true);
@@ -104,9 +112,10 @@ export default function AuthPage() {
         executeRegister({
           name: regName,
           email: regEmail,
+          citizenIdNumber: regCitizenIdNumber,
           phoneNumber: regPhone,
           address: regAddress,
-          dob: "2010-01-01",
+          dob: regDob,
           gender: regGender,
           password: regPassword,
         }),
@@ -366,6 +375,28 @@ export default function AuthPage() {
                         className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-primary-500 rounded-2xl font-medium"
                       />
                     </div>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center pr-1">
+                        <Label
+                          htmlFor="reg-citizen-id"
+                          className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
+                        >
+                          CCCD <span className="text-accent-500">*</span>
+                        </Label>
+                        <span className={`text-[10px] font-black tracking-widest ${regCitizenIdNumber.length === 12 ? 'text-green-500' : 'text-slate-400'}`}>
+                          {regCitizenIdNumber.length}/12
+                        </span>
+                      </div>
+                      <Input
+                        id="reg-citizen-id"
+                        type="text"
+                        placeholder="Nhập 12 số CCCD"
+                        value={regCitizenIdNumber}
+                        onChange={(e) => setRegCitizenIdNumber(e.target.value.replace(/\D/g, '').slice(0, 12))}
+                        className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-primary-500 rounded-2xl font-medium tracking-widest"
+                      />
+                    </div>
+                    
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label
@@ -378,36 +409,52 @@ export default function AuthPage() {
                             id="reg-phone"
                             type="tel"
                             value={regPhone}
-                            onChange={(e) => setRegPhone(e.target.value)}
+                            onChange={(e) => setRegPhone(e.target.value.replace(/\D/g, ''))}
                             className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-primary-500 rounded-2xl font-medium"
                           />
                         </div>
                         <div className="space-y-2">
                           <Label
-                            htmlFor="gender"
+                            htmlFor="reg-dob"
                             className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
                           >
-                            Giới tính <span className="text-accent-500">*</span>
+                            Ngày sinh <span className="text-accent-500">*</span>
                           </Label>
-                          <Select
-                            value={regGender}
-                            onValueChange={(val) =>
-                              setRegGender(val as "MALE" | "FEMALE" | "OTHER")
-                            }
-                          >
-                            <SelectTrigger
-                              id="gender"
-                              className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white rounded-2xl text-slate-700 font-medium"
-                            >
-                              <SelectValue placeholder="Chọn" />
-                            </SelectTrigger>
-                            <SelectContent className="rounded-2xl border-slate-100 shadow-2xl">
-                              <SelectItem value="MALE">Nam</SelectItem>
-                              <SelectItem value="FEMALE">Nữ</SelectItem>
-                              <SelectItem value="OTHER">Khác</SelectItem>
-                            </SelectContent>
-                          </Select>
+                          <Input
+                            id="reg-dob"
+                            type="date"
+                            value={regDob}
+                            onChange={(e) => setRegDob(e.target.value)}
+                            className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-primary-500 rounded-2xl font-medium"
+                          />
                         </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                       <Label
+                         htmlFor="gender"
+                         className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
+                       >
+                         Giới tính <span className="text-accent-500">*</span>
+                       </Label>
+                       <Select
+                         value={regGender}
+                         onValueChange={(val) =>
+                           setRegGender(val as "MALE" | "FEMALE" | "OTHER")
+                         }
+                       >
+                         <SelectTrigger
+                           id="gender"
+                           className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white rounded-2xl text-slate-700 font-medium"
+                         >
+                           <SelectValue placeholder="Chọn" />
+                         </SelectTrigger>
+                         <SelectContent className="rounded-2xl border-slate-100 shadow-2xl">
+                           <SelectItem value="MALE">Nam</SelectItem>
+                           <SelectItem value="FEMALE">Nữ</SelectItem>
+                           <SelectItem value="OTHER">Khác</SelectItem>
+                         </SelectContent>
+                       </Select>
                     </div>
 
                     <div className="space-y-2">

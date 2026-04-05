@@ -29,12 +29,13 @@ export default function ProfilePage() {
   const dispatch = useAppDispatch();
   const [updateLoading, setUpdateLoading] = useState(false);
 
-  const [form, setForm] = useState<UpdateProfileRequest>({
+  const [form, setForm] = useState<UpdateProfileRequest & { citizenIdNumber?: string }>({
     name: "",
     phoneNumber: "",
     address: "",
     dob: "",
     gender: "MALE",
+    citizenIdNumber: "",
   });
 
   useEffect(() => {
@@ -42,13 +43,14 @@ export default function ProfilePage() {
       try {
         const response = await getUserProfileApi();
         if (response.data) {
-          const { name, phoneNumber, address, dob, gender } = response.data;
+          const { name, phoneNumber, address, dob, gender, citizenIdNumber } = response.data;
           setForm({
             name: name ?? "",
             phoneNumber: phoneNumber ?? "",
             address: address ?? "",
             dob: dob ?? "",
             gender: gender ?? "OTHER",
+            citizenIdNumber: citizenIdNumber ?? "",
           });
         }
       } catch {
@@ -95,7 +97,6 @@ export default function ProfilePage() {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Name */}
           <div className="space-y-1.5">
             <Label htmlFor="name">
               Họ và tên <span className="text-red-500">*</span>
@@ -107,6 +108,22 @@ export default function ProfilePage() {
               onChange={handleChange}
               placeholder="Nhập họ và tên"
             />
+          </div>
+
+          {/* CCCD (Read-only) */}
+          <div className="space-y-1.5 opacity-80">
+            <Label htmlFor="citizenIdNumber" className="text-slate-500">
+              Mã căn cước công dân
+            </Label>
+            <Input
+              id="citizenIdNumber"
+              value={form.citizenIdNumber}
+              disabled
+              className="bg-slate-50 border-slate-100 font-medium"
+            />
+            <p className="text-[10px] text-slate-400 font-medium italic">
+              * Mã định danh này không thể tự thay đổi. Nếu có sai sót, vui lòng liên hệ quản trị viên.
+            </p>
           </div>
 
           {/* Phone Number */}
