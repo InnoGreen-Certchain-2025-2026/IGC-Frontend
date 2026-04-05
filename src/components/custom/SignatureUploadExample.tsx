@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useSignature } from "@/hooks/useSignature";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
   AlertDialog,
@@ -9,7 +8,6 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 
@@ -31,7 +29,6 @@ export function SignatureUploadExample({
   orgId,
   onSuccess,
 }: SignatureUploadProps) {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
@@ -58,7 +55,6 @@ export function SignatureUploadExample({
     };
     reader.readAsDataURL(file);
 
-    setSelectedFile(file);
     reset();
 
     // Check the signature
@@ -79,7 +75,6 @@ export function SignatureUploadExample({
     if (success) {
       toast.success("Signature uploaded successfully");
       setShowConfirmDialog(false);
-      setSelectedFile(null);
       setPreviewUrl(null);
       onSuccess?.();
     } else {

@@ -23,8 +23,6 @@ import {
   AlertCircle,
   Loader2,
   X,
-  Eye,
-  Download,
 } from "lucide-react";
 
 interface SignatureUploadDialogProps {
@@ -58,7 +56,6 @@ export function SignatureUploadDialog({
     loading,
     error,
     signatureData,
-    isSignatureUsed,
     checkSignatureFile,
     confirmSignatureUpload,
     reset,
