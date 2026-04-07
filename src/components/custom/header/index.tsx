@@ -37,7 +37,7 @@ export default function Header() {
              <span className="text-2xl font-black tracking-tighter text-slate-900 font-display uppercase">
                 InnoGreen
              </span>
-             <span className="text-[8px] font-bold tracking-[0.32em] uppercase text-primary-700">Nền tảng Certchain</span>
+             <span className="text-[9px] font-bold tracking-[1.4em] uppercase text-primary-700">Certchain</span>
           </div>
         </Link>
 

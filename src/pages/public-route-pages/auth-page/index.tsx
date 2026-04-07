@@ -151,7 +151,7 @@ export default function AuthPage() {
               <span className="text-3xl font-black tracking-tighter text-white font-display italic uppercase">
                 InnoGreen
               </span>
-              <span className="text-[8px] font-black tracking-[0.4em] uppercase text-primary-400">Nền tảng Certchain</span>
+              <span className="text-[10px] font-black tracking-[1.5em] uppercase text-primary-400">Certchain</span>
             </div>
           </Link>
 
