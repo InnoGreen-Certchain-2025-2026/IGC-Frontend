@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Leaf, ShieldCheck, Box, Cpu, GraduationCap, Sparkles, Orbit, BookOpen } from "lucide-react";
+import { Leaf, ShieldCheck, Box, Cpu, GraduationCap, Sparkles, Orbit, BookOpen, Building2, School, Home, Cloud, TreePine } from "lucide-react";
 
 // Generate random particles once when module loads
 const PARTICLES = [...Array(25)].map(() => ({
@@ -25,14 +25,94 @@ const BLOCKS = [...Array(8)].map(() => ({
   delay: Math.random() * 8,
 }));
 
+const WalkingStyles = () => (
+  <style>{`
+    @keyframes walkLegFront {
+      0%, 100% { transform: rotate(-25deg); }
+      50% { transform: rotate(25deg); }
+    }
+    @keyframes walkLegBack {
+      0%, 100% { transform: rotate(25deg); }
+      50% { transform: rotate(-25deg); }
+    }
+    @keyframes walkArmFront {
+      0%, 100% { transform: rotate(20deg); }
+      50% { transform: rotate(-20deg); }
+    }
+    @keyframes walkArmBack {
+      0%, 100% { transform: rotate(-20deg); }
+      50% { transform: rotate(20deg); }
+    }
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+    }
+    .w-leg-f { animation: walkLegFront var(--ws, 1s) infinite; transform-origin: 10px 25px; }
+    .w-leg-b { animation: walkLegBack var(--ws, 1s) infinite; transform-origin: 10px 25px; }
+    .w-arm-f { animation: walkArmFront var(--ws, 1s) infinite; transform-origin: 10px 15px; }
+    .w-arm-b { animation: walkArmBack var(--ws, 1s) infinite; transform-origin: 10px 15px; }
+    .w-bob { animation: bob var(--ws, 1s) infinite; }
+  `}</style>
+);
+
+const WalkingPerson = ({ scale = 1, speed = 1, hasBriefcase = false, isStudent = false, flip = false }) => {
+  const customStyles = { "--ws": speed + "s", transform: flip ? 'scaleX(-1)' : 'none', overflow: "visible" } as React.CSSProperties;
+  return (
+    <svg width={20 * scale} height={40 * scale} viewBox="0 0 20 40" style={customStyles} className="w-bob inline-block mb-[1px]">
+      <g className="w-arm-b">
+         <path d="M 10 15 L 12 25" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+         {hasBriefcase && <rect x="9" y="24" width="6" height="5" fill="none" stroke="currentColor" strokeWidth="1.5" className="opacity-80"/>}
+      </g>
+      <g className="w-leg-b">
+         <path d="M 10 25 L 10 38" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+      </g>
+      <path d="M 10 13 L 10 26" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
+      <circle cx="10" cy="8" r="3.5" fill="currentColor" />
+      {isStudent && (
+        <g transform="translate(10, 3) rotate(-10)">
+          <rect x="-6" y="-1" width="12" height="1.5" fill="currentColor" />
+          <path d="M -5 0 L 0 -3 L 5 0 Z" fill="currentColor" />
+          <path d="M 5 0 L 5 4" stroke="currentColor" strokeWidth="1" />
+        </g>
+      )}
+      <g className="w-leg-f">
+         <path d="M 10 25 L 10 38" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+      </g>
+      <g className="w-arm-f">
+         <path d="M 10 15 L 8 25" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+         {!hasBriefcase && isStudent && <rect x="5" y="22" width="3" height="5" fill="currentColor" className="opacity-80" />}
+      </g>
+    </svg>
+  );
+};
+
 export default function LoadingScreen() {
 
   return (
-    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#061410] overflow-hidden text-emerald-50">
-      {/* ================= BACKGROUND GLOWS & GRID ================= */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+CjxwYXRoIGQ9Ik0wIDBoNDB2NDBIMHoiIGZpbGw9Im5vbmUiLz4KPHBhdGggZD0iTTM5LjUgMzkuNVYwTTM5LjUgMzkuNUgwIiBzdHJva2U9InJnYmEoMTYsIDE4NSLCAxMjksIDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPgo8L3N2Zz4=')] opacity-30 mask-image:radial-gradient(ellipse_at_center,black,transparent)]" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-900/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-green-500/10 rounded-full blur-[80px] pointer-events-none" />
+    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden text-emerald-50 bg-[#070b19]">
+      <WalkingStyles />
+      
+      {/* ================= 1. BẦU TRỜI & MẶT TRỜI (SKY & SUN) ================= */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0a0f1c] via-[#2a1b54] to-[#f57e42] opacity-90" />
+      
+      <motion.div 
+        animate={{ y: [10, -10, 10] }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-[10vh] left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-gradient-to-t from-[#fde047] to-[#ea580c] rounded-full opacity-80 blur-[2px] shadow-[0_0_150px_rgba(250,204,21,0.6)] z-0"
+      />
+
+      {/* ================= 2. DÃY NÚI (MOUNTAINS) ================= */}
+      <div className="absolute bottom-[15vh] left-0 w-full h-[35vh] z-0 overflow-hidden pointer-events-none">
+        <svg viewBox="0 0 1000 100" preserveAspectRatio="none" className="absolute bottom-0 w-[200vw] h-full fill-[#1c1833] opacity-80">
+          <path d="M0,100 L0,50 Q100,20 250,55 T500,45 T750,65 T1000,35 L1000,100 Z" />
+        </svg>
+        <svg viewBox="0 0 1000 100" preserveAspectRatio="none" className="absolute bottom-0 w-[200vw] h-[80%] fill-[#062c21]">
+          <path d="M0,100 L0,70 Q150,40 300,60 T600,50 T850,70 T1000,50 L1000,100 Z" />
+        </svg>
+      </div>
+
+      {/* GRID OVERLAY */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+CjxwYXRoIGQ9Ik0wIDBoNDB2NDBIMHoiIGZpbGw9Im5vbmUiLz4KPHBhdGggZD0iTTM5LjUgMzkuNVYwTTM5LjUgMzkuNUgwIiBzdHJva2U9InJnYmEoMTYsIDE4NSLCAxMjksIDAuMDgpIiBzdHJva2Utd2lkdGg9IjEiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPgo8L3N2Zz4=')] opacity-50 mask-image:radial-gradient(ellipse_at_center,black,transparent)] z-0" />
 
       {/* ================= MAIN ANIMATION CONTAINER ================= */}
       <div className="relative z-10 flex flex-col items-center">
@@ -216,7 +296,7 @@ export default function LoadingScreen() {
         {/* Few falling green blocks/rects to simulate data blocks */}
         {BLOCKS.map((b, i) => (
           <motion.div
-            key={`block-${i}`}
+            key={"block-" + i}
             className="absolute rounded-[1px] border border-emerald-500/30 bg-emerald-900/20"
             style={{
               width: b.width + 'px',
@@ -238,6 +318,105 @@ export default function LoadingScreen() {
           />
         ))}
       </div>
+
+      {/* ================= PARALLAX EDUCATIONAL CITYSCAPE ================= */}
+      <div className="absolute bottom-[12vh] left-0 w-full h-56 overflow-hidden pointer-events-none z-0">
+        
+        {/* Layer 1: Clouds */}
+        <motion.div 
+          animate={{ x: ["0%", "-50%"] }} 
+          transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
+          className="absolute top-4 flex w-[200vw] text-emerald-700/30"
+        >
+          <div className="flex w-1/2 justify-around">
+            {[...Array(6)].map((_, i) => <Cloud key={i} size={40} className="mt-8" />)}
+          </div>
+          <div className="flex w-1/2 justify-around">
+            {[...Array(6)].map((_, i) => <Cloud key={i} size={40} className="mt-8" />)}
+          </div>
+        </motion.div>
+
+        {/* Layer 2: Distant Buildings & City (Xã hội/Phát triển) */}
+        <motion.div 
+          animate={{ x: ["0%", "-50%"] }} 
+          transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-10 flex w-[200vw] text-emerald-800/40"
+        >
+          {[1, 2].map((group) => (
+            <div key={group} className="flex w-1/2 justify-around items-end">
+              <Building2 size={80} /><Building2 size={120} /><School size={100} /><Building2 size={60} /><Building2 size={90} />
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Layer 3: Campus & Houses (Cơ sở giáo dục/Nhà ở) */}
+        <motion.div 
+          animate={{ x: ["0%", "-50%"] }} 
+          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-4 flex w-[200vw] text-emerald-600/50"
+        >
+          {[1, 2].map((group) => (
+            <div key={group} className="flex w-1/2 justify-around items-end">
+              <div className="flex items-end gap-2"><TreePine size={40}/><Home size={48} /></div>
+              <School size={72} />
+              <div className="flex items-end gap-2"><TreePine size={32}/><Building2 size={56} /></div>
+              <div className="flex items-end gap-2"><Home size={40} /><TreePine size={48}/></div>
+              <School size={64} />
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Layer 4: Animated Walking People (Giảng viên, Sinh viên) */}
+        <motion.div 
+          animate={{ x: ["0%", "-50%"] }} 
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-0 flex w-[200vw] text-emerald-400/80 items-end"
+        >
+          {[1, 2].map((group) => (
+            <div key={group} className="flex w-1/2 justify-around items-end px-12">
+              <div className="flex items-end gap-1">
+                <WalkingPerson speed={1.2} isStudent scale={1.2}/>
+                <WalkingPerson speed={1.1} scale={1.1}/>
+              </div>
+              
+              <div className="flex items-end gap-2">
+                <WalkingPerson speed={1.5} hasBriefcase scale={1.3}/>
+                <WalkingPerson speed={1} isStudent scale={1} />
+                <WalkingPerson speed={1.2} isStudent scale={1.15} />
+              </div>
+              
+              <div className="flex items-end gap-1.5">
+                <WalkingPerson speed={1} isStudent scale={1.25} />
+              </div>
+              
+              <div className="flex items-end gap-2">
+                <WalkingPerson speed={1.3} scale={1.35} />
+                <WalkingPerson speed={1.1} isStudent scale={1.2} />
+              </div>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Ground Line */}
+        <div className="absolute bottom-0 left-0 w-full h-[2px] bg-emerald-500 opacity-50" />
+      </div>
+
+      {/* ================= 4. DÒNG SÔNG (RIVER) ================= */}
+      <div className="absolute bottom-0 left-0 w-full h-[12vh] bg-gradient-to-b from-[#f97316] via-[#0d9488] to-[#042f2e] z-0 border-t border-yellow-500/40">
+        <motion.div 
+           animate={{ x: ["0%", "-50%"] }}
+           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+           className="absolute top-1 w-[200%] h-[2px] opacity-40 mix-blend-overlay"
+           style={{ backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,255,255,1) 40px, rgba(255,255,255,1) 80px)' }}
+        />
+        <motion.div 
+           animate={{ x: ["-50%", "0%"] }}
+           transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+           className="absolute top-4 w-[200%] h-[1px] opacity-20 mix-blend-overlay"
+           style={{ backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,1) 60px, rgba(255,255,255,1) 120px)' }}
+        />
+      </div>
+
     </div>
   );
 }
