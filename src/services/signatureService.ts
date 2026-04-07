@@ -1,31 +1,36 @@
 import axiosInstance from "@/lib/axiosInstance";
+import type { AxiosError } from "axios";
 
-export interface CheckSignatureResponse {
-  hash: string;
-  isUsed: boolean;
-}
-
-export interface SignatureCheckResult {
-  hash: string;
-  isUsed: boolean;
+/**
+ * Extract error message from axios error response
+ */
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    // Check if it's an axios error with response data
+    const axiosError = error as AxiosError<any>;
+    if (axiosError.response?.data?.errorMessage) {
+      return axiosError.response.data.errorMessage;
+    }
+    return error.message;
+  }
+  return "Lỗi không xác định";
 }
 
 /**
- * Check if uploaded signature file is valid
+ * Check if uploaded signature file is valid and if it's already in use
  * Calls backend API: POST /api/signature/check
  *
  * @param orgId - Organization ID
  * @param file - Signature image file to validate
- * @returns Promise containing hash and isUsed status
- * @throws Error if validation fails
+ * @returns Promise<boolean> - true if signature is already used, false if new signature
+ * @throws Error if file is not a valid signature or validation fails
  */
 export async function checkSignature(
   orgId: number,
   file: File,
-): Promise<CheckSignatureResponse> {
+): Promise<boolean> {
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("orgId", orgId.toString());
 
   try {
     const response = await axiosInstance.post<any>(
@@ -44,40 +49,47 @@ export async function checkSignature(
     return response.data.data;
   } catch (error) {
     console.error("Error checking signature:", error);
-    throw error;
+    const errorMessage = getErrorMessage(error);
+    throw new Error(errorMessage);
   }
 }
 
 /**
- * Confirm and save signature for organization
+ * Upload and save signature for organization
  * Replaces existing signature if present
- * Calls backend API: POST /api/signature/confirm
+ * Calls backend API: POST /api/signature/upload
  *
  * @param orgId - Organization ID
- * @param hash - Hash of the signature (returned from checkSignature)
- * @returns Promise<boolean> - true if confirmation successful
- * @throws Error if confirmation fails
+ * @param file - Signature image file to upload
+ * @returns Promise<boolean> - true if upload successful
+ * @throws Error if file is not a valid signature or upload fails
  */
-export async function confirmSignature(
+export async function uploadSignature(
   orgId: number,
-  hash: string,
+  file: File,
 ): Promise<boolean> {
+  const formData = new FormData();
+  formData.append("file", file);
+
   try {
     const response = await axiosInstance.post<any>(
-      "/api/signature/confirm",
-      undefined,
+      "/api/signature/upload",
+      formData,
       {
         params: {
           orgId,
-          hash,
+        },
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
       },
     );
 
     return response.data.data;
   } catch (error) {
-    console.error("Error confirming signature:", error);
-    throw error;
+    console.error("Error uploading signature:", error);
+    const errorMessage = getErrorMessage(error);
+    throw new Error(errorMessage);
   }
 }
 
