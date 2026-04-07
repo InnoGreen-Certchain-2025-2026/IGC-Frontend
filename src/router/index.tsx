@@ -1,19 +1,32 @@
+import { lazy } from "react";
 import { createBrowserRouter, Navigate } from "react-router";
-import LandingPage from "@/pages/public-route-pages/landing-page";
-import AuthPage from "@/pages/public-route-pages/auth-page";
+
+// Helper để giả lập delay load 3 giây cho Suspense (Dev purposes)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const delayLazy = (factory: () => Promise<any>, delay: number = 3000) => 
+  lazy(() => 
+    Promise.all([
+      factory(),
+      new Promise(resolve => setTimeout(resolve, delay))
+    ]).then(([module]) => module)
+  );
+
+const LandingPage = delayLazy(() => import("@/pages/public-route-pages/landing-page"));
+const AuthPage = delayLazy(() => import("@/pages/public-route-pages/auth-page"));
+import LoadingScreen from "@/components/common/LoadingScreen";
 
 import ProtectedRoute from "@/components/custom/protected-route/ProtectedRoute";
 import PublicOnlyRoute from "@/components/custom/protected-route/PublicOnlyRoute";
 
 // ── User Dashboard ──
-import UserDashboardLayout from "@/pages/app-route-pages/user-dashboard-pages/UserDashboardLayout";
+const UserDashboardLayout = delayLazy(() => import("@/pages/app-route-pages/user-dashboard-pages/UserDashboardLayout"));
 import GeneralPage from "@/pages/app-route-pages/user-dashboard-pages/general";
 import CertificatesPage from "@/pages/app-route-pages/user-dashboard-pages/certificates";
 import OrganizationsPage from "@/pages/app-route-pages/user-dashboard-pages/organizations";
 import CreateOrganizationPage from "@/pages/app-route-pages/user-dashboard-pages/create-organization";
 
 // ── Organization Dashboard ──
-import OrgDashboardLayout from "@/pages/app-route-pages/org-dashboard-pages/OrgDashboardLayout";
+const OrgDashboardLayout = delayLazy(() => import("@/pages/app-route-pages/org-dashboard-pages/OrgDashboardLayout"));
 import OrgOverviewPage from "@/pages/app-route-pages/org-dashboard-pages/overview";
 import OrgMembersPage from "@/pages/app-route-pages/org-dashboard-pages/members";
 import OrgInfoPage from "@/pages/app-route-pages/org-dashboard-pages/info";
@@ -41,6 +54,10 @@ export const router = createBrowserRouter([
   {
     path: "/claim",
     element: <ClaimVerificationPage />,
+  },
+  {
+    path: "/loading",
+    element: <LoadingScreen />,
   },
   {
     path: "/verify/file",

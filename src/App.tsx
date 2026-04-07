@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { RouterProvider } from "react-router";
@@ -9,6 +9,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary";
 import { queryClient } from "@/lib/query/queryClient";
+import LoadingScreen from "@/components/common/LoadingScreen";
 import { persistor, store } from "./features/store";
 import { useAppDispatch, useAppSelector } from "./features/hooks";
 import { fetchMe } from "./features/user/userThunk";
@@ -38,7 +39,9 @@ function AppInner() {
     <PersistGate loading={null} persistor={persistor}>
       <TooltipProvider>
         <ScrollArea className="h-screen w-full">
-          <RouterProvider router={router} />
+          <Suspense fallback={<LoadingScreen />}>
+            <RouterProvider router={router} />
+          </Suspense>
         </ScrollArea>
 
         <Toaster
