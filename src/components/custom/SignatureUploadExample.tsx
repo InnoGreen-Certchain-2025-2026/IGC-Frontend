@@ -73,19 +73,19 @@ export function SignatureUploadExample({
     const success = await confirmSignatureUpload(orgId, hash);
 
     if (success) {
-      toast.success("Signature uploaded successfully");
+      toast.success("Tải chữ ký lên thành công");
       setShowConfirmDialog(false);
       setPreviewUrl(null);
       onSuccess?.();
     } else {
-      toast.error(error || "Failed to confirm signature");
+      toast.error(error || "Xác nhận chữ ký thất bại");
     }
   };
 
   return (
     <Card className="p-6">
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Upload Signature</h3>
+        <h3 className="text-lg font-semibold">Tải chữ ký lên</h3>
 
         <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition">
           <input
@@ -98,19 +98,19 @@ export function SignatureUploadExample({
           />
           <label htmlFor="signature-upload" className="cursor-pointer block">
             <p className="text-sm text-gray-600">
-              Click to upload or drag and drop
+              Nhấp để tải lên hoặc kéo thả tệp
             </p>
-            <p className="text-xs text-gray-400">JPG or PNG (max 5MB)</p>
+            <p className="text-xs text-gray-400">JPG hoặc PNG (tối đa 5MB)</p>
           </label>
         </div>
 
         {/* Preview */}
         {previewUrl && (
           <div className="mt-4">
-            <p className="text-sm font-medium mb-2">Preview:</p>
+            <p className="text-sm font-medium mb-2">Xem trước:</p>
             <img
               src={previewUrl}
-              alt="Signature preview"
+              alt="Xem trước chữ ký"
               className="max-h-40 border rounded"
             />
           </div>
@@ -126,7 +126,7 @@ export function SignatureUploadExample({
         {/* Loading state */}
         {loading && (
           <div className="text-center text-sm text-gray-500">
-            Processing signature...
+            Đang xử lý chữ ký...
           </div>
         )}
 
@@ -137,13 +137,13 @@ export function SignatureUploadExample({
             onOpenChange={setShowConfirmDialog}
           >
             <AlertDialogContent>
-              <AlertDialogTitle>Signature Already in Use</AlertDialogTitle>
+              <AlertDialogTitle>Chữ ký đã được sử dụng</AlertDialogTitle>
               <AlertDialogDescription>
-                This signature is already registered for your organization. Do
-                you want to replace the current signature with this one?
+                Chữ ký này đã được đăng ký cho tổ chức của bạn. Bạn có muốn
+                thay thế chữ ký hiện tại bằng chữ ký này không?
               </AlertDialogDescription>
               <div className="flex gap-2 justify-end">
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel>Hủy</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={() => {
                     if (signatureData?.hash) {
@@ -152,7 +152,7 @@ export function SignatureUploadExample({
                   }}
                   disabled={loading}
                 >
-                  {loading ? "Confirming..." : "Replace Signature"}
+                  {loading ? "Đang xác nhận..." : "Thay thế chữ ký"}
                 </AlertDialogAction>
               </div>
             </AlertDialogContent>

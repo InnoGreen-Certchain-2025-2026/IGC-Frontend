@@ -67,12 +67,12 @@ export default function OrganizationSelector() {
 
   return (
     <div className="px-4 pt-4 pb-2">
-      <label className="block text-[0.7rem] uppercase tracking-wider text-white/55 mb-1.5 font-semibold">
+      <label className="mb-1.5 block text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-slate-500">
         Tổ chức
       </label>
       <Popover open={orgOpen} onOpenChange={setOrgOpen}>
         <PopoverTrigger asChild>
-          <button className="w-full bg-white/10 border border-white/15 text-white rounded-lg px-3 py-2 text-sm cursor-pointer transition-colors duration-150 flex items-center justify-between gap-2 hover:bg-white/18 focus:bg-white/18">
+          <button className="flex w-full cursor-pointer items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm transition-all duration-150 hover:border-primary-200 hover:bg-slate-50 hover:shadow-md focus:border-primary-300 focus:bg-slate-50">
             <div className="flex items-center gap-2 overflow-hidden">
               {selectedOrg?.logoUrl ? (
                 <img
@@ -81,48 +81,48 @@ export default function OrganizationSelector() {
                   className="h-5 w-5 rounded object-cover shrink-0"
                 />
               ) : (
-                <Building2 className="h-4 w-4 opacity-60 shrink-0" />
+                <Building2 className="h-4 w-4 text-slate-400 shrink-0" />
               )}
               <span className="overflow-hidden text-ellipsis whitespace-nowrap">
                 {selectedOrg?.name ?? "Cá nhân"}
               </span>
             </div>
-            <ChevronsUpDown className="h-4 w-4 opacity-60 shrink-0" />
+            <ChevronsUpDown className="h-4 w-4 text-slate-400 shrink-0" />
           </button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-[240px] p-0"
+          className="w-60 overflow-hidden rounded-2xl border border-slate-200 p-0 shadow-xl"
           side="bottom"
           align="start"
           sideOffset={6}
         >
           {/* Header */}
-          <div className="px-3 py-2.5">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+          <div className="bg-linear-to-r from-slate-50 to-white px-3 py-2.5">
+            <p className="text-xs font-semibold text-primary-800 uppercase tracking-[0.2em]">
               Chuyển tổ chức
             </p>
           </div>
           <Separator />
 
           {/* Organization list */}
-          <div className="py-1 max-h-[200px] overflow-y-auto">
+          <div className="max-h-50 overflow-y-auto py-1.5">
             {loading ? (
               <div className="flex items-center justify-center py-4">
-                <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+                <Loader2 className="h-4 w-4 animate-spin text-slate-400" />
               </div>
             ) : (
               <>
                 {/* Personal (no org selected) */}
                 <button
                   onClick={handleSelectPersonal}
-                  className="flex items-center gap-2.5 w-full px-3 py-2 text-sm text-gray-700 bg-transparent border-none cursor-pointer text-left transition-colors duration-100 hover:bg-gray-100"
+                  className="flex w-full cursor-pointer items-center gap-3 border-none bg-transparent px-3 py-2.5 text-left text-sm text-slate-700 transition-all duration-150 hover:bg-slate-50 hover:text-primary-800 hover:shadow-sm"
                 >
                   {selectedOrg === null ? (
-                    <Check className="h-4 w-4 text-blue-600 shrink-0" />
+                    <Check className="h-4 w-4 text-primary-600 shrink-0" />
                   ) : (
                     <span className="h-4 w-4 shrink-0" />
                   )}
-                  <Building2 className="h-4 w-4 text-gray-400 shrink-0" />
+                  <Building2 className="h-4 w-4 text-slate-400 shrink-0" />
                   <span>Cá nhân</span>
                 </button>
 
@@ -131,10 +131,10 @@ export default function OrganizationSelector() {
                   <button
                     key={org.id}
                     onClick={() => handleSelectOrg(org)}
-                    className="flex items-center gap-2.5 w-full px-3 py-2 text-sm text-gray-700 bg-transparent border-none cursor-pointer text-left transition-colors duration-100 hover:bg-gray-100"
+                    className="flex w-full cursor-pointer items-center gap-3 border-none bg-transparent px-3 py-2.5 text-left text-sm text-slate-700 transition-all duration-150 hover:bg-slate-50 hover:text-primary-800 hover:shadow-sm"
                   >
                     {selectedOrg?.id === org.id ? (
-                      <Check className="h-4 w-4 text-blue-600 shrink-0" />
+                      <Check className="h-4 w-4 text-primary-600 shrink-0" />
                     ) : (
                       <span className="h-4 w-4 shrink-0" />
                     )}
@@ -145,14 +145,14 @@ export default function OrganizationSelector() {
                         className="h-4 w-4 rounded object-cover shrink-0"
                       />
                     ) : (
-                      <Building2 className="h-4 w-4 text-gray-400 shrink-0" />
+                      <Building2 className="h-4 w-4 text-slate-400 shrink-0" />
                     )}
                     <span className="truncate">{org.name}</span>
                   </button>
                 ))}
 
                 {organizations.length === 0 && (
-                  <p className="px-3 py-2 text-xs text-gray-400 italic">
+                  <p className="px-3 py-2 text-xs text-slate-400 italic">
                     Chưa có tổ chức nào
                   </p>
                 )}
@@ -169,7 +169,7 @@ export default function OrganizationSelector() {
                 navigate("/usr/organizations");
                 setOrgOpen(false);
               }}
-              className="flex items-center gap-2.5 w-full px-3 py-2 text-[0.82rem] font-medium text-gray-500 bg-transparent border-none cursor-pointer text-left transition-all duration-100 hover:bg-gray-100 hover:text-gray-900"
+              className="flex w-full cursor-pointer items-center gap-3 border-none bg-transparent px-3 py-2.5 text-left text-[0.82rem] font-medium text-slate-500 transition-all duration-150 hover:bg-slate-50 hover:text-primary-800 hover:shadow-sm"
             >
               <Settings className="h-4 w-4" />
               Quản lý tổ chức
@@ -179,7 +179,7 @@ export default function OrganizationSelector() {
                 navigate("/usr/organizations/create");
                 setOrgOpen(false);
               }}
-              className="flex items-center gap-2.5 w-full px-3 py-2 text-[0.82rem] font-medium text-gray-500 bg-transparent border-none cursor-pointer text-left transition-all duration-100 hover:bg-gray-100 hover:text-gray-900"
+              className="flex w-full cursor-pointer items-center gap-3 border-none bg-transparent px-3 py-2.5 text-left text-[0.82rem] font-medium text-slate-500 transition-all duration-150 hover:bg-slate-50 hover:text-primary-800 hover:shadow-sm"
             >
               <Plus className="h-4 w-4" />
               Tạo tổ chức mới

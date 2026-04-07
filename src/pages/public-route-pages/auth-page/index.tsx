@@ -151,14 +151,14 @@ export default function AuthPage() {
               <span className="text-3xl font-black tracking-tighter text-white font-display italic uppercase">
                 InnoGreen
               </span>
-              <span className="text-[8px] font-black tracking-[0.4em] uppercase text-primary-400">Certchain Platform</span>
+              <span className="text-[8px] font-black tracking-[0.4em] uppercase text-primary-400">Nền tảng Certchain</span>
             </div>
           </Link>
 
           <div className="space-y-10 max-w-lg">
             <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-white/5 text-primary-400 border border-white/10 text-[10px] font-black tracking-widest uppercase font-display">
               <ShieldCheck className="w-4 h-4" />
-              <span>Next-Gen Verification</span>
+              <span>Xác minh thế hệ mới</span>
             </div>
 
             <h1 className="text-6xl md:text-8xl font-black leading-[1.05] tracking-tighter text-white">
@@ -201,7 +201,7 @@ export default function AuthPage() {
         </div>
 
         <div className="relative z-10 text-[10px] font-bold uppercase tracking-[0.3em] text-slate-600 pt-12">
-          © 2026 InnoGreen Certchain • Immutable Digital Identity
+          © 2026 InnoGreen Certchain • Danh tính số bất biến
         </div>
       </div>
 

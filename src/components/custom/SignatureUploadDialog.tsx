@@ -173,6 +173,8 @@ export function SignatureUploadDialog({
                   type="file"
                   accept="image/jpeg,image/png"
                   onChange={handleFileSelect}
+                  aria-label="Tải lên tệp chữ ký"
+                  title="Tải lên tệp chữ ký"
                   className="hidden"
                 />
 
@@ -200,7 +202,7 @@ export function SignatureUploadDialog({
                   <div className="relative group">
                     <img
                       src={previewUrl}
-                      alt="Signature preview"
+                      alt="Xem trước chữ ký"
                       className="w-full h-40 object-cover border border-gray-200 rounded-lg"
                     />
                     <button
@@ -208,6 +210,8 @@ export function SignatureUploadDialog({
                         setSelectedFile(null);
                         setPreviewUrl(null);
                       }}
+                      aria-label="Xóa tệp đã chọn"
+                      title="Xóa tệp đã chọn"
                       className="absolute top-2 right-2 p-1.5 bg-red-500 hover:bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition"
                     >
                       <X className="h-4 w-4" />

@@ -164,13 +164,13 @@ export default function VerifyCertificateFilePage() {
         <Card
           className={
             result.valid
-              ? "space-y-3 border-emerald-200 bg-emerald-50 p-5"
+              ? "space-y-3 border-primary-200 bg-primary-50 p-5"
               : "space-y-3 border-red-200 bg-red-50 p-5"
           }
         >
           <div className="flex items-center gap-2">
             {result.valid ? (
-              <FileCheck2 className="size-5 text-emerald-700" />
+              <FileCheck2 className="size-5 text-primary-700" />
             ) : (
               <AlertTriangle className="size-5 text-red-700" />
             )}

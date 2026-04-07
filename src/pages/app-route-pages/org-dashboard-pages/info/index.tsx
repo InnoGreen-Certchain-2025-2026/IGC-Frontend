@@ -21,10 +21,10 @@ import {
 
 const SERVICE_PLAN_LABELS: Record<string, { label: string; color: string }> = {
   FREE: { label: "Miễn phí", color: "bg-gray-100 text-gray-700" },
-  PRO: { label: "Pro", color: "bg-blue-100 text-blue-700" },
+  PRO: { label: "Pro", color: "bg-primary-100 text-primary-700" },
   ENTERPRISE: {
     label: "Enterprise",
-    color: "bg-purple-100 text-purple-700",
+    color: "bg-primary-100 text-primary-700",
   },
 };
 
@@ -139,7 +139,7 @@ export default function OrgInfoPage() {
             >
               {planInfo.label}
             </span>
-            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">
+            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-700">
               {ROLE_LABELS[org.role] ?? org.role}
             </span>
             <Button

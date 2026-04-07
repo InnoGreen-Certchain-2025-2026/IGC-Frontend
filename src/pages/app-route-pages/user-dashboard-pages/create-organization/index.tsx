@@ -3,7 +3,6 @@ import { useNavigate, useSearchParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Progress } from "@/components/ui/progress";
 import {
   Check,
   ChevronLeft,
@@ -117,8 +116,6 @@ export default function CreateOrganizationPage() {
     setExpandedSections((prev) => ({ ...prev, [section]: !prev[section] }));
   };
 
-  const progress = (step / STEPS.length) * 100;
-
   const handleNext = () => {
     if (step < STEPS.length) {
       setStep(step + 1);
@@ -222,7 +219,7 @@ export default function CreateOrganizationPage() {
             Bước {step} trên {STEPS.length}
           </span>
         </div>
-        <Progress value={progress} className="h-2" />
+        {/* <Progress value={progress} className="h-2" /> */}
 
         <div className="grid grid-cols-3 gap-4 pt-4">
           {STEPS.map((s, i) => {
@@ -235,16 +232,16 @@ export default function CreateOrganizationPage() {
                   className={cn(
                     "h-1.5 w-full rounded-full transition-all duration-500",
                     isCompleted
-                      ? "bg-blue-600"
+                      ? "bg-primary"
                       : isActive
-                        ? "bg-blue-400"
+                          ? "bg-primary/80"
                         : "bg-gray-100",
                   )}
                 />
                 <div
                   className={cn(
                     "flex flex-col items-center md:items-start gap-1 transition-colors",
-                    isActive || isCompleted ? "text-blue-600" : "text-gray-400",
+                    isActive || isCompleted ? "text-primary" : "text-gray-400",
                   )}
                 >
                   <div className="flex items-center gap-2">
@@ -267,7 +264,7 @@ export default function CreateOrganizationPage() {
       </div>
 
       {/* ── Step Content ── */}
-      <div className="min-h-[400px]">
+      <div className="min-h-100">
         {/* Step 1: Consolidated Info with Collapsible Cards */}
         {step === 1 && (
           <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
@@ -278,7 +275,7 @@ export default function CreateOrganizationPage() {
                 className="w-full flex items-center justify-between p-4 bg-gray-50/50 hover:bg-gray-50 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+                  <div className="w-8 h-8 rounded-lg bg-primary-100 flex items-center justify-center text-primary-700">
                     <Building size={18} />
                   </div>
                   <h3 className="font-bold text-gray-900">Thông tin chung</h3>
@@ -353,9 +350,9 @@ export default function CreateOrganizationPage() {
                       </Label>
                       <div
                         onClick={handleLogoClick}
-                        className="group relative flex items-center gap-4 p-4 border-2 border-dashed border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50/30 transition-all"
+                        className="group relative flex items-center gap-4 p-4 border-2 border-dashed border-primary-100 rounded-lg cursor-pointer hover:border-primary-300 hover:bg-primary-50/40 transition-all"
                       >
-                        <div className="h-14 w-14 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0 group-hover:bg-blue-100 transition-colors">
+                        <div className="h-14 w-14 rounded-lg bg-primary-50 flex items-center justify-center overflow-hidden shrink-0 group-hover:bg-primary-100 transition-colors">
                           {logoPreview ? (
                             <img
                               src={logoPreview}
@@ -363,24 +360,25 @@ export default function CreateOrganizationPage() {
                               className="h-full w-full object-cover"
                             />
                           ) : (
-                            <ImageIcon className="h-6 w-6 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                            <ImageIcon className="h-6 w-6 text-gray-400 group-hover:text-primary transition-colors" />
                           )}
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors">
+                          <p className="text-sm font-medium text-gray-700 group-hover:text-primary transition-colors">
                             {logoFile ? logoFile.name : "Nhấn để tải logo"}
                           </p>
                           <p className="text-xs text-gray-400">
                             PNG, JPG — tối đa 5MB
                           </p>
                         </div>
-                        <Camera className="ml-auto h-5 w-5 text-gray-300 group-hover:text-blue-400 transition-colors" />
+                        <Camera className="ml-auto h-5 w-5 text-gray-300 group-hover:text-primary/80 transition-colors" />
                       </div>
                       <input
                         type="file"
                         ref={logoInputRef}
                         className="hidden"
                         accept="image/*"
+                        title="Tải logo tổ chức"
                         onChange={handleLogoFileChange}
                       />
                     </div>
@@ -389,7 +387,7 @@ export default function CreateOrganizationPage() {
                       <Label htmlFor="description">Mô tả (Tùy chọn)</Label>
                       <textarea
                         id="description"
-                        className="w-full min-h-[80px] text-sm p-3 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                        className="w-full min-h-20 text-sm p-3 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/20"
                         placeholder="Giới thiệu ngắn gọn về tổ chức..."
                         value={formData.description}
                         onChange={(e) =>
@@ -412,7 +410,7 @@ export default function CreateOrganizationPage() {
                 className="w-full flex items-center justify-between p-4 bg-gray-50/50 hover:bg-gray-50 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+                  <div className="w-8 h-8 rounded-lg bg-primary-100 flex items-center justify-center text-primary-700">
                     <FileText size={18} />
                   </div>
                   <h3 className="font-bold text-gray-900">Thông tin pháp lý</h3>
@@ -503,7 +501,7 @@ export default function CreateOrganizationPage() {
                 className="w-full flex items-center justify-between p-4 bg-gray-50/50 hover:bg-gray-50 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+                  <div className="w-8 h-8 rounded-lg bg-primary-100 flex items-center justify-center text-primary-700">
                     <User size={18} />
                   </div>
                   <h3 className="font-bold text-gray-900">Thông tin liên hệ</h3>
@@ -584,12 +582,12 @@ export default function CreateOrganizationPage() {
                 className={cn(
                   "relative flex flex-col p-6 rounded-xl border-2 cursor-pointer transition-all hover:shadow-md",
                   formData.servicePlan === p.id
-                    ? "border-blue-600 bg-blue-50/30"
+                    ? "border-primary-600 bg-primary-50/30"
                     : "border-gray-100 bg-white hover:border-gray-200",
                 )}
               >
                 {p.popular && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-blue-600 text-white text-[0.65rem] font-bold uppercase tracking-wider rounded-full">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-primary-600 text-white text-[0.65rem] font-bold uppercase tracking-wider rounded-full">
                     Khuyên dùng
                   </span>
                 )}
@@ -597,7 +595,7 @@ export default function CreateOrganizationPage() {
                   className={cn(
                     "w-10 h-10 rounded-lg flex items-center justify-center mb-4 transition-colors",
                     formData.servicePlan === p.id
-                      ? "bg-blue-600 text-white"
+                      ? "bg-primary-600 text-white"
                       : "bg-gray-100 text-gray-500",
                   )}
                 >
@@ -615,10 +613,7 @@ export default function CreateOrganizationPage() {
                       key={i}
                       className="flex items-center gap-2 text-[0.75rem] text-gray-600"
                     >
-                      <Check
-                        size={12}
-                        className="text-green-500 flex-shrink-0"
-                      />
+                      <Check size={12} className="text-primary-600 shrink-0" />
                       <span>{f}</span>
                     </div>
                   ))}
@@ -673,7 +668,7 @@ export default function CreateOrganizationPage() {
                   </div>
                   <div>
                     <p className="text-gray-500">Gói:</p>
-                    <p className="font-bold text-blue-600">
+                    <p className="font-bold text-primary-700">
                       {PLANS.find((p) => p.id === formData.servicePlan)?.name}
                     </p>
                   </div>
@@ -686,15 +681,15 @@ export default function CreateOrganizationPage() {
             </div>
 
             <div className="p-4 bg-amber-50 border border-amber-100 rounded-lg text-sm text-amber-800 flex gap-3">
-              <Info className="h-5 w-5 flex-shrink-0" />
+              <Info className="h-5 w-5 shrink-0" />
               <p>
                 Vui lòng kiểm tra kỹ các thông tin pháp lý. Sau khi tạo, một số
                 thông tin quan trọng sẽ cần quy trình xác minh để thay đổi.
               </p>
             </div>
 
-            <div className="p-4 bg-blue-50 border border-blue-100 rounded-lg text-sm text-blue-800 leading-relaxed flex gap-3">
-              <ShieldCheck className="h-5 w-5 flex-shrink-0" />
+            <div className="p-4 bg-primary-50/40 border border-primary-100 rounded-lg text-sm text-primary-800 leading-relaxed flex gap-3">
+              <ShieldCheck className="h-5 w-5 shrink-0" />
               <p>
                 Bằng việc nhấn <strong>Xác nhận</strong>, bạn đồng ý với các
                 Điều khoản dịch vụ và Chính sách quyền riêng tư của IGC
@@ -721,7 +716,7 @@ export default function CreateOrganizationPage() {
           {step < STEPS.length ? (
             <Button
               onClick={handleNext}
-              className="gap-2 min-w-[120px] bg-blue-600 hover:bg-blue-700 shadow-sm"
+              className="gap-2 min-w-30 bg-primary-600 hover:bg-primary-700 shadow-sm"
             >
               Tiếp tục
               <ChevronRight size={18} />
@@ -730,7 +725,7 @@ export default function CreateOrganizationPage() {
             <Button
               onClick={handleConfirm}
               disabled={submitting}
-              className="gap-2 min-w-[140px] bg-green-600 hover:bg-green-700 shadow-md"
+              className="gap-2 min-w-35 bg-primary-600 hover:bg-primary-700 shadow-md"
             >
               {submitting ? (
                 <>

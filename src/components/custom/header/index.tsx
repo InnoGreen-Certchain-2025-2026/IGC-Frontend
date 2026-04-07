@@ -21,47 +21,42 @@ export default function Header() {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="sticky top-0 z-50 w-full border-b border-white/50 bg-white/60 backdrop-blur-xl"
+      className="sticky top-0 z-50 w-full border-b border-slate-200/80 bg-white/90 backdrop-blur-xl"
     >
       <div className="container mx-auto flex h-20 items-center justify-between px-4">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-3 group">
-          <motion.div
-            whileHover={{ scale: 1.1, rotate: 5 }}
-            className="p-1"
-          >
+          <div className="rounded-2xl bg-white p-1.5 shadow-sm ring-1 ring-primary-100/70">
             <img
               src="/favicon/web-logo.png"
               alt="IGC Logo"
               className="h-10 w-10 object-contain"
             />
-          </motion.div>
+          </div>
           <div className="flex flex-col -space-y-1">
-             <span className="text-2xl font-black tracking-tighter text-slate-900 font-display uppercase italic">
+             <span className="text-2xl font-black tracking-tighter text-slate-900 font-display uppercase">
                 InnoGreen
              </span>
-             <span className="text-[8px] font-black tracking-[0.3em] uppercase text-primary-500">Certchain Platform</span>
+             <span className="text-[8px] font-bold tracking-[0.32em] uppercase text-primary-700">Nền tảng Certchain</span>
           </div>
         </Link>
 
         {/* Navigation */}
         <nav className="hidden lg:block">
-          <ul className="flex items-center space-x-1 bg-slate-50 p-1.5 rounded-2xl border border-slate-100">
+          <ul className="flex items-center gap-3 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1.5 shadow-[0_1px_0_rgba(16,24,40,0.02),0_8px_24px_rgba(15,23,42,0.04)]">
             {navLinks.map((link, i) => (
-              <motion.li
-                key={link.name}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 + i * 0.1 }}
-              >
-                <a
+              <li key={link.name}>
+                <motion.a
                   href={link.href}
-                  className="flex items-center space-x-2 px-5 py-2.5 rounded-xl text-xs font-bold text-slate-500 hover:text-primary-600 hover:bg-white hover:shadow-sm transition-all uppercase tracking-widest"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 + i * 0.1 }}
+                  className="flex items-center gap-2 rounded-full border border-transparent px-4.5 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-slate-600 transition-all duration-150 hover:border-primary-200 hover:bg-slate-100 hover:text-primary-800 hover:shadow-sm"
                 >
-                  <span className="opacity-70 group-hover:opacity-100">{link.icon}</span>
+                  <span className="opacity-80">{link.icon}</span>
                   <span>{link.name}</span>
-                </a>
-              </motion.li>
+                </motion.a>
+              </li>
             ))}
           </ul>
         </nav>
@@ -76,18 +71,18 @@ export default function Header() {
           <Button
             variant="ghost"
             asChild
-            className="text-slate-500 hover:text-slate-950 font-bold text-sm hidden sm:flex px-6 rounded-2xl h-12"
+            className="hidden h-11 rounded-full px-5 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-primary-800 sm:flex"
           >
             <Link to="/auth?mode=sign-in" className="flex gap-2">
-              <LogIn className="h-4 w-4" /> Sign In
+              <LogIn className="h-4 w-4" /> Đăng nhập
             </Link>
           </Button>
           <Button
             asChild
-            className="bg-slate-950 hover:bg-black text-white px-8 rounded-2xl h-12 font-bold transition-all hover:scale-[1.05] active:scale-95 shadow-xl shadow-slate-900/10"
+            className="h-11 rounded-full bg-primary px-6 font-semibold text-white shadow-sm transition-colors hover:bg-primary-600 active:scale-95"
           >
             <Link to="/auth?mode=sign-up" className="flex gap-2">
-              <span>Get Started</span>
+              <span>Bắt đầu ngay</span>
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </Button>

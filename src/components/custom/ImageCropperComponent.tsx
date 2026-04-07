@@ -303,13 +303,14 @@ export default function ImageCropperComponent({
             type="button"
             onClick={() => handleZoom(-0.1)}
             className="h-9 w-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors"
+            title="Thu nhỏ"
           >
             <ZoomOut className="h-4 w-4" />
           </button>
 
           <div className="w-24 h-1.5 bg-slate-200 rounded-full overflow-hidden">
             <div
-              className="h-full bg-emerald-500 rounded-full transition-all"
+              className="h-full bg-primary-500 rounded-full transition-all"
               style={{ width: `${Math.min(100, (scale / 3) * 100)}%` }}
             />
           </div>
@@ -318,6 +319,7 @@ export default function ImageCropperComponent({
             type="button"
             onClick={() => handleZoom(0.1)}
             className="h-9 w-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors"
+            title="Phóng to"
           >
             <ZoomIn className="h-4 w-4" />
           </button>

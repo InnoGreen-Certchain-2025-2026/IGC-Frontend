@@ -114,7 +114,7 @@ export default function AccountLayout() {
               alt={name ?? ""}
               className="object-cover"
             />
-            <AvatarFallback className="bg-blue-100 text-blue-700 text-3xl font-bold">
+            <AvatarFallback className="bg-primary-100 text-primary-800 text-3xl font-bold">
               {getAvatarFallback(name)}
             </AvatarFallback>
           </Avatar>
@@ -134,6 +134,7 @@ export default function AccountLayout() {
           ref={fileInputRef}
           className="hidden"
           accept="image/*"
+          title="Tải ảnh đại diện"
           onChange={handleFileChange}
         />
 
@@ -146,16 +147,16 @@ export default function AccountLayout() {
       </div>
 
       {/* ── Tab bar ── */}
-      <div className="flex justify-center border-b border-gray-200 mb-6">
+      <div className="mb-6 flex justify-center border-b border-primary-100">
         {TABS.map((tab) => (
           <NavLink
             key={tab.to}
             to={tab.to}
             className={({ isActive }) =>
-              `px-5 py-2.5 text-sm font-medium transition-colors duration-150 border-b-2 -mb-px ${
+              `-mb-px border-b-2 px-5 py-2.5 text-sm font-medium transition-colors duration-150 ${
                 isActive
-                  ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  ? "border-primary-600 text-primary-700"
+                  : "border-transparent text-gray-500 hover:border-primary-200 hover:text-primary-700"
               }`
             }
           >
@@ -165,7 +166,10 @@ export default function AccountLayout() {
       </div>
 
       {/* ── Sub-page content ── */}
+
       <Outlet />
+
+      
 
       {/* ── Image Cropper Modal ── */}
       <ImageCropperComponent

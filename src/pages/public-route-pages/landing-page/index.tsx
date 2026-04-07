@@ -27,7 +27,7 @@ export default function LandingPage() {
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-500"></span>
                   </span>
                   <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-[0.2em] font-display">
-                    Trust on Blockchain
+                    Niềm tin trên Blockchain
                   </span>
                 </motion.div>
                 
@@ -80,11 +80,11 @@ export default function LandingPage() {
                 className="flex-1 relative hidden lg:block"
               >
                 <div className="absolute -inset-40 bg-primary-500/10 blur-[140px] rounded-full animate-pulse" />
-                <div className="relative p-6 bg-slate-950 rounded-[4rem] rotate-3 hover:translate-y-[-10px] hover:rotate-0 transition-all duration-700 aspect-square max-w-md mx-auto overflow-hidden group shadow-2xl shadow-primary-900/20">
+                <div className="relative p-6 bg-slate-950 rounded-[4rem] rotate-3 hover:-translate-y-2.5 hover:rotate-0 transition-all duration-700 aspect-square max-w-md mx-auto overflow-hidden group shadow-2xl shadow-primary-900/20">
                    <div className="absolute inset-0 bg-linear-to-br from-primary-600/10 via-transparent to-accent-500/10" />
                    <img 
                     src="/homepage-hero-bg.png" 
-                    alt="Platform Map Preview" 
+                    alt="Xem trước bản đồ nền tảng" 
                     className="relative z-10 w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700"
                    />
                    <div className="absolute bottom-10 left-10 right-10 z-20">
@@ -92,7 +92,7 @@ export default function LandingPage() {
                          <div className="h-10 w-10 bg-accent-500 rounded-xl flex items-center justify-center">
                             <Network className="h-5 w-5 text-white" />
                          </div>
-                         <div className="text-white font-bold text-sm">Global Verification Network</div>
+                         <div className="text-white font-bold text-sm">Mạng lưới xác minh toàn cầu</div>
                       </div>
                    </div>
                 </div>

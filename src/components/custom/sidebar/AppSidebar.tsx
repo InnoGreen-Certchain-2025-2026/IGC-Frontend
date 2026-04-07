@@ -17,25 +17,25 @@ export default function AppSidebar({
   bottomSections,
 }: AppSidebarProps) {
   return (
-    <aside className="w-[272px] min-w-[272px] bg-linear-to-b from-[#002B5B] to-[#001D3D] text-white flex flex-col overflow-y-auto">
+    <aside className="flex w-68 min-w-68 flex-col overflow-y-auto border-r border-slate-200 bg-white/95 text-slate-800 shadow-[0_0_0_1px_rgba(15,23,42,0.02),0_12px_40px_rgba(15,23,42,0.04)]">
       {/* Branding */}
-      <div className="flex items-center gap-2.5 px-5 pt-6 pb-4 text-lg font-bold tracking-tight border-b border-white/12">
+      <div className="flex items-center gap-2.5 border-b border-slate-200 px-5 pt-6 pb-4 text-lg font-bold tracking-tight bg-linear-to-r from-slate-50 to-transparent">
         <img
           src="/favicon/web-logo.png"
           alt="IGC Logo"
           className="h-9 w-9 object-contain"
         />
-        <span>IGC Platform</span>
+        <span className="font-display text-slate-900">IGC Platform</span>
       </div>
 
       {/* Organization selector */}
       <OrganizationSelector />
 
       {/* Main navigation sections */}
-      <nav className="flex-1 px-3 py-2 flex flex-col gap-0.5">
+      <nav className="flex flex-1 flex-col gap-1 px-3 py-2">
         {mainSections.map((section) => (
           <div key={section.title}>
-            <span className="text-[0.7rem] uppercase tracking-wider text-white/45 px-2 pt-3 pb-1.5 font-semibold block">
+            <span className="block px-2 pt-3 pb-1.5 text-[0.68rem] font-semibold tracking-[0.2em] text-slate-500 uppercase">
               {section.title}
             </span>
             {section.items.map((item) => (
@@ -44,10 +44,10 @@ export default function AppSidebar({
                 to={item.to}
                 end={item.end}
                 className={({ isActive }) =>
-                  `flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium no-underline transition-all duration-150 [&>svg]:w-[18px] [&>svg]:h-[18px] [&>svg]:shrink-0 ${
+                  `group flex items-center gap-3 mt-1 rounded-xl border-l-2 px-3.5 py-2.75 text-sm font-medium no-underline transition-all duration-150 [&>svg]:h-4.5 [&>svg]:w-4.5 [&>svg]:shrink-0 ${
                     isActive
-                      ? "bg-white/18 text-white font-semibold"
-                      : "text-white/78 hover:bg-white/10 hover:text-white"
+                      ? "border-primary-500 bg-primary-50 text-primary-800 font-semibold shadow-[0_4px_18px_rgba(35,111,70,0.08)]"
+                      : "border-transparent text-slate-600 hover:border-primary-200 hover:bg-slate-50 hover:text-primary-800 hover:shadow-sm"
                   }`
                 }
               >
@@ -59,10 +59,10 @@ export default function AppSidebar({
         ))}
 
         {/* Bottom sections + Account link */}
-        <div className="mt-auto pt-4 flex flex-col gap-0.5">
+        <div className="mt-auto flex flex-col gap-0.5 pt-4">
           {bottomSections?.map((section) => (
             <div key={section.title}>
-              <span className="text-[0.7rem] uppercase tracking-wider text-white/45 px-2 pb-1.5 font-semibold block">
+              <span className="block px-2 pb-1.5 text-[0.68rem] font-semibold tracking-[0.2em] text-slate-500 uppercase">
                 {section.title}
               </span>
               {section.items.map((item) => (
@@ -71,10 +71,10 @@ export default function AppSidebar({
                   to={item.to}
                   end={item.end}
                   className={({ isActive }) =>
-                    `flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium no-underline transition-all duration-150 [&>svg]:w-[18px] [&>svg]:h-[18px] [&>svg]:shrink-0 ${
+                    `group flex items-center gap-3 rounded-xl border-l-2 px-3.5 py-2.75 text-sm font-medium no-underline transition-all duration-150 [&>svg]:h-4.5 [&>svg]:w-4.5 [&>svg]:shrink-0 ${
                       isActive
-                        ? "bg-white/18 text-white font-semibold"
-                        : "text-white/78 hover:bg-white/10 hover:text-white"
+                      ? "border-primary-500 bg-primary-50 text-primary-800 font-semibold shadow-[0_4px_18px_rgba(35,111,70,0.08)]"
+                      : "border-transparent text-slate-600 hover:border-primary-200 hover:bg-slate-50 hover:text-primary-800 hover:shadow-sm"
                     }`
                   }
                 >
@@ -89,10 +89,10 @@ export default function AppSidebar({
           <NavLink
             to="/account"
             className={({ isActive }) =>
-              `flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium no-underline transition-all duration-150 [&>svg]:w-[18px] [&>svg]:h-[18px] [&>svg]:shrink-0 ${
+              `group flex items-center gap-3 mt-1 rounded-xl border-l-2 px-3.5 py-2.75 text-sm font-medium no-underline transition-all duration-150 [&>svg]:h-4.5 [&>svg]:w-4.5 [&>svg]:shrink-0 ${
                 isActive
-                  ? "bg-white/18 text-white font-semibold"
-                  : "text-white/78 hover:bg-white/10 hover:text-white"
+                  ? "border-primary-500 bg-primary-50 text-primary-800 font-semibold shadow-[0_4px_18px_rgba(35,111,70,0.08)]"
+                  : "border-transparent text-slate-600 hover:border-primary-200 hover:bg-slate-50 hover:text-primary-800 hover:shadow-sm"
               }`
             }
           >
@@ -102,7 +102,7 @@ export default function AppSidebar({
         </div>
       </nav>
 
-      <div className="px-4 py-3 border-t border-white/12 text-[0.7rem] text-white/40 text-center">
+      <div className="border-t border-slate-200 px-4 py-3 text-center text-[0.7rem] text-slate-500">
         © 2026 InnoGreen Certchain
       </div>
     </aside>
