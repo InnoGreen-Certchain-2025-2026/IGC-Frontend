@@ -17,7 +17,7 @@ export default function AppSidebar({
   bottomSections,
 }: AppSidebarProps) {
   return (
-    <aside className="flex w-68 min-w-68 flex-col overflow-y-auto border-r border-slate-200 bg-white/95 text-slate-800 shadow-[0_0_0_1px_rgba(15,23,42,0.02),0_12px_40px_rgba(15,23,42,0.04)]">
+    <aside className="flex w-68 min-w-68 flex-col overflow-y-auto border-r border-slate-200 bg-white/95 text-slate-800 shadow-[0_0_0_1px_rgba(15,23,42,0.02),0_12px_40px_rgba(15,23,42,0.04)] bg-linear-to-b from-white to-primary-200">
       {/* Branding */}
       <div className="flex items-center gap-2.5 border-b border-slate-200 px-5 pt-6 pb-4 text-lg font-bold tracking-tight bg-linear-to-r from-slate-50 to-transparent">
         <img

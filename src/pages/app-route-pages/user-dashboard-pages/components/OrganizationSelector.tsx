@@ -7,6 +7,7 @@ import {
   Plus,
   Building2,
   Loader2,
+  User2,
 } from "lucide-react";
 import {
   Popover,
@@ -81,7 +82,7 @@ export default function OrganizationSelector() {
                   className="h-5 w-5 rounded object-cover shrink-0"
                 />
               ) : (
-                <Building2 className="h-4 w-4 text-slate-400 shrink-0" />
+                <User2 className="h-4 w-4 text-slate-400 shrink-0" />
               )}
               <span className="overflow-hidden text-ellipsis whitespace-nowrap">
                 {selectedOrg?.name ?? "Cá nhân"}
@@ -122,7 +123,7 @@ export default function OrganizationSelector() {
                   ) : (
                     <span className="h-4 w-4 shrink-0" />
                   )}
-                  <Building2 className="h-4 w-4 text-slate-400 shrink-0" />
+                  <User2 className="h-4 w-4 text-slate-400 shrink-0" />
                   <span>Cá nhân</span>
                 </button>
 
