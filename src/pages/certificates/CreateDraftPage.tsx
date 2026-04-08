@@ -6,20 +6,34 @@ import { useCreateDraftCertificate } from "@/hooks/useCertificates";
 import type { CertificateDraftPayload } from "@/types/certificate";
 import { CERTIFICATE_TEXTS, DEFAULT_LOCALE } from "@/pages/certificates/texts";
 import { ApiBusinessError } from "@/types/certificate";
+import { useOrganizationContext } from "@/hooks/useOrganizationContext";
 
 export default function CreateDraftPage() {
   const navigate = useNavigate();
   const { orgCode } = useParams<{ orgCode: string }>();
+  const { orgId } = useOrganizationContext();
   const text = CERTIFICATE_TEXTS[DEFAULT_LOCALE];
   const createDraftMutation = useCreateDraftCertificate();
 
-  const handleSubmit = async (payload: CertificateDraftPayload) => {
+  const handleSubmit = async (payload: {
+    request: CertificateDraftPayload;
+    userCertificate: File;
+    certificatePassword: string;
+  }) => {
+    if (!orgId) {
+      toast.error("Không tìm thấy tổ chức đang chọn");
+      return;
+    }
+
     try {
-      const result = await createDraftMutation.mutateAsync(payload);
-      toast.success(text.notifications.createDraftSuccess);
+      const result = await createDraftMutation.mutateAsync({
+        ...payload,
+        organizationId: orgId,
+      });
+      toast.success("Tạo chứng chỉ thành công");
       navigate(`/org/${orgCode}/certificates`, {
         state: {
-          activeTab: "DRAFT",
+          activeTab: "SIGNED",
           highlightCertificateId: result.certificateId,
         },
       });

@@ -25,7 +25,13 @@ import CertificateManagementPage from "@/pages/certificates/CertificateManagemen
 import CreateDraftPage from "@/pages/certificates/CreateDraftPage";
 import ClaimVerificationPage from "@/pages/certificates/ClaimVerificationPage";
 import VerifyCertificateFilePage from "@/pages/certificates/VerifyCertificateFilePage";
+import TemplateListPage from "@/pages/certificates/TemplateListPage";
+import TemplateCreatePage from "@/pages/certificates/TemplateCreatePage";
+import TemplateEditPage from "@/pages/certificates/TemplateEditPage";
+import TemplateDetailPage from "@/pages/certificates/TemplateDetailPage";
+import TemplateBatchPage from "@/pages/certificates/TemplateBatchPage";
 import OrgVerifyCertificatePage from "@/pages/app-route-pages/org-dashboard-pages/certificates/OrgVerifyCertificatePage";
+import TemplateEditorPage from "@/pages/TemplateEditorPage";
 
 // ── Account (standalone) ──
 import AccountDashboardLayout from "@/pages/app-route-pages/account-pages/AccountDashboardLayout";
@@ -98,6 +104,25 @@ export const router = createBrowserRouter([
             children: [
               { index: true, element: <CertificateManagementPage /> },
               { path: "create-draft", element: <CreateDraftPage /> },
+              { path: "templates", element: <TemplateListPage /> },
+              { path: "templates/new", element: <TemplateCreatePage /> },
+              {
+                path: "templates/:templateId",
+                element: <TemplateDetailPage />,
+              },
+              {
+                path: "templates/:templateId/edit",
+                element: <TemplateEditPage />,
+              },
+              {
+                path: "template-editor/:templateId",
+                element: <TemplateEditorPage />,
+              },
+              {
+                path: "templates/:templateId/bulk",
+                element: <TemplateBatchPage />,
+              },
+              { path: "template-editor", element: <TemplateCreatePage /> },
               { path: "verify", element: <OrgVerifyCertificatePage /> },
             ],
           },

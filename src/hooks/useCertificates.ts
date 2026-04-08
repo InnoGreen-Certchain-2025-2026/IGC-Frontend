@@ -14,7 +14,7 @@ import {
   verifyCertificateByPdfFileApi,
 } from "@/services/certificateApi";
 import type {
-  CertificateDraftPayload,
+  CertificateIssuePayload,
   CertificateRecord,
   ClaimCertificateResponse,
   SignCertificatePayload,
@@ -62,11 +62,14 @@ export const useCreateDraftCertificate = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (payload: CertificateDraftPayload) =>
+    mutationFn: (payload: CertificateIssuePayload) =>
       createDraftCertificateApi(payload),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: certificateQueryKeys.draft,
+      });
+      await queryClient.invalidateQueries({
+        queryKey: certificateQueryKeys.signed,
       });
     },
   });

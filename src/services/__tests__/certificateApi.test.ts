@@ -70,14 +70,21 @@ describe("certificateApi parser", () => {
     });
 
     const result = await createDraftCertificateApi({
-      certificateId: "CERT-100",
-      studentName: "John Doe",
-      dateOfBirth: "2000-01-01",
-      major: "Computer Science",
-      graduationYear: 2024,
-      gpa: 3.6,
-      certificateType: "Bachelor",
-      issueDate: "2026-03-20",
+      request: {
+        certificateId: "CERT-100",
+        studentName: "John Doe",
+        dateOfBirth: "2000-01-01",
+        major: "Computer Science",
+        graduationYear: 2024,
+        gpa: 3.6,
+        certificateType: "Bachelor",
+        issueDate: "2026-03-20",
+      },
+      userCertificate: new File(["cert"], "user.p12", {
+        type: "application/x-pkcs12",
+      }),
+      certificatePassword: "secret",
+      organizationId: 1,
     });
 
     expect(result.certificateId).toBe("CERT-100");
