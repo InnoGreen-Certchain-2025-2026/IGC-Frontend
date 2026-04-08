@@ -2,7 +2,7 @@ import axiosInstance from "@/lib/axiosInstance";
 import {
   ApiBusinessError,
   type ApiResponse,
-  type CertificateDraftPayload,
+  type CertificateIssuePayload,
   type CertificateRecord,
   type ClaimCertificateResponse,
   type SignCertificatePayload,
@@ -32,16 +32,32 @@ export function parseApiResponse<T>(
 }
 
 export const createDraftCertificateApi = async (
-  payload: CertificateDraftPayload,
+  payload: CertificateIssuePayload,
 ): Promise<CertificateRecord> => {
+  const formData = new FormData();
+  formData.append(
+    "request",
+    new Blob([JSON.stringify(payload.request)], {
+      type: "application/json",
+    }),
+  );
+  formData.append("userCertificate", payload.userCertificate);
+  formData.append("certificatePassword", payload.certificatePassword);
+  formData.append("organizationId", String(payload.organizationId));
+
   const response = await axiosInstance.post<
     ApiResponse<CertificateRecord | null>
-  >("/api/certificates/draft", payload);
+  >("/api/certificates/issue", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    withCredentials: true,
+  });
 
   const fallback: CertificateRecord = {
-    certificateId: payload.certificateId,
-    studentName: payload.studentName,
-    status: "DRAFT",
+    certificateId: payload.request.certificateId,
+    studentName: payload.request.studentName,
+    status: "SIGNED",
   };
 
   return parseApiResponse(response.data, fallback);

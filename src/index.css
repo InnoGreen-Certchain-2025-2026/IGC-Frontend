@@ -99,3 +99,89 @@
   }
 }
 
+.template-editor-pdf .react-pdf__Page {
+  position: relative;
+}
+
+.template-editor-pdf .react-pdf__Page__canvas {
+  position: relative;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.template-editor-pdf .textLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: auto;
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: text;
+}
+
+.template-editor-pdf .textLayer span {
+  color: transparent;
+  background: transparent;
+}
+
+.template-editor-pdf .textLayer span::selection {
+  background: rgba(59, 130, 246, 0.5) !important;
+  color: transparent;
+}
+
+.template-editor-pdf .textLayer ::selection {
+  background: rgba(59, 130, 246, 0.5) !important;
+  color: transparent;
+}
+
+/* Ensure selection is visible across all text elements */
+.template-editor-pdf {
+  --highlight-bg-color: rgba(59, 130, 246, 0.5);
+  --highlight-selected-bg-color: rgba(59, 130, 246, 0.5);
+}
+
+.template-editor-pdf .react-pdf__Page__annotations {
+  pointer-events: none;
+}
+
+/* Cursor styling for different modes */
+.template-editor-pdf {
+  cursor: default;
+}
+
+.template-editor-pdf.select-text {
+  cursor: text !important;
+}
+
+.template-editor-pdf.draw-mode {
+  cursor: crosshair !important;
+}
+
+/* Scrollbar styling - never treated as text selection */
+[data-slot="scroll-area-scrollbar"] {
+  cursor: default !important;
+  user-select: none !important;
+  pointer-events: auto !important;
+}
+
+[data-slot="scroll-area-scrollbar"] * {
+  user-select: none !important;
+}
+
+/* Toolbar styling to prevent content overflow */
+.rounded-xl.border.bg-white.p-3.shadow-sm {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.rounded-xl.border.bg-white.p-3.shadow-sm p {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  max-width: 100%;
+}

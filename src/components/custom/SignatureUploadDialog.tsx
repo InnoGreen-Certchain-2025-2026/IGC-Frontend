@@ -17,13 +17,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import {
-  Upload,
-  Check,
-  AlertCircle,
-  Loader2,
-  X,
-} from "lucide-react";
+import { Upload, Check, AlertCircle, Loader2, X } from "lucide-react";
 
 interface SignatureUploadDialogProps {
   open: boolean;
@@ -33,11 +27,17 @@ interface SignatureUploadDialogProps {
   onSuccess?: () => void;
 }
 
-type UploadStep = "select" | "confirm" | "loading";
+type UploadStep = "select" | "checking" | "uploading";
 
 /**
- * Dialog component for uploading and confirming signature
- * Handles file selection, validation, and confirmation flow
+ * Dialog component for uploading signature
+ *
+ * Flow:
+ * 1. User selects file
+ * 2. Check if signature is valid and if already used (call /check)
+ * 3. If already used, show confirmation dialog
+ * 4. User confirms or cancels
+ * 5. If confirmed, upload signature (call /upload)
  */
 export function SignatureUploadDialog({
   open,
@@ -55,9 +55,9 @@ export function SignatureUploadDialog({
   const {
     loading,
     error,
-    signatureData,
+    isSignatureUsed,
     checkSignatureFile,
-    confirmSignatureUpload,
+    uploadSignatureFile,
     reset,
   } = useSignature();
 
@@ -75,27 +75,43 @@ export function SignatureUploadDialog({
     reader.readAsDataURL(file);
   };
 
-  const handleCheckSignature = async () => {
+  const handleCheckAndUpload = async () => {
     if (!selectedFile) return;
 
-    setStep("loading");
-    const result = await checkSignatureFile(orgId, selectedFile);
+    setStep("checking");
+    const isUsed = await checkSignatureFile(orgId, selectedFile);
 
-    if (result) {
-      if (result.isUsed) {
-        setShowConfirmDialog(true);
+    if (isUsed === null) {
+      // Error during check - show toast and go back to select
+      if (
+        error &&
+        (error.includes("không phù hợp") || error.includes("không hợp lệ"))
+      ) {
+        // Show error in select step
+        setStep("select");
       } else {
-        // Auto confirm if not used
-        await handleConfirmSignature(result.hash);
+        // For other errors, show toast
+        setStep("select");
+        toast.error(error || "Kiểm tra chữ ký thất bại. Vui lòng thử lại.");
       }
-    } else {
+      return;
+    }
+
+    if (isUsed) {
+      // Signature already used - show confirmation dialog
+      setShowConfirmDialog(true);
       setStep("select");
+    } else {
+      // New signature - upload directly
+      await handleUploadSignature();
     }
   };
 
-  const handleConfirmSignature = async (hash: string) => {
-    setStep("loading");
-    const success = await confirmSignatureUpload(orgId, hash);
+  const handleUploadSignature = async () => {
+    if (!selectedFile) return;
+
+    setStep("uploading");
+    const success = await uploadSignatureFile(orgId, selectedFile);
 
     if (success) {
       toast.success(
@@ -107,7 +123,7 @@ export function SignatureUploadDialog({
       handleClose();
       onSuccess?.();
     } else {
-      setStep("confirm");
+      setStep("select");
       toast.error(error || "Không thể lưu chữ ký. Vui lòng thử lại.");
     }
   };
@@ -148,9 +164,7 @@ export function SignatureUploadDialog({
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>
-              {hasExistingSignature
-                ? "Đăng ký chữ ký thay thế"
-                : "Đăng ký chữ ký"}
+              {hasExistingSignature ? "Đặt chữ ký thay thế" : "Đăng ký chữ ký"}
             </DialogTitle>
             <DialogDescription>
               {hasExistingSignature
@@ -158,6 +172,16 @@ export function SignatureUploadDialog({
                 : "Tải lên hình ảnh chữ ký của bạn (JPG hoặc PNG)"}
             </DialogDescription>
           </DialogHeader>
+
+          {/* Note/Requirements */}
+          <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg flex gap-3">
+            <AlertCircle className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
+            <div className="text-sm text-blue-700">
+              <p className="font-medium mb-1">Yêu cầu chữ ký:</p>
+              <p>• Chữ ký phải là nền trắng</p>
+              <p>• Chữ ký phải nằm trọn trong hình không được vượt quá viền</p>
+            </div>
+          </div>
 
           {step === "select" && (
             <div className="space-y-4">
@@ -241,7 +265,7 @@ export function SignatureUploadDialog({
                   Hủy
                 </Button>
                 <Button
-                  onClick={handleCheckSignature}
+                  onClick={handleCheckAndUpload}
                   disabled={!selectedFile || loading}
                   className="flex-1"
                 >
@@ -261,10 +285,17 @@ export function SignatureUploadDialog({
             </div>
           )}
 
-          {step === "loading" && (
+          {step === "checking" && (
             <div className="flex flex-col items-center justify-center py-12 gap-3">
               <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
-              <p className="text-sm text-gray-600">Đang xử lý chữ ký...</p>
+              <p className="text-sm text-gray-600">Đang kiểm tra chữ ký...</p>
+            </div>
+          )}
+
+          {step === "uploading" && (
+            <div className="flex flex-col items-center justify-center py-12 gap-3">
+              <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+              <p className="text-sm text-gray-600">Đang tải chữ ký lên...</p>
             </div>
           )}
         </DialogContent>
@@ -296,11 +327,7 @@ export function SignatureUploadDialog({
           <div className="flex gap-2 justify-end">
             <AlertDialogCancel>Hủy</AlertDialogCancel>
             <AlertDialogAction
-              onClick={() => {
-                if (signatureData?.hash) {
-                  handleConfirmSignature(signatureData.hash);
-                }
-              }}
+              onClick={handleUploadSignature}
               disabled={loading}
               className="bg-blue-600 hover:bg-blue-700"
             >

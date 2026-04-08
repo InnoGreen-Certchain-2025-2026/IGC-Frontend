@@ -14,6 +14,16 @@ export default function OrgCertificatesPage() {
       label: "Tạo bản nháp",
     },
     {
+      to: `/org/${orgCode}/certificates/templates/new`,
+      label: "Template",
+      end: true,
+    },
+    {
+      to: `/org/${orgCode}/certificates/templates`,
+      label: "Danh sách template",
+      end: true,
+    },
+    {
       to: `/org/${orgCode}/certificates/verify`,
       label: "Xác thực",
     },

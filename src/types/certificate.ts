@@ -17,6 +17,13 @@ export interface CertificateDraftPayload {
   issueDate: string;
 }
 
+export interface CertificateIssuePayload {
+  request: CertificateDraftPayload;
+  userCertificate: File;
+  certificatePassword: string;
+  organizationId: number;
+}
+
 export interface CertificateRecord {
   id?: number;
   certificateId: string;

@@ -7,6 +7,12 @@ import { Label } from "@/components/ui/label";
 import type { CertificateDraftPayload } from "@/types/certificate";
 import { CERTIFICATE_TEXTS, DEFAULT_LOCALE } from "@/pages/certificates/texts";
 
+const certificateFileSchema = z
+  .instanceof(File, { message: "Vui lòng upload chứng thư số (.p12/.pfx)" })
+  .refine((file) => /\.(p12|pfx)$/i.test(file.name), {
+    message: "Chỉ chấp nhận file .p12 hoặc .pfx",
+  });
+
 const draftSchema = z.object({
   certificateId: z.string().min(3, "Mã chứng chỉ phải có ít nhất 3 ký tự"),
   studentName: z.string().min(2, "Vui lòng nhập tên sinh viên"),
@@ -20,13 +26,19 @@ const draftSchema = z.object({
   issueDate: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, "Ngày cấp phải theo định dạng YYYY-MM-DD"),
+  userCertificate: certificateFileSchema,
+  certificatePassword: z.string().min(1, "Vui lòng nhập mật khẩu chứng thư số"),
 });
 
 type DraftFormValues = z.infer<typeof draftSchema>;
 type DraftFormInput = z.input<typeof draftSchema>;
 
 interface CreateDraftFormProps {
-  onSubmit: (payload: CertificateDraftPayload) => Promise<void>;
+  onSubmit: (payload: {
+    request: CertificateDraftPayload;
+    userCertificate: File;
+    certificatePassword: string;
+  }) => Promise<void>;
   onCancel: () => void;
   isSubmitting: boolean;
 }
@@ -48,13 +60,28 @@ export function CreateDraftForm({
       gpa: 0,
       certificateType: "",
       issueDate: new Date().toISOString().split("T")[0],
+      userCertificate: undefined,
+      certificatePassword: "",
     },
   });
 
   const localeText = CERTIFICATE_TEXTS[DEFAULT_LOCALE];
 
   const submit = async (values: DraftFormValues) => {
-    await onSubmit(values);
+    await onSubmit({
+      request: {
+        certificateId: values.certificateId,
+        studentName: values.studentName,
+        dateOfBirth: values.dateOfBirth,
+        major: values.major,
+        graduationYear: values.graduationYear,
+        gpa: values.gpa,
+        certificateType: values.certificateType,
+        issueDate: values.issueDate,
+      },
+      userCertificate: values.userCertificate,
+      certificatePassword: values.certificatePassword,
+    });
   };
 
   return (
@@ -73,6 +100,40 @@ export function CreateDraftForm({
           <Input id="studentName" {...form.register("studentName")} />
           <p className="text-destructive text-xs">
             {form.formState.errors.studentName?.message}
+          </p>
+        </div>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="space-y-2">
+          <Label htmlFor="userCertificate">Chứng thư số (.p12/.pfx)</Label>
+          <Input
+            id="userCertificate"
+            type="file"
+            accept=".p12,.pfx,application/x-pkcs12"
+            onChange={(event) => {
+              const file = event.target.files?.[0];
+              form.setValue("userCertificate", file as File, {
+                shouldValidate: true,
+                shouldDirty: true,
+              });
+            }}
+          />
+          <p className="text-destructive text-xs">
+            {form.formState.errors.userCertificate?.message}
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="certificatePassword">Mật khẩu chứng thư số</Label>
+          <Input
+            id="certificatePassword"
+            type="password"
+            autoComplete="new-password"
+            {...form.register("certificatePassword")}
+          />
+          <p className="text-destructive text-xs">
+            {form.formState.errors.certificatePassword?.message}
           </p>
         </div>
       </div>
