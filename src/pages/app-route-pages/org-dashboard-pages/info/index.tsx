@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@/features/hooks";
 import { getOrganizationByIdApi } from "@/services/organizationService";
+import { checkOrganizationHasSignature } from "@/services/signatureService";
 import type { OrganizationResponse } from "@/types/organization/OrganizationResponse";
 import { getS3Url } from "@/lib/utils";
+import { SignatureUploadDialog } from "@/components/custom/SignatureUploadDialog";
+import { Button } from "@/components/ui/button";
 import {
   Building2,
   Globe,
@@ -14,6 +17,7 @@ import {
   CreditCard,
   Loader2,
   AlertCircle,
+  Pen,
 } from "lucide-react";
 
 const SERVICE_PLAN_LABELS: Record<string, { label: string; color: string }> = {
@@ -43,6 +47,8 @@ export default function OrgInfoPage() {
   const [org, setOrg] = useState<OrganizationResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [signatureDialogOpen, setSignatureDialogOpen] = useState(false);
+  const [hasSignature, setHasSignature] = useState(false);
 
   useEffect(() => {
     if (!selectedOrg?.id) return;
@@ -54,7 +60,16 @@ export default function OrgInfoPage() {
       setError(null);
       try {
         const res = await getOrganizationByIdApi(selectedOrg.id);
-        if (!cancelled && res.data) setOrg(res.data);
+        if (!cancelled && res.data) {
+          setOrg(res.data);
+          // Check if organization has existing signature
+          const orgHasSignature = await checkOrganizationHasSignature(
+            selectedOrg.id,
+          );
+          if (!cancelled) {
+            setHasSignature(orgHasSignature);
+          }
+        }
       } catch {
         if (!cancelled) setError("Không thể tải thông tin tổ chức.");
       } finally {
@@ -108,21 +123,25 @@ export default function OrgInfoPage() {
 
       {/* ── Header card ── */}
       <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <div className="flex items-center gap-5">
-          <div className="h-16 w-16 rounded-xl bg-gray-100 flex items-center justify-center overflow-hidden shrink-0">
-            {org.logoUrl ? (
-              <img
-                src={getS3Url(org.logoUrl)}
-                alt={org.name}
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <Building2 className="h-8 w-8 text-gray-400" />
-            )}
-          </div>
-          <div className="min-w-0 flex-1">
-            <h3 className="text-xl font-semibold text-gray-900">{org.name}</h3>
-            <p className="text-sm text-gray-400 font-mono">{org.code}</p>
+        <div className="flex items-center justify-between gap-5">
+          <div className="flex items-center gap-5 flex-1">
+            <div className="h-16 w-16 rounded-xl bg-gray-100 flex items-center justify-center overflow-hidden shrink-0">
+              {org.logoUrl ? (
+                <img
+                  src={getS3Url(org.logoUrl)}
+                  alt={org.name}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <Building2 className="h-8 w-8 text-gray-400" />
+              )}
+            </div>
+            <div className="min-w-0 flex-1">
+              <h3 className="text-xl font-semibold text-gray-900">
+                {org.name}
+              </h3>
+              <p className="text-sm text-gray-400 font-mono">{org.code}</p>
+            </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <span
@@ -133,6 +152,15 @@ export default function OrgInfoPage() {
             <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">
               {ROLE_LABELS[org.role] ?? org.role}
             </span>
+            <Button
+              onClick={() => setSignatureDialogOpen(true)}
+              variant="default"
+              size="sm"
+              className="ml-2"
+            >
+              <Pen className="h-4 w-4 mr-1.5" />
+              {hasSignature ? "Đăng ký chữ ký thay thế" : "Đăng ký chữ ký"}
+            </Button>
           </div>
         </div>
 
@@ -201,6 +229,18 @@ export default function OrgInfoPage() {
           </div>
         </div>
       </div>
+
+      {/* Signature Upload Dialog */}
+      <SignatureUploadDialog
+        open={signatureDialogOpen}
+        onOpenChange={setSignatureDialogOpen}
+        orgId={org.id}
+        hasExistingSignature={hasSignature}
+        onSuccess={() => {
+          // Optionally refetch org data here if needed
+          setHasSignature(true);
+        }}
+      />
     </div>
   );
 }

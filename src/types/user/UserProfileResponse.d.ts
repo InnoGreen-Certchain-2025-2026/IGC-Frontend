@@ -4,4 +4,5 @@ export interface UserProfileResponse {
   address: string;
   dob: string;
   gender: "MALE" | "FEMALE" | "OTHER";
+  citizenIdNumber: string;
 }
