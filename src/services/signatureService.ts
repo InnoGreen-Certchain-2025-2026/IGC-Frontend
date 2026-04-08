@@ -111,6 +111,31 @@ export function isValidSignatureFile(file: File): boolean {
 }
 
 /**
+ * Check if an organization has an existing signature
+ * Calls backend API: GET /api/signature/exist?orgId={orgId}
+ *
+ * @param orgId - Organization ID
+ * @returns Promise<boolean> - true if organization has a signature, false otherwise
+ */
+export async function checkOrganizationHasSignature(
+  orgId: number,
+): Promise<boolean> {
+  try {
+    const response = await axiosInstance.get<any>("/api/signature/exist", {
+      params: {
+        orgId,
+      },
+    });
+
+    return response.data.data || false;
+  } catch (error) {
+    console.error("Error checking if organization has signature:", error);
+    // Return false on error - assume no signature
+    return false;
+  }
+}
+
+/**
  * Get file size in human readable format
  */
 export function getFileSizeLabel(bytes: number): string {

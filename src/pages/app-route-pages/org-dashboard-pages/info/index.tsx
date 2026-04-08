@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@/features/hooks";
 import { getOrganizationByIdApi } from "@/services/organizationService";
+import { checkOrganizationHasSignature } from "@/services/signatureService";
 import type { OrganizationResponse } from "@/types/organization/OrganizationResponse";
 import { getS3Url } from "@/lib/utils";
 import { SignatureUploadDialog } from "@/components/custom/SignatureUploadDialog";
@@ -59,7 +60,16 @@ export default function OrgInfoPage() {
       setError(null);
       try {
         const res = await getOrganizationByIdApi(selectedOrg.id);
-        if (!cancelled && res.data) setOrg(res.data);
+        if (!cancelled && res.data) {
+          setOrg(res.data);
+          // Check if organization has existing signature
+          const orgHasSignature = await checkOrganizationHasSignature(
+            selectedOrg.id,
+          );
+          if (!cancelled) {
+            setHasSignature(orgHasSignature);
+          }
+        }
       } catch {
         if (!cancelled) setError("Không thể tải thông tin tổ chức.");
       } finally {
