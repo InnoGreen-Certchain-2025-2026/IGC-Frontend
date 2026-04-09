@@ -55,7 +55,6 @@ export function SignatureUploadDialog({
   const {
     loading,
     error,
-    isSignatureUsed,
     checkSignatureFile,
     uploadSignatureFile,
     reset,
