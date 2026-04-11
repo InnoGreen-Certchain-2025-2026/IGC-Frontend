@@ -30,9 +30,12 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "@/features/hooks";
-import { executeLogin } from "@/features/auth/authThunk";
-import { executeRegister } from "@/features/auth/authThunk";
-import { clearError } from "@/features/auth/authSlice";
+import { executeRegister, executeLogin } from "@/features/auth/authThunk";
+import { clearError, setTokens } from "@/features/auth/authSlice";
+import { AuthenticationDetails, CognitoUser, CognitoUserAttribute } from "amazon-cognito-identity-js";
+import { getCognitoUser, userPool } from "@/services/cognitoService";
+import { QRCodeSVG } from "qrcode.react";
+import axiosInstance from "@/lib/axiosInstance";
 
 export default function AuthPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -67,6 +70,22 @@ export default function AuthPage() {
   // Register loading (separate from auth slice since register is void)
   const [registerLoading, setRegisterLoading] = useState(false);
 
+  // Cognito MFA State
+  const [mfaStep, setMfaStep] = useState<"NONE" | "SETUP" | "VERIFY" | "CONFIRM_SIGNUP">("NONE");
+  const [mfaCode, setMfaCode] = useState("");
+  const [mfaQrCode, setMfaQrCode] = useState("");
+  const [cognitoUserRef, setCognitoUserRef] = useState<CognitoUser | null>(null);
+  const [pendingRegData, setPendingRegData] = useState<{
+    name: string;
+    email: string;
+    password: string;
+    phone: string;
+    address: string;
+    citizenIdNumber: string;
+    dob: string;
+    gender: "MALE" | "FEMALE" | "OTHER";
+  } | null>(null);
+
   const handleTabChange = (newMode: string) => {
     dispatch(clearError());
     setSearchParams({ mode: newMode });
@@ -77,15 +96,176 @@ export default function AuthPage() {
       toast.error("Vui lòng nhập đầy đủ email và mật khẩu.");
       return;
     }
-    try {
-      await dispatch(
-        executeLogin({ email: loginEmail, password: loginPassword }),
-      ).unwrap();
-      toast.success("Đăng nhập thành công!");
-      navigate("/usr");
-    } catch (err: unknown) {
-      toast.error((err as string) || "Đăng nhập thất bại");
-    }
+
+    const normalizedEmail = loginEmail.toLowerCase();
+    const cognitoUser = getCognitoUser(normalizedEmail);
+    const authDetails = new AuthenticationDetails({
+      Username: normalizedEmail,
+      Password: loginPassword,
+    });
+
+    cognitoUser.authenticateUser(authDetails, {
+      onSuccess: async (result) => {
+        const payload = result.getIdToken().payload;
+        try {
+          const syncRes = await axiosInstance.post("/auth/sync", {
+            cognitoSub: payload.sub,
+            email: normalizedEmail,
+            name: payload.name || normalizedEmail,
+          });
+          const { accessToken, userSessionResponse } = syncRes.data.data;
+          dispatch(setTokens({ accessToken, userSessionResponse }));
+          setLoginEmail("");
+          setLoginPassword("");
+          toast.success("Đăng nhập thành công!");
+          navigate("/usr");
+        } catch {
+          toast.error("Lỗi đồng bộ dữ liệu tài khoản.");
+        }
+      },
+      onFailure: async (err) => {
+        if (err.code === "UserNotConfirmedException") {
+          toast.warning("Tài khoản chưa được xác nhận, vui lòng kiểm tra email.");
+          return;
+        }
+        // Fallback to local auth
+        try {
+          await dispatch(executeLogin({ email: normalizedEmail, password: loginPassword })).unwrap();
+          setLoginEmail("");
+          setLoginPassword("");
+          toast.success("Đăng nhập thành công!");
+          navigate("/usr");
+        } catch (localErr: unknown) {
+          toast.error((localErr as string) || "Đăng nhập thất bại");
+        }
+      },
+      mfaSetup: () => {
+        // User never set up TOTP — associate software token
+        cognitoUser.associateSoftwareToken({
+          associateSecretCode: (secretCode) => {
+            setMfaQrCode(`otpauth://totp/InnoGreen:${normalizedEmail}?secret=${secretCode}&issuer=InnoGreen`);
+            setMfaStep("SETUP");
+            setCognitoUserRef(cognitoUser);
+          },
+          onFailure: (err) => toast.error("Lỗi thiết lập MFA: " + err.message),
+        });
+      },
+      totpRequired: () => {
+        setMfaStep("VERIFY");
+        setCognitoUserRef(cognitoUser);
+      },
+    });
+  };
+
+  const handleVerifyMfaSetup = () => {
+    if (!cognitoUserRef || !mfaCode) return;
+    cognitoUserRef.verifySoftwareToken(mfaCode, "SoftwareToken", {
+      onSuccess: async () => {
+        // If this came from registration, create the local DB user and go to login
+        if (pendingRegData) {
+          try {
+            await dispatch(
+              executeRegister({
+                name: pendingRegData.name,
+                email: pendingRegData.email,
+                citizenIdNumber: pendingRegData.citizenIdNumber,
+                phoneNumber: pendingRegData.phone,
+                address: pendingRegData.address,
+                dob: pendingRegData.dob,
+                gender: pendingRegData.gender,
+                password: pendingRegData.password,
+              }),
+            ).unwrap();
+            const email = pendingRegData.email;
+            setPendingRegData(null);
+            setMfaStep("NONE");
+            setMfaCode("");
+            setMfaQrCode("");
+            setRegName(""); setRegEmail(""); setRegPassword(""); setRegPhone("");
+            setRegAddress(""); setRegCitizenIdNumber(""); setRegDob("");
+            toast.success("Đăng ký và thiết lập 2FA thành công! Vui lòng đăng nhập.");
+            navigate("/auth?mode=sign-in");
+            setLoginEmail(email);
+          } catch {
+            toast.error("Lỗi tạo tài khoản nội bộ, vui lòng liên hệ hỗ trợ.");
+            setPendingRegData(null);
+            setMfaStep("NONE");
+            setMfaCode("");
+          }
+        } else {
+          toast.success("Thiết lập 2FA thành công! Vui lòng đăng nhập lại.");
+          setMfaStep("NONE");
+          setMfaCode("");
+          navigate("/auth?mode=sign-in");
+        }
+      },
+      onFailure: (err) => toast.error("Mã không đúng: " + err.message),
+    });
+  };
+
+  const handleVerifyMfaLogin = () => {
+    if (!cognitoUserRef || !mfaCode) return;
+    cognitoUserRef.sendMFACode(mfaCode, {
+      onSuccess: async (result) => {
+        const payload = result.getIdToken().payload;
+        try {
+          const syncRes = await axiosInstance.post("/auth/sync", {
+            cognitoSub: payload.sub,
+            email: loginEmail.toLowerCase(),
+            name: payload.name || loginEmail.toLowerCase(),
+          });
+          const { accessToken, userSessionResponse } = syncRes.data.data;
+          dispatch(setTokens({ accessToken, userSessionResponse }));
+          setMfaCode("");
+          setMfaStep("NONE");
+          setLoginEmail("");
+          setLoginPassword("");
+          toast.success("Đăng nhập thành công!");
+          navigate("/usr");
+        } catch {
+          toast.error("Lỗi đồng bộ dữ liệu tài khoản.");
+        }
+      },
+      onFailure: (err) => toast.error("Sai mã OTP: " + err.message),
+    }, "SOFTWARE_TOKEN_MFA");
+  };
+
+  const handleConfirmSignup = () => {
+    if (!cognitoUserRef || !mfaCode || !pendingRegData) return;
+    cognitoUserRef.confirmRegistration(mfaCode, true, (err) => {
+      if (err) {
+        toast.error("Mã xác nhận không đúng: " + err.message);
+        return;
+      }
+      // Email confirmed — auto sign-in to trigger TOTP setup
+      setMfaCode("");
+      const user = getCognitoUser(pendingRegData.email);
+      const authDetails = new AuthenticationDetails({
+        Username: pendingRegData.email,
+        Password: pendingRegData.password,
+      });
+      user.authenticateUser(authDetails, {
+        mfaSetup: () => {
+          user.associateSoftwareToken({
+            associateSecretCode: (secretCode) => {
+              setMfaQrCode(`otpauth://totp/InnoGreen:${pendingRegData.email}?secret=${secretCode}&issuer=InnoGreen`);
+              setMfaStep("SETUP");
+              setCognitoUserRef(user);
+              toast.info("Quét mã QR bằng Google Authenticator để hoàn tất đăng ký.");
+            },
+            onFailure: (e) => toast.error("Lỗi thiết lập 2FA: " + e.message),
+          });
+        },
+        onSuccess: () => {
+          // MFA already configured (edge case) — go straight to login
+          toast.success("Xác nhận email thành công! Vui lòng đăng nhập.");
+          setMfaStep("NONE");
+          setPendingRegData(null);
+          handleTabChange("sign-in");
+        },
+        onFailure: (e) => toast.error("Lỗi xác thực: " + e.message),
+      });
+    });
   };
 
   const handleRegister = async () => {
@@ -107,29 +287,33 @@ export default function AuthPage() {
       return;
     }
     setRegisterLoading(true);
-    try {
-      await dispatch(
-        executeRegister({
-          name: regName,
-          email: regEmail,
-          citizenIdNumber: regCitizenIdNumber,
-          phoneNumber: regPhone,
-          address: regAddress,
-          dob: regDob,
-          gender: regGender,
-          password: regPassword,
-        }),
-      ).unwrap();
-      toast.success("Đăng ký thành công! Vui lòng đăng nhập.");
-      handleTabChange("sign-in");
-      // Pre-fill login email
-      setLoginEmail(regEmail);
-      setLoginPassword("");
-    } catch (err: unknown) {
-      toast.error((err as string) || "Đăng ký thất bại");
-    } finally {
+
+    const attributeList = [
+      new CognitoUserAttribute({ Name: "email", Value: regEmail }),
+      new CognitoUserAttribute({ Name: "name", Value: regName }),
+    ];
+
+    userPool.signUp(regEmail, regPassword, attributeList, [], (err, result) => {
       setRegisterLoading(false);
-    }
+      if (err) {
+        toast.error("Đăng ký thất bại: " + err.message);
+        return;
+      }
+      // Save all form data for after OTP confirmation + TOTP setup
+      setPendingRegData({
+        name: regName,
+        email: regEmail,
+        password: regPassword,
+        phone: regPhone,
+        address: regAddress,
+        citizenIdNumber: regCitizenIdNumber,
+        dob: regDob,
+        gender: regGender,
+      });
+      setCognitoUserRef(result!.user);
+      setMfaStep("CONFIRM_SIGNUP");
+      toast.info("Mã xác nhận đã được gửi đến email của bạn.");
+    });
   };
 
   return (
@@ -236,7 +420,7 @@ export default function AuthPage() {
 
         {/* Auth Form Area */}
         <div className="flex-1 flex items-center justify-center p-6 md:p-12 overflow-y-auto no-scrollbar">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="w-full max-w-md"
@@ -252,7 +436,7 @@ export default function AuthPage() {
                     : "Khởi tạo danh tính số của bạn ngay."}
                 </CardDescription>
               </CardHeader>
-              
+
               <CardContent className="px-10 pb-10">
                 <div className="grid grid-cols-2 gap-2 mb-10 p-1.5 bg-slate-50 rounded-2xl border border-slate-100">
                   <button
@@ -277,7 +461,53 @@ export default function AuthPage() {
                   </button>
                 </div>
 
-                {activeTab === "sign-in" ? (
+                {activeTab === "sign-in" || mfaStep === "CONFIRM_SIGNUP" || mfaStep === "SETUP" ? (
+                  mfaStep === "CONFIRM_SIGNUP" ? (
+                    <div className="space-y-6 text-center">
+                      <h3 className="text-xl font-bold">Xác nhận email</h3>
+                      <p className="text-sm text-slate-500">Chúng tôi đã gửi mã OTP đến <span className="font-bold text-slate-800">{pendingRegData?.email}</span>. Vui lòng kiểm tra hộp thư.</p>
+                      <Input
+                        placeholder="Nhập mã xác nhận"
+                        value={mfaCode}
+                        onChange={(e) => setMfaCode(e.target.value)}
+                        className="text-center tracking-[0.5em] font-black text-xl h-14"
+                        maxLength={6}
+                      />
+                      <Button onClick={handleConfirmSignup} className="w-full bg-slate-950 hover:bg-black h-16 rounded-2xl text-lg font-black shadow-lg">Xác nhận</Button>
+                      <button onClick={() => { setMfaStep("NONE"); setMfaCode(""); setPendingRegData(null); }} className="text-sm text-primary-600 font-bold mt-4">Hủy</button>
+                    </div>
+                  ) : mfaStep === "SETUP" ? (
+                    <div className="space-y-6 text-center">
+                      <h3 className="text-xl font-bold">Thiết lập bảo mật 2 lớp (2FA)</h3>
+                      <p className="text-sm text-slate-500">Mở Google Authenticator và quét mã QR dưới đây:</p>
+                      <div className="flex justify-center p-4">
+                         {mfaQrCode && <QRCodeSVG value={mfaQrCode} size={200} />}
+                      </div>
+                      <Input
+                        placeholder="Nhập mã 6 số từ App"
+                        value={mfaCode}
+                        onChange={(e) => setMfaCode(e.target.value)}
+                        className="text-center tracking-[0.5em] font-black text-xl h-14"
+                        maxLength={6}
+                      />
+                      <Button onClick={handleVerifyMfaSetup} className="w-full bg-slate-950 hover:bg-black h-16 rounded-2xl text-lg font-black shadow-lg">Xác nhận thiết lập</Button>
+                      <button onClick={() => setMfaStep("NONE")} className="text-sm text-primary-600 font-bold mt-4">Quay lại</button>
+                    </div>
+                  ) : mfaStep === "VERIFY" ? (
+                    <div className="space-y-6 text-center">
+                      <h3 className="text-xl font-bold">Xác thực bảo mật 2 lớp</h3>
+                      <p className="text-sm text-slate-500">Nhập mã 6 số từ ứng dụng Authenticator của bạn:</p>
+                      <Input
+                        placeholder="••••••"
+                        value={mfaCode}
+                        onChange={(e) => setMfaCode(e.target.value)}
+                        className="text-center tracking-[0.5em] font-black text-xl h-14"
+                        maxLength={6}
+                      />
+                      <Button onClick={handleVerifyMfaLogin} className="w-full bg-slate-950 hover:bg-black h-16 rounded-2xl text-lg font-black shadow-lg">Xác nhận</Button>
+                      <button onClick={() => setMfaStep("NONE")} className="text-sm text-primary-600 font-bold mt-4">Hủy</button>
+                    </div>
+                  ) : (
                   <div className="space-y-8">
                     <div className="space-y-3">
                       <Label
@@ -344,6 +574,7 @@ export default function AuthPage() {
                       )}
                     </Button>
                   </div>
+                  )
                 ) : (
                   <div className="space-y-6">
                     <div className="space-y-2">
@@ -396,7 +627,7 @@ export default function AuthPage() {
                         className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-primary-500 rounded-2xl font-medium tracking-widest"
                       />
                     </div>
-                    
+
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label
@@ -429,7 +660,7 @@ export default function AuthPage() {
                           />
                         </div>
                     </div>
-                    
+
                     <div className="space-y-2">
                        <Label
                          htmlFor="gender"
@@ -471,7 +702,7 @@ export default function AuthPage() {
                         className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-primary-500 rounded-2xl font-medium"
                       />
                     </div>
-                    
+
                     <div className="space-y-2">
                       <Label
                         htmlFor="reg-password"

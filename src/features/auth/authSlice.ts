@@ -47,6 +47,7 @@ const authSlice = createSlice({
       state.email = userSessionResponse.email;
       state.name = userSessionResponse.name;
       state.avatarUrl = userSessionResponse.avatarUrl;
+      state.isAuthenticated = true;
     },
   },
   extraReducers: (builder) => {
