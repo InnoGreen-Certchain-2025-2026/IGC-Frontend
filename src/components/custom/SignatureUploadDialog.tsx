@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useSignature } from "@/hooks/useSignature";
 import {
   Dialog,
@@ -55,12 +55,13 @@ export function SignatureUploadDialog({
   const {
     loading,
     error,
+    isSignatureUsed,
     checkSignatureFile,
     uploadSignatureFile,
     reset,
   } = useSignature();
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -72,9 +73,38 @@ export function SignatureUploadDialog({
       setPreviewUrl(e.target?.result as string);
     };
     reader.readAsDataURL(file);
-  };
+  }, []);
 
-  const handleCheckAndUpload = async () => {
+  const handleClose = useCallback(() => {
+    setSelectedFile(null);
+    setPreviewUrl(null);
+    setStep("select");
+    reset();
+    onOpenChange(false);
+  }, [reset, onOpenChange]);
+
+  const handleUploadSignature = useCallback(async () => {
+    if (!selectedFile) return;
+
+    setStep("uploading");
+    const success = await uploadSignatureFile(orgId, selectedFile);
+
+    if (success) {
+      toast.success(
+        hasExistingSignature
+          ? "Đã cập nhật chữ ký thành công"
+          : "Đã đăng ký chữ ký thành công",
+      );
+      setShowConfirmDialog(false);
+      handleClose();
+      onSuccess?.();
+    } else {
+      setStep("select");
+      toast.error(error || "Không thể lưu chữ ký. Vui lòng thử lại.");
+    }
+  }, [selectedFile, orgId, uploadSignatureFile, hasExistingSignature, handleClose, onSuccess, error]);
+
+  const handleCheckAndUpload = useCallback(async () => {
     if (!selectedFile) return;
 
     setStep("checking");
@@ -104,43 +134,14 @@ export function SignatureUploadDialog({
       // New signature - upload directly
       await handleUploadSignature();
     }
-  };
+  }, [selectedFile, orgId, checkSignatureFile, error, handleUploadSignature]);
 
-  const handleUploadSignature = async () => {
-    if (!selectedFile) return;
-
-    setStep("uploading");
-    const success = await uploadSignatureFile(orgId, selectedFile);
-
-    if (success) {
-      toast.success(
-        hasExistingSignature
-          ? "Đã cập nhật chữ ký thành công"
-          : "Đã đăng ký chữ ký thành công",
-      );
-      setShowConfirmDialog(false);
-      handleClose();
-      onSuccess?.();
-    } else {
-      setStep("select");
-      toast.error(error || "Không thể lưu chữ ký. Vui lòng thử lại.");
-    }
-  };
-
-  const handleClose = () => {
-    setSelectedFile(null);
-    setPreviewUrl(null);
-    setStep("select");
-    reset();
-    onOpenChange(false);
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-  };
+  }, []);
 
-  const handleDrop = (e: React.DragEvent) => {
+  const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -155,7 +156,7 @@ export function SignatureUploadDialog({
       };
       reader.readAsDataURL(file);
     }
-  };
+  }, []);
 
   return (
     <>
@@ -188,6 +189,14 @@ export function SignatureUploadDialog({
               <div
                 className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-400 transition cursor-pointer"
                 onClick={() => fileInputRef.current?.click()}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    fileInputRef.current?.click();
+                  }
+                }}
+                role="button"
+                tabIndex={0}
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
               >
@@ -247,7 +256,7 @@ export function SignatureUploadDialog({
               )}
 
               {/* Error message */}
-              {error && (
+              {error && !isSignatureUsed && (
                 <div className="p-3 bg-red-50 border border-red-200 rounded-lg flex gap-3">
                   <AlertCircle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
                   <p className="text-sm text-red-700">{error}</p>
