@@ -2,8 +2,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function HeroSection() {
+  const { t } = useTranslation();
+
   return (
     <section className="relative w-full pt-32 pb-48 overflow-hidden bg-[#214e41] text-white">
       {/* Background Image with Opacity */}
@@ -51,8 +54,8 @@ export default function HeroSection() {
               </span>
             </div>
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-black leading-tight uppercase tracking-tight text-white">
-              Xác minh <span className="text-[#f2ce3c]">niềm tin</span><br />
-              Kiến tạo <span className="text-[#f2ce3c]">giá trị</span>
+              {t("landingPage.hero.verify")} <span className="text-[#f2ce3c]">{t("landingPage.hero.trust")}</span><br />
+              {t("landingPage.hero.create")} <span className="text-[#f2ce3c]">{t("landingPage.hero.value")}</span>
             </h1>
           </motion.div>
           
@@ -66,11 +69,11 @@ export default function HeroSection() {
               <Search className="h-6 w-6 text-[#214e41] shrink-0 font-bold" />
               <Input 
                 type="text" 
-                placeholder="Nhập mã chứng chỉ để tra cứu..." 
+                placeholder={t("landingPage.hero.placeholder")}
                 className="grow bg-transparent border-none shadow-none focus-visible:ring-0 text-slate-900 px-6 text-lg placeholder:text-slate-400 h-full font-medium"
               />
               <Button className="bg-[#214e41] hover:bg-[#183930] text-[#f2ce3c] rounded-full h-full px-10 text-lg font-bold transition-all shrink-0 hover:scale-[1.02]">
-                Tra cứu ngay
+                {t("landingPage.hero.search")}
               </Button>
             </div>
           </motion.div>

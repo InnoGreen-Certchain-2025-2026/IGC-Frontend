@@ -1,0 +1,70 @@
+{
+  "landingPage": {
+    "header": {
+      "signIn": "Đăng Nhập",
+      "getStarted": "Bắt Đầu"
+    },
+    "hero": {
+      "verify": "Xác minh",
+      "trust": "niềm tin",
+      "create": "Kiến tạo",
+      "value": "giá trị",
+      "placeholder": "Nhập mã chứng chỉ để tra cứu...",
+      "search": "Tra cứu ngay"
+    },
+    "stats": {
+      "established": "Thành lập",
+      "support": "Hỗ trợ",
+      "responseTime": "Thời gian phản hồi"
+    },
+    "problemSolution": {
+      "problemTitle": "Vấn đề hệ thống hiện tại mang lại",
+      "problemList": [
+        "Nạn bằng giả đang gia tăng",
+        "Xác minh thủ công mất 3-7 ngày",
+        "Tốn giấy, chi phí lưu trữ cao"
+      ],
+      "solutionTitle": "Hệ thống chúng tôi giải quyết được",
+      "solutionList": [
+        "Xác thực văn bằng bằng Blockchain",
+        "Quét QR code kiểm tra ngay",
+        "Kết hợp AI phát hiện bất thường"
+      ]
+    },
+    "targetAudience": {
+      "title": "Đối tượng hướng đến",
+      "university": "Đại học",
+      "universityDesc": "Đơn vị đào tạo",
+      "student": "Sinh viên",
+      "studentDesc": "Người học",
+      "organization": "Tổ chức",
+      "organizationDesc": "Doanh nghiệp tuyển dụng"
+    },
+    "features": {
+      "title": "Tính năng",
+      "issue": "Cấp phát",
+      "issueDesc": "Văn bằng/chứng chỉ là độc nhất. Chữ ký số đảm bảo chống giả mạo.",
+      "store": "Lưu trữ",
+      "storeDesc": "Sử dụng công nghệ blockchain. Đảm bảo tính bất biến của dữ liệu.",
+      "verify": "Xác thực",
+      "verifyDesc": "Tra cứu file trực tiếp trên hệ thống. Nhanh chóng, chính xác, minh bạch."
+    },
+    "story": {
+      "missionTitle": "Sứ mệnh",
+      "missionDesc": "InnoGreen CertChain hướng đến một tương lai nơi mọi văn bằng/chứng chỉ đều được xác thực tức thời, minh bạch và đáng tin cậy — góp phần xây dựng nền giáo dục hiện đại, xanh và bền vững, gia tăng nguồn lao động chất lượng cao.",
+      "aboutTitle": "Về dự án",
+      "aboutDesc": "Hệ thống quản lý xác thực văn bằng/chứng chỉ xanh dựa trên nền tảng Blockchain và chữ ký số nhằm số hóa toàn bộ quy trình cấp phát, lưu trữ và xác thực văn bằng/chứng chỉ, từ đó hạn chế gian lận trong sử dụng, giúp tiết kiệm chi phí vận hành và góp phần bảo vệ môi trường thông qua việc giảm sử dụng văn bằng/chứng chỉ giấy truyền thống.",
+      "storyTitle": "Câu chuyện truyền cảm hứng",
+      "storyDesc": "Hiện nay, vấn nạn sử dụng văn bằng/chứng chỉ giả mạo đang ngày càng nhiều trong các cơ sở giáo dục. Quy trình lưu trữ xác thực truyền thống gây mất thời gian cho người học và các doanh nghiệp tuyển dụng. Việc phụ thuộc văn bằng/chứng chỉ giấy dẫn đến nguy cơ sai sót và gian lận khó kiểm soát. Đây chính là động lực để nhóm nghiên cứu và đề xuất một giải pháp mới, nhằm nâng cao tính minh bạch, chính xác và hiệu quả trong việc quản lý văn bằng/chứng chỉ.",
+      "bannerSystem": "Hệ thống quản lý và xác thực",
+      "bannerHighlight": "văn bằng/chứng chỉ xanh",
+      "bannerSub": "dựa trên nền tảng blockchain\nvà chữ ký số"
+    },
+    "contact": {
+      "title": "Làm việc với chúng tôi",
+      "sub": "Kết nối với InnoGreen CertChain ngay hôm nay.",
+      "address": "123/2/6 Đường số 20 Phường An Nhơn, TP. Hồ Chí Minh",
+      "scan": "QUÉT MÃ QR"
+    }
+  }
+}

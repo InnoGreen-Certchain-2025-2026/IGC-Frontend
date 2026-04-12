@@ -1,12 +1,15 @@
 import { motion } from "framer-motion";
 import { PlusCircle, Box, CheckCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function FeaturesSection() {
+  const { t } = useTranslation();
+
   return (
     <section className="py-24 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-20">
-           <h2 className="text-5xl md:text-6xl font-black text-[#214e41] uppercase tracking-tight">Tính năng</h2>
+           <h2 className="text-5xl md:text-6xl font-black text-[#214e41] uppercase tracking-tight">{t("landingPage.features.title")}</h2>
            <div className="h-1.5 w-24 bg-[#f2ce3c] mx-auto mt-6" />
         </div>
 
@@ -21,9 +24,9 @@ export default function FeaturesSection() {
             <div className="h-24 w-24 rounded-full border-4 border-[#4f9b5a] flex items-center justify-center mb-8 bg-white group-hover:border-[#f2ce3c] transition-colors duration-300">
                <PlusCircle className="h-10 w-10 text-[#4f9b5a] group-hover:text-[#f2ce3c] transition-colors" />
             </div>
-            <h3 className="text-3xl font-black text-[#214e41] mb-4 group-hover:text-white transition-colors">Cấp phát</h3>
+            <h3 className="text-3xl font-black text-[#214e41] mb-4 group-hover:text-white transition-colors">{t("landingPage.features.issue")}</h3>
             <p className="text-slate-600 text-lg leading-relaxed group-hover:text-slate-200 transition-colors">
-               Văn bằng/chứng chỉ là độc nhất. Chữ ký số đảm bảo chống giả mạo.
+               {t("landingPage.features.issueDesc")}
             </p>
           </motion.div>
           
@@ -38,9 +41,9 @@ export default function FeaturesSection() {
             <div className="h-24 w-24 rounded-full border-4 border-[#4f9b5a] flex items-center justify-center mb-8 bg-white group-hover:border-[#f2ce3c] transition-colors duration-300">
                <Box className="h-10 w-10 text-[#4f9b5a] group-hover:text-[#f2ce3c] transition-colors" />
             </div>
-            <h3 className="text-3xl font-black text-[#214e41] mb-4 group-hover:text-white transition-colors">Lưu trữ</h3>
+            <h3 className="text-3xl font-black text-[#214e41] mb-4 group-hover:text-white transition-colors">{t("landingPage.features.store")}</h3>
             <p className="text-slate-600 text-lg leading-relaxed group-hover:text-slate-200 transition-colors">
-               Sử dụng công nghệ blockchain. Đảm bảo tính bất biến của dữ liệu.
+               {t("landingPage.features.storeDesc")}
             </p>
           </motion.div>
 
@@ -55,9 +58,9 @@ export default function FeaturesSection() {
             <div className="h-24 w-24 rounded-full border-4 border-[#4f9b5a] flex items-center justify-center mb-8 bg-white group-hover:border-[#f2ce3c] transition-colors duration-300">
                <CheckCircle className="h-10 w-10 text-[#4f9b5a] group-hover:text-[#f2ce3c] transition-colors" />
             </div>
-            <h3 className="text-3xl font-black text-[#214e41] mb-4 group-hover:text-white transition-colors">Xác thực</h3>
+            <h3 className="text-3xl font-black text-[#214e41] mb-4 group-hover:text-white transition-colors">{t("landingPage.features.verify")}</h3>
             <p className="text-slate-600 text-lg leading-relaxed group-hover:text-slate-200 transition-colors">
-               Tra cứu file trực tiếp trên hệ thống. Nhanh chóng, chính xác, minh bạch.
+               {t("landingPage.features.verifyDesc")}
             </p>
           </motion.div>
         </div>

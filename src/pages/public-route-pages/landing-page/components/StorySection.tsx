@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
 import { Globe, Quote, Target, Network } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function StorySection() {
+  const { t } = useTranslation();
+
   return (
     <>
       {/* DIAGONAL SPLIT SECTION (Sứ mệnh & Về dự án) */}
@@ -20,9 +23,9 @@ export default function StorySection() {
                viewport={{ once: true }}
                className="text-white space-y-8 md:pr-16"
              >
-               <h2 className="text-5xl font-black uppercase text-[#f2ce3c]">Sứ mệnh</h2>
+               <h2 className="text-5xl font-black uppercase text-[#f2ce3c]">{t("landingPage.story.missionTitle")}</h2>
                <p className="text-xl leading-relaxed text-slate-200 font-medium text-justify">
-                 InnoGreen CertChain hướng đến một tương lai nơi mọi văn bằng/chứng chỉ đều được xác thực tức thời, minh bạch và đáng tin cậy — góp phần xây dựng nền giáo dục hiện đại, xanh và bền vững, gia tăng nguồn lao động chất lượng cao.
+                 {t("landingPage.story.missionDesc")}
                </p>
                <div className="pt-4 flex items-center gap-4 text-[#f2ce3c] hover:text-white transition-colors cursor-pointer w-max">
                   <Globe className="h-8 w-8" />
@@ -40,10 +43,10 @@ export default function StorySection() {
                {/* Decorative Corner */}
                <div className="absolute top-0 right-0 w-24 h-24 bg-[#214e41]" style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}></div>
                
-               <h2 className="text-4xl font-black uppercase text-[#214e41] mb-6 relative z-10">Về dự án</h2>
+               <h2 className="text-4xl font-black uppercase text-[#214e41] mb-6 relative z-10">{t("landingPage.story.aboutTitle")}</h2>
                <div className="w-16 h-1 bg-[#4f9b5a] mb-8" />
                <p className="text-lg text-slate-700 leading-relaxed font-medium text-justify relative z-10">
-                 Hệ thống quản lý xác thực văn bằng/chứng chỉ xanh dựa trên nền tảng Blockchain và chữ ký số nhằm số hóa toàn bộ quy trình cấp phát, lưu trữ và xác thực văn bằng/chứng chỉ, từ đó hạn chế gian lận trong sử dụng, giúp tiết kiệm chi phí vận hành và góp phần bảo vệ môi trường thông qua việc giảm sử dụng văn bằng/chứng chỉ giấy truyền thống.
+                 {t("landingPage.story.aboutDesc")}
                </p>
              </motion.div>
              
@@ -68,11 +71,11 @@ export default function StorySection() {
                    <Quote className="h-8 w-8 fill-current" />
                  </div>
                  <h2 className="text-5xl font-black uppercase text-[#214e41] leading-tight">
-                    Câu chuyện <br/> truyền cảm hứng
+                    {t("landingPage.story.storyTitle").split('\n').map((line, i) => <span key={i}>{line}<br/></span>)}
                  </h2>
                  <div className="w-24 h-2 bg-[#f2ce3c]" />
                  <p className="text-xl text-slate-600 leading-relaxed text-justify font-medium pt-4">
-                    Hiện nay, vấn nạn sử dụng văn bằng/chứng chỉ giả mạo đang ngày càng nhiều trong các cơ sở giáo dục. Quy trình lưu trữ xác thực truyền thống gây mất thời gian cho người học và các doanh nghiệp tuyển dụng. Việc phụ thuộc văn bằng/chứng chỉ giấy dẫn đến nguy cơ sai sót và gian lận khó kiểm soát. Đây chính là động lực để nhóm nghiên cứu và đề xuất một giải pháp mới, nhằm nâng cao tính minh bạch, chính xác và hiệu quả trong việc quản lý văn bằng/chứng chỉ.
+                    {t("landingPage.story.storyDesc")}
                  </p>
               </motion.div>
               
@@ -92,10 +95,9 @@ export default function StorySection() {
                    <div className="relative z-10">
                      <Target className="h-20 w-20 text-[#f2ce3c] mx-auto mb-10" />
                      <h3 className="text-3xl lg:text-4xl font-bold text-white mb-6 leading-tight">
-                       Hệ thống quản lý và xác thực <br/>
-                       <span className="text-[#f2ce3c]">văn bằng/chứng chỉ xanh</span> <br/>
-                       dựa trên nền tảng blockchain <br/>
-                       và chữ ký số
+                       {t("landingPage.story.bannerSystem")} <br/>
+                       <span className="text-[#f2ce3c]">{t("landingPage.story.bannerHighlight")}</span> <br/>
+                       {t("landingPage.story.bannerSub").split('\n').map((line, i) => <span key={i}>{line}<br/></span>)}
                      </h3>
                      <div className="mt-12 inline-block px-8 py-3 border-2 border-[#f2ce3c] text-[#f2ce3c] font-bold text-xl tracking-[0.2em] uppercase rounded-full hover:bg-[#f2ce3c] hover:text-[#214e41] transition-colors cursor-pointer">
                         WWW.IGCERT.CLICK

@@ -1,0 +1,70 @@
+{
+  "landingPage": {
+    "header": {
+      "signIn": "Sign In",
+      "getStarted": "Get Started"
+    },
+    "hero": {
+      "verify": "Verify",
+      "trust": "trust",
+      "create": "Create",
+      "value": "value",
+      "placeholder": "Enter certificate code to verify...",
+      "search": "Verify Now"
+    },
+    "stats": {
+      "established": "Established",
+      "support": "Support",
+      "responseTime": "Response Time"
+    },
+    "problemSolution": {
+      "problemTitle": "System Problems",
+      "problemList": [
+        "Rising rate of fake diplomas",
+        "Manual verification takes 3-7 days",
+        "High storage and paper costs"
+      ],
+      "solutionTitle": "Our Solutions",
+      "solutionList": [
+        "Certificate verification via Blockchain",
+        "Instant QR code scanning",
+        "AI-powered anomaly detection"
+      ]
+    },
+    "targetAudience": {
+      "title": "Target Audience",
+      "university": "University",
+      "universityDesc": "Training Institution",
+      "student": "Student",
+      "studentDesc": "Learner",
+      "organization": "Organization",
+      "organizationDesc": "Recruitment Enterprise"
+    },
+    "features": {
+      "title": "Features",
+      "issue": "Issuance",
+      "issueDesc": "Certificates are unique. Digital signatures ensure anti-forgery.",
+      "store": "Storage",
+      "storeDesc": "Using blockchain technology. Ensuring data immutability.",
+      "verify": "Verification",
+      "verifyDesc": "Direct file lookup on the system. Fast, accurate, transparent."
+    },
+    "story": {
+      "missionTitle": "Mission",
+      "missionDesc": "InnoGreen CertChain envisions a future where all certificates are verified instantly, transparently, and securely — contributing to a modern, green, and sustainable education system, and increasing the high-quality workforce.",
+      "aboutTitle": "About the Project",
+      "aboutDesc": "A green certificate management and verification system based on Blockchain and digital signature technology to digitize the entire issuance, storage, and verification process, thereby minimizing fraud, saving operational costs, and protecting the environment by reducing traditional paper certificates.",
+      "storyTitle": "Inspiring Story",
+      "storyDesc": "Currently, the issue of fake certificates is increasingly prevalent in educational institutions. Traditional storage and verification processes waste time for both learners and recruiting enterprises. Relying on paper certificates leads to uncontrollable errors and fraud. This is the motivation for the research team to propose a new solution, aiming to improve transparency, accuracy, and efficiency in certificate management.",
+      "bannerSystem": "Management and verification system for",
+      "bannerHighlight": "green certificates",
+      "bannerSub": "based on blockchain\nand digital signatures"
+    },
+    "contact": {
+      "title": "Work With Us",
+      "sub": "Connect with InnoGreen CertChain today.",
+      "address": "123/2/6 Street 20, An Nhon Ward, Ho Chi Minh City",
+      "scan": "SCAN QR CODE"
+    }
+  }
+}
