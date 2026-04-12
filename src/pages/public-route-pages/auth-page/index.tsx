@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useSearchParams, Link, useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import {
   Select,
@@ -38,6 +39,7 @@ import { QRCodeSVG } from "qrcode.react";
 import axiosInstance from "@/lib/axiosInstance";
 
 export default function AuthPage() {
+  const { t, i18n } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const mode = searchParams.get("mode") || "sign-in";
   const navigate = useNavigate();
@@ -93,7 +95,7 @@ export default function AuthPage() {
 
   const handleLogin = async () => {
     if (!loginEmail || !loginPassword) {
-      toast.error("Vui lòng nhập đầy đủ email và mật khẩu.");
+      toast.error(t("auth.form.alerts.emailRequired"));
       return;
     }
 
@@ -279,11 +281,11 @@ export default function AuthPage() {
       !regCitizenIdNumber ||
       !regDob
     ) {
-      toast.error("Vui lòng nhập đầy đủ tất cả thông tin.");
+      toast.error(t("auth.form.alerts.fillAll"));
       return;
     }
     if (regCitizenIdNumber.length !== 12) {
-      toast.error("CCCD phải có đúng 12 chữ số.");
+      toast.error(t("auth.form.alerts.cccdError"));
       return;
     }
     setRegisterLoading(true);
@@ -317,12 +319,12 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="flex min-h-screen w-full bg-white overflow-hidden selection:bg-primary-500 selection:text-white">
+    <div className="flex min-h-screen w-full bg-white overflow-hidden selection:bg-[#214e41] selection:text-white">
       {/* Visual Sidebar */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-slate-950 flex-col justify-between p-16 text-white overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 relative bg-[#214e41] flex-col justify-between p-16 text-white overflow-hidden">
         {/* Abstract Background Decoration */}
-        <div className="absolute top-0 right-0 -mr-24 -mt-24 w-160 h-160 bg-primary-600/20 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 left-0 -ml-24 -mb-24 w-120 h-120 bg-accent-500/10 rounded-full blur-[100px]" />
+        <div className="absolute top-0 right-0 -mr-24 -mt-24 w-160 h-160 bg-[#f2ce3c]/20 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 left-0 -ml-24 -mb-24 w-120 h-120 bg-[#336b59]/20 rounded-full blur-[100px]" />
 
         <div className="relative z-10">
           <Link to="/" className="flex items-center space-x-3 mb-24 group">
@@ -335,43 +337,39 @@ export default function AuthPage() {
               <span className="text-3xl font-black tracking-tighter text-white font-display italic uppercase">
                 InnoGreen
               </span>
-              <span className="text-[8px] font-black tracking-[0.4em] uppercase text-primary-400">Certchain Platform</span>
+              <span className="text-[8px] font-black tracking-[0.4em] uppercase text-[#f2ce3c]">Certchain Platform</span>
             </div>
           </Link>
 
           <div className="space-y-10 max-w-lg">
-            <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-white/5 text-primary-400 border border-white/10 text-[10px] font-black tracking-widest uppercase font-display">
+            <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-white/5 text-[#f2ce3c] border border-white/10 text-[10px] font-black tracking-widest uppercase font-display">
               <ShieldCheck className="w-4 h-4" />
-              <span>Next-Gen Verification</span>
+              <span>{t("auth.sidebar.badge")}</span>
             </div>
 
             <h1 className="text-6xl md:text-8xl font-black leading-[1.05] tracking-tighter text-white">
-              Kỷ Nguyên Mới Cho <br />
-              <span className="text-white">Chứng Chỉ </span>
-              <span className="text-accent-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)] uppercase italic">Số</span>
+              {t("auth.sidebar.titleLine1")} <br />
+              <span className="text-white">{t("auth.sidebar.titleLine2")}</span>
+              <span className="text-[#f2ce3c] drop-shadow-[0_0_15px_rgba(34,211,238,0.5)] uppercase italic">{t("auth.sidebar.titleLine3")}</span>
             </h1>
 
-            <p className="text-xl text-slate-200 leading-relaxed font-medium">
-              Chào mừng bạn đến với hệ sinh thái xác minh chứng chỉ toàn cầu.
-              Mọi dữ liệu của bạn đều được bảo mật và bất biến trên nền tảng
-              Blockchain.
-            </p>
+            <p className="text-xl text-slate-200 leading-relaxed font-medium">{t("auth.sidebar.subtitle")}</p>
 
             <div className="grid grid-cols-1 gap-10 pt-10">
               {[
                 {
                   icon: <Globe className="w-6 h-6" />,
-                  title: "Mạng Lưới Toàn Cầu",
-                  desc: "Xác minh mọi lúc, mọi nơi trên thế giới chỉ với một click chuột.",
+                  title: t("auth.sidebar.features.0.title"),
+                  desc: t("auth.sidebar.features.0.desc"),
                 },
                 {
                   icon: <Zap className="w-6 h-6" />,
-                  title: "Tốc Độ & Bảo Mật",
-                  desc: "Dữ liệu được mã hóa bất biến, xử lý tức thì trên công nghệ Blockchain.",
+                  title: t("auth.sidebar.features.1.title"),
+                  desc: t("auth.sidebar.features.1.desc"),
                 },
               ].map((item, i) => (
                 <div key={i} className="flex items-start space-x-5">
-                  <div className="shrink-0 w-14 h-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-primary-400 shadow-xl shadow-black/20">
+                  <div className="shrink-0 w-14 h-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-[#f2ce3c] shadow-xl shadow-black/20">
                     {item.icon}
                   </div>
                   <div>
@@ -385,7 +383,7 @@ export default function AuthPage() {
         </div>
 
         <div className="relative z-10 text-[10px] font-bold uppercase tracking-[0.3em] text-slate-600 pt-12">
-          © 2026 InnoGreen Certchain • Immutable Digital Identity
+          {t("auth.sidebar.footer")}
         </div>
       </div>
 
@@ -405,16 +403,35 @@ export default function AuthPage() {
           </Link>
           <Link
             to="/"
-            className="text-xs font-black uppercase tracking-widest text-slate-400 flex items-center hover:text-primary-600 transition-colors"
+            className="text-xs font-black uppercase tracking-widest text-slate-400 flex items-center hover:text-[#214e41] transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-2" /> Quay lại
           </Link>
         </div>
 
         {/* Back Button Desktop */}
-        <div className="hidden lg:block absolute top-8 right-8 z-10">
+        <div className="hidden lg:flex items-center absolute top-8 right-8 z-10">
+          {/* Language Toggle */}
+          <button 
+            type="button"
+            onClick={() => i18n.changeLanguage(i18n.language === "vi" ? "en" : "vi")}
+            className="flex items-center justify-center gap-2 h-10 px-4 py-2 bg-slate-50 hover:bg-slate-200 border border-slate-200 rounded-2xl transition-colors font-bold text-sm text-slate-800 shadow-sm mr-4"
+          >
+            {i18n.language === "vi" ? (
+               <>
+                 <img src="https://flagcdn.com/w40/vn.png" alt="Việt Nam" className="w-5 h-auto rounded-sm" />
+                 <span>VI</span>
+               </>
+            ) : (
+               <>
+                 <img src="https://flagcdn.com/w40/us.png" alt="English" className="w-5 h-auto rounded-sm" />
+                 <span>EN</span>
+               </>
+            )}
+          </button>
+
            <Button variant="ghost" asChild className="rounded-full px-6 font-bold text-slate-400 hover:text-slate-900">
-             <Link to="/"><ArrowLeft className="w-4 h-4 mr-2" /> Trang chủ</Link>
+             <Link to="/"><ArrowLeft className="w-4 h-4 mr-2" /> {t("auth.form.home")}</Link>
            </Button>
         </div>
 
@@ -427,13 +444,11 @@ export default function AuthPage() {
           >
             <Card className="border-none shadow-2xl shadow-slate-200/50 bg-white rounded-[3rem] overflow-hidden">
               <CardHeader className="space-y-3 pt-12 pb-8 text-center px-10">
-                <CardTitle className="text-4xl font-black text-slate-950 tracking-tight">
-                  {activeTab === "sign-in" ? "Đăng Nhập" : "Đăng Ký"}
-                </CardTitle>
+                <CardTitle className="text-4xl font-black text-slate-950 tracking-tight"> {activeTab === "sign-in" ? t("auth.form.tabs.signIn") : t("auth.form.tabs.signUp")} </CardTitle>
                 <CardDescription className="text-slate-500 font-medium text-lg leading-snug">
                   {activeTab === "sign-in"
-                    ? "Rất vui được gặp lại bạn!"
-                    : "Khởi tạo danh tính số của bạn ngay."}
+                    ? t("auth.form.signInDesc")
+                    : t("auth.form.signUpDesc")}
                 </CardDescription>
               </CardHeader>
 
@@ -443,60 +458,56 @@ export default function AuthPage() {
                     onClick={() => handleTabChange("sign-in")}
                     className={`py-3 text-xs font-black uppercase tracking-widest rounded-xl transition-all duration-300 ${
                       activeTab === "sign-in"
-                        ? "bg-white text-primary-600 shadow-xl shadow-slate-200/50"
+                        ? "bg-white text-[#214e41] shadow-xl shadow-slate-200/50"
                         : "text-slate-400 hover:text-slate-600 hover:bg-slate-100"
                     }`}
-                  >
-                    Đăng Nhập
-                  </button>
+                  >{t("auth.form.tabs.signIn")}</button>
                   <button
                     onClick={() => handleTabChange("sign-up")}
                     className={`py-3 text-xs font-black uppercase tracking-widest rounded-xl transition-all duration-300 ${
                       activeTab === "sign-up"
-                        ? "bg-white text-primary-600 shadow-xl shadow-slate-200/50"
+                        ? "bg-white text-[#214e41] shadow-xl shadow-slate-200/50"
                         : "text-slate-400 hover:text-slate-600 hover:bg-slate-100"
                     }`}
-                  >
-                    Đăng Ký
-                  </button>
+                  >{t("auth.form.tabs.signUp")}</button>
                 </div>
 
                 {activeTab === "sign-in" || mfaStep === "CONFIRM_SIGNUP" || mfaStep === "SETUP" ? (
                   mfaStep === "CONFIRM_SIGNUP" ? (
                     <div className="space-y-6 text-center">
-                      <h3 className="text-xl font-bold">Xác nhận email</h3>
-                      <p className="text-sm text-slate-500">Chúng tôi đã gửi mã OTP đến <span className="font-bold text-slate-800">{pendingRegData?.email}</span>. Vui lòng kiểm tra hộp thư.</p>
+                      <h3 className="text-xl font-bold"> {t("auth.form.mfa.confirmEmail")} </h3>
+                      <p className="text-sm text-slate-500">{t("auth.form.mfa.confirmEmailDesc")}<span className="font-bold text-slate-800">{pendingRegData?.email}</span>{t("auth.form.mfa.confirmEmailDesc2")}</p>
                       <Input
-                        placeholder="Nhập mã xác nhận"
+                        placeholder={t("auth.form.mfa.enterOtp")}
                         value={mfaCode}
                         onChange={(e) => setMfaCode(e.target.value)}
                         className="text-center tracking-[0.5em] font-black text-xl h-14"
                         maxLength={6}
                       />
-                      <Button onClick={handleConfirmSignup} className="w-full bg-slate-950 hover:bg-black h-16 rounded-2xl text-lg font-black shadow-lg">Xác nhận</Button>
-                      <button onClick={() => { setMfaStep("NONE"); setMfaCode(""); setPendingRegData(null); }} className="text-sm text-primary-600 font-bold mt-4">Hủy</button>
+                      <Button onClick={handleConfirmSignup} className="w-full bg-[#214e41] hover:bg-black h-16 rounded-2xl text-lg font-black shadow-lg">{t("auth.form.mfa.confirmBtn")}</Button>
+                      <button onClick={() => { setMfaStep("NONE"); setMfaCode(""); setPendingRegData(null); }} className="text-sm text-[#214e41] font-bold mt-4">{t("auth.form.mfa.cancelBtn")}</button>
                     </div>
                   ) : mfaStep === "SETUP" ? (
                     <div className="space-y-6 text-center">
-                      <h3 className="text-xl font-bold">Thiết lập bảo mật 2 lớp (2FA)</h3>
-                      <p className="text-sm text-slate-500">Mở Google Authenticator và quét mã QR dưới đây:</p>
+                      <h3 className="text-xl font-bold">{t("auth.form.mfa.setupTitle")}</h3>
+                      <p className="text-sm text-slate-500">{t("auth.form.mfa.setupDesc")}</p>
                       <div className="flex justify-center p-4">
                          {mfaQrCode && <QRCodeSVG value={mfaQrCode} size={200} />}
                       </div>
                       <Input
-                        placeholder="Nhập mã 6 số từ App"
+                        placeholder={t("auth.form.mfa.enterAppCode")}
                         value={mfaCode}
                         onChange={(e) => setMfaCode(e.target.value)}
                         className="text-center tracking-[0.5em] font-black text-xl h-14"
                         maxLength={6}
                       />
-                      <Button onClick={handleVerifyMfaSetup} className="w-full bg-slate-950 hover:bg-black h-16 rounded-2xl text-lg font-black shadow-lg">Xác nhận thiết lập</Button>
-                      <button onClick={() => setMfaStep("NONE")} className="text-sm text-primary-600 font-bold mt-4">Quay lại</button>
+                      <Button onClick={handleVerifyMfaSetup} className="w-full bg-[#214e41] hover:bg-black h-16 rounded-2xl text-lg font-black shadow-lg">{t("auth.form.mfa.setupBtn")}</Button>
+                      <button onClick={() => setMfaStep("NONE")} className="text-sm text-[#214e41] font-bold mt-4">Quay lại</button>
                     </div>
                   ) : mfaStep === "VERIFY" ? (
                     <div className="space-y-6 text-center">
-                      <h3 className="text-xl font-bold">Xác thực bảo mật 2 lớp</h3>
-                      <p className="text-sm text-slate-500">Nhập mã 6 số từ ứng dụng Authenticator của bạn:</p>
+                      <h3 className="text-xl font-bold">{t("auth.form.mfa.verifyTitle")}</h3>
+                      <p className="text-sm text-slate-500">{t("auth.form.mfa.verifyDesc")}</p>
                       <Input
                         placeholder="••••••"
                         value={mfaCode}
@@ -504,8 +515,8 @@ export default function AuthPage() {
                         className="text-center tracking-[0.5em] font-black text-xl h-14"
                         maxLength={6}
                       />
-                      <Button onClick={handleVerifyMfaLogin} className="w-full bg-slate-950 hover:bg-black h-16 rounded-2xl text-lg font-black shadow-lg">Xác nhận</Button>
-                      <button onClick={() => setMfaStep("NONE")} className="text-sm text-primary-600 font-bold mt-4">Hủy</button>
+                      <Button onClick={handleVerifyMfaLogin} className="w-full bg-[#214e41] hover:bg-black h-16 rounded-2xl text-lg font-black shadow-lg">{t("auth.form.mfa.confirmBtn")}</Button>
+                      <button onClick={() => setMfaStep("NONE")} className="text-sm text-[#214e41] font-bold mt-4">{t("auth.form.mfa.cancelBtn")}</button>
                     </div>
                   ) : (
                   <div className="space-y-8">
@@ -513,16 +524,15 @@ export default function AuthPage() {
                       <Label
                         htmlFor="email"
                         className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 pl-1"
-                      >
-                        Email công việc <span className="text-accent-500">*</span>
+                      >{t("auth.form.fields.email")} <span className="text-[#f2ce3c]">*</span>
                       </Label>
                       <Input
                         id="email"
                         type="email"
-                        placeholder="example@innogreen.com"
+                        placeholder={t("auth.form.fields.placeholders.email")}
                         value={loginEmail}
                         onChange={(e) => setLoginEmail(e.target.value)}
-                        className="h-14 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 rounded-2xl text-lg font-medium transition-all"
+                        className="h-14 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-[#214e41] focus:ring-4 focus:ring-[#214e41]/10 rounded-2xl text-lg font-medium transition-all"
                       />
                     </div>
                     <div className="space-y-3">
@@ -530,12 +540,9 @@ export default function AuthPage() {
                         <Label
                           htmlFor="password"
                           className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400"
-                        >
-                          Mật khẩu <span className="text-accent-500">*</span>
+                        >{t("auth.form.fields.password")} <span className="text-[#f2ce3c]">*</span>
                         </Label>
-                        <button className="text-[10px] font-black uppercase tracking-widest text-primary-600 hover:text-accent-500 transition-colors">
-                          Quên mật khẩu?
-                        </button>
+                        <button className="text-[10px] font-black uppercase tracking-widest text-[#214e41] hover:text-[#f2ce3c] transition-colors">{t("auth.form.fields.forgotPwd")}</button>
                       </div>
                       <div className="relative">
                         <Input
@@ -545,7 +552,7 @@ export default function AuthPage() {
                           value={loginPassword}
                           onChange={(e) => setLoginPassword(e.target.value)}
                           onKeyDown={(e) => e.key === "Enter" && handleLogin()}
-                          className="h-14 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 rounded-2xl text-lg font-medium pr-12 transition-all"
+                          className="h-14 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-[#214e41] focus:ring-4 focus:ring-[#214e41]/10 rounded-2xl text-lg font-medium pr-12 transition-all"
                         />
                         <button
                           type="button"
@@ -563,14 +570,13 @@ export default function AuthPage() {
                     <Button
                       onClick={handleLogin}
                       disabled={loading}
-                      className="w-full bg-slate-950 hover:bg-black h-16 rounded-2xl text-lg font-black shadow-2xl shadow-slate-900/10 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-70 disabled:hover:scale-100"
+                      className="w-full bg-[#214e41] hover:bg-black h-16 rounded-2xl text-lg font-black shadow-2xl shadow-slate-900/10 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-70 disabled:hover:scale-100"
                     >
                       {loading ? (
                         <>
-                          <Loader2 className="w-5 h-5 mr-3 animate-spin" /> Đang xử lý...
-                        </>
+                          <Loader2 className="w-5 h-5 mr-3 animate-spin" /> {t("auth.form.buttons.processing")} </>
                       ) : (
-                        "Tiếp tục"
+                        t("auth.form.buttons.continue")
                       )}
                     </Button>
                   </div>
@@ -581,29 +587,27 @@ export default function AuthPage() {
                       <Label
                         htmlFor="fullname"
                         className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
-                      >
-                        Họ và tên <span className="text-accent-500">*</span>
+                      >{t("auth.form.fields.fullname")} <span className="text-[#f2ce3c]">*</span>
                       </Label>
                       <Input
                         id="fullname"
                         value={regName}
                         onChange={(e) => setRegName(e.target.value)}
-                        className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-primary-500 rounded-2xl font-medium"
+                        className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-[#214e41] rounded-2xl font-medium"
                       />
                     </div>
                     <div className="space-y-2">
                       <Label
                         htmlFor="reg-email"
                         className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
-                      >
-                        Email <span className="text-accent-500">*</span>
+                      >{t("auth.form.fields.regEmail")} <span className="text-[#f2ce3c]">*</span>
                       </Label>
                       <Input
                         id="reg-email"
                         type="email"
                         value={regEmail}
                         onChange={(e) => setRegEmail(e.target.value)}
-                        className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-primary-500 rounded-2xl font-medium"
+                        className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-[#214e41] rounded-2xl font-medium"
                       />
                     </div>
                     <div className="space-y-2">
@@ -611,8 +615,7 @@ export default function AuthPage() {
                         <Label
                           htmlFor="reg-citizen-id"
                           className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
-                        >
-                          CCCD <span className="text-accent-500">*</span>
+                        >{t("auth.form.fields.citizenId")} <span className="text-[#f2ce3c]">*</span>
                         </Label>
                         <span className={`text-[10px] font-black tracking-widest ${regCitizenIdNumber.length === 12 ? 'text-green-500' : 'text-slate-400'}`}>
                           {regCitizenIdNumber.length}/12
@@ -621,10 +624,10 @@ export default function AuthPage() {
                       <Input
                         id="reg-citizen-id"
                         type="text"
-                        placeholder="Nhập 12 số CCCD"
+                        placeholder={t("auth.form.fields.placeholders.citizenId")}
                         value={regCitizenIdNumber}
                         onChange={(e) => setRegCitizenIdNumber(e.target.value.replace(/\D/g, '').slice(0, 12))}
-                        className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-primary-500 rounded-2xl font-medium tracking-widest"
+                        className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-[#214e41] rounded-2xl font-medium tracking-widest"
                       />
                     </div>
 
@@ -633,30 +636,28 @@ export default function AuthPage() {
                           <Label
                             htmlFor="reg-phone"
                             className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
-                          >
-                            Điện thoại <span className="text-accent-500">*</span>
+                          >{t("auth.form.fields.phone")} <span className="text-[#f2ce3c]">*</span>
                           </Label>
                           <Input
                             id="reg-phone"
                             type="tel"
                             value={regPhone}
                             onChange={(e) => setRegPhone(e.target.value.replace(/\D/g, ''))}
-                            className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-primary-500 rounded-2xl font-medium"
+                            className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-[#214e41] rounded-2xl font-medium"
                           />
                         </div>
                         <div className="space-y-2">
                           <Label
                             htmlFor="reg-dob"
                             className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
-                          >
-                            Ngày sinh <span className="text-accent-500">*</span>
+                          >{t("auth.form.fields.dob")} <span className="text-[#f2ce3c]">*</span>
                           </Label>
                           <Input
                             id="reg-dob"
                             type="date"
                             value={regDob}
                             onChange={(e) => setRegDob(e.target.value)}
-                            className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-primary-500 rounded-2xl font-medium"
+                            className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-[#214e41] rounded-2xl font-medium"
                           />
                         </div>
                     </div>
@@ -665,8 +666,7 @@ export default function AuthPage() {
                        <Label
                          htmlFor="gender"
                          className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
-                       >
-                         Giới tính <span className="text-accent-500">*</span>
+                       >{t("auth.form.fields.gender")} <span className="text-[#f2ce3c]">*</span>
                        </Label>
                        <Select
                          value={regGender}
@@ -678,12 +678,12 @@ export default function AuthPage() {
                            id="gender"
                            className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white rounded-2xl text-slate-700 font-medium"
                          >
-                           <SelectValue placeholder="Chọn" />
+                           <SelectValue placeholder={t("auth.form.fields.placeholders.gender")} />
                          </SelectTrigger>
                          <SelectContent className="rounded-2xl border-slate-100 shadow-2xl">
-                           <SelectItem value="MALE">Nam</SelectItem>
-                           <SelectItem value="FEMALE">Nữ</SelectItem>
-                           <SelectItem value="OTHER">Khác</SelectItem>
+                           <SelectItem value="MALE">{t("auth.form.fields.genderOpts.male")}</SelectItem>
+                           <SelectItem value="FEMALE">{t("auth.form.fields.genderOpts.female")}</SelectItem>
+                           <SelectItem value="OTHER">{t("auth.form.fields.genderOpts.other")}</SelectItem>
                          </SelectContent>
                        </Select>
                     </div>
@@ -692,14 +692,13 @@ export default function AuthPage() {
                       <Label
                         htmlFor="reg-address"
                         className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
-                      >
-                        Địa chỉ cư trú <span className="text-accent-500">*</span>
+                      >{t("auth.form.fields.address")} <span className="text-[#f2ce3c]">*</span>
                       </Label>
                       <Input
                         id="reg-address"
                         value={regAddress}
                         onChange={(e) => setRegAddress(e.target.value)}
-                        className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-primary-500 rounded-2xl font-medium"
+                        className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-[#214e41] rounded-2xl font-medium"
                       />
                     </div>
 
@@ -707,8 +706,7 @@ export default function AuthPage() {
                       <Label
                         htmlFor="reg-password"
                         className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
-                      >
-                        Mật khẩu bảo mật <span className="text-accent-500">*</span>
+                      >{t("auth.form.fields.securePassword")} <span className="text-[#f2ce3c]">*</span>
                       </Label>
                       <div className="relative">
                         <Input
@@ -717,7 +715,7 @@ export default function AuthPage() {
                           value={regPassword}
                           onChange={(e) => setRegPassword(e.target.value)}
                           onKeyDown={(e) => e.key === "Enter" && handleRegister()}
-                          className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-primary-500 rounded-2xl font-medium pr-12"
+                          className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-[#214e41] rounded-2xl font-medium pr-12"
                         />
                         <button
                           type="button"
@@ -736,14 +734,13 @@ export default function AuthPage() {
                     <Button
                       onClick={handleRegister}
                       disabled={registerLoading}
-                      className="w-full bg-slate-950 hover:bg-black h-16 rounded-2xl text-lg font-black shadow-2xl shadow-slate-900/10 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-70 mt-4"
+                      className="w-full bg-[#214e41] hover:bg-black h-16 rounded-2xl text-lg font-black shadow-2xl shadow-slate-900/10 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-70 mt-4"
                     >
                       {registerLoading ? (
                         <>
-                          <Loader2 className="w-5 h-5 mr-3 animate-spin" /> Đang xử lý...
-                        </>
+                          <Loader2 className="w-5 h-5 mr-3 animate-spin" /> {t("auth.form.buttons.processing")} </>
                       ) : (
-                        "Tạo tài khoản"
+                        t("auth.form.buttons.createAccount")
                       )}
                     </Button>
                   </div>
@@ -753,23 +750,19 @@ export default function AuthPage() {
                 <div className="text-xs font-bold text-center text-slate-400 uppercase tracking-widest leading-relaxed px-4">
                   {activeTab === "sign-in" ? (
                     <>
-                      Bạn chưa có tài khoản?{" "}
-                      <button
+                      {t("auth.form.footer.noAccount")}{" "}
+                    <button
                         onClick={() => handleTabChange("sign-up")}
-                        className="text-primary-600 font-black hover:text-accent-500 transition-colors"
-                      >
-                        Đăng ký ngay
-                      </button>
+                        className="text-[#214e41] font-black hover:text-[#f2ce3c] transition-colors"
+                      >{t("auth.form.footer.registerNow")}</button>
                     </>
                   ) : (
                     <>
-                      Bạn đã có tài khoản?{" "}
-                      <button
+                      {t("auth.form.footer.hasAccount")}{" "}
+                    <button
                         onClick={() => handleTabChange("sign-in")}
-                        className="text-primary-600 font-black hover:text-accent-500 transition-colors"
-                      >
-                        Đăng nhập
-                      </button>
+                        className="text-[#214e41] font-black hover:text-[#f2ce3c] transition-colors"
+                      >{t("auth.form.footer.loginNow")}</button>
                     </>
                   )}
                 </div>

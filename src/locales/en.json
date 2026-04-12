@@ -66,5 +66,92 @@
       "address": "123/2/6 Street 20, An Nhon Ward, Ho Chi Minh City",
       "scan": "SCAN QR CODE"
     }
+  },
+  "auth": {
+    "sidebar": {
+      "badge": "Next-Gen Verification",
+      "titleLine1": "New Era For",
+      "titleLine2": "Digital ",
+      "titleLine3": "Certificates",
+      "subtitle": "Welcome to the global certificate verification ecosystem. All your data is secured and immutable on the Blockchain platform.",
+      "features": [
+        {
+          "title": "Global Network",
+          "desc": "Verify anytime, anywhere in the world with just one click."
+        },
+        {
+          "title": "Speed & Security",
+          "desc": "Data is immutably encrypted and processed instantly on Blockchain technology."
+        }
+      ],
+      "footer": "© 2026 InnoGreen Certchain • Immutable Digital Identity"
+    },
+    "form": {
+      "back": "Back",
+      "home": "Home",
+      "signInTitle": "Sign In",
+      "signUpTitle": "Sign Up",
+      "signInDesc": "Welcome back!",
+      "signUpDesc": "Create your digital identity now.",
+      "tabs": {
+        "signIn": "Sign In",
+        "signUp": "Sign Up"
+      },
+      "mfa": {
+        "confirmEmail": "Confirm Email",
+        "confirmEmailDesc": "We have sent an OTP code to ",
+        "confirmEmailDesc2": ". Please check your inbox.",
+        "enterOtp": "Enter verification code",
+        "confirmBtn": "Confirm",
+        "cancelBtn": "Cancel",
+        "setupTitle": "Setup 2-Factor Authentication (2FA)",
+        "setupDesc": "Open Google Authenticator and scan the QR code below:",
+        "enterAppCode": "Enter 6-digit code from App",
+        "setupBtn": "Confirm Setup",
+        "backBtn": "Back",
+        "verifyTitle": "2-Factor Authentication",
+        "verifyDesc": "Enter the 6-digit code from your Authenticator app:"
+      },
+      "fields": {
+        "email": "Work Email",
+        "password": "Password",
+        "forgotPwd": "Forgot password?",
+        "fullname": "Full Name",
+        "regEmail": "Email",
+        "citizenId": "Citizen ID",
+        "phone": "Phone Number",
+        "dob": "Date of Birth",
+        "gender": "Gender",
+        "genderOpts": {
+          "male": "Male",
+          "female": "Female",
+          "other": "Other"
+        },
+        "address": "Residential Address",
+        "securePassword": "Secure Password",
+        "placeholders": {
+          "email": "example@innogreen.com",
+          "password": "••••••••",
+          "citizenId": "Enter 12 digits ID",
+          "gender": "Select"
+        }
+      },
+      "buttons": {
+        "continue": "Continue",
+        "processing": "Processing...",
+        "createAccount": "Create Account"
+      },
+      "alerts": {
+        "fillAll": "Please fill in all the required information.",
+        "cccdError": "Citizen ID must be exactly 12 digits.",
+        "emailRequired": "Please enter both email and password."
+      },
+      "footer": {
+        "noAccount": "Don't have an account?",
+        "registerNow": "Sign up now",
+        "hasAccount": "Already have an account?",
+        "loginNow": "Sign in"
+      }
+    }
   }
 }

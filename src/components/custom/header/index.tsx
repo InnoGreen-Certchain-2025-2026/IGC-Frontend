@@ -59,24 +59,22 @@ export default function Header() {
             )}
           </button>
 
-          <Button
-            variant="ghost"
-            asChild
-            className="text-slate-500 hover:text-slate-950 font-bold text-sm hidden sm:flex px-6 rounded-2xl h-12"
-          >
-            <Link to="/auth?mode=sign-in" className="flex gap-2 items-center">
+          <Link to="/auth?mode=sign-in">
+            <Button
+              variant="ghost"
+              className="text-slate-500 hover:text-slate-950 font-bold text-sm hidden sm:flex px-6 rounded-2xl h-12 gap-2"
+            >
               <LogIn className="h-4 w-4" /> {t("landingPage.header.signIn", "Đăng Nhập")}
-            </Link>
-          </Button>
-          <Button
-            asChild
-            className="bg-slate-950 hover:bg-black text-white px-8 rounded-2xl h-12 font-bold transition-all hover:scale-[1.05] active:scale-95 shadow-xl shadow-slate-900/10"
-          >
-            <Link to="/auth?mode=sign-up" className="flex gap-2 items-center">
+            </Button>
+          </Link>
+          <Link to="/auth?mode=sign-up">
+            <Button
+              className="bg-slate-950 hover:bg-black text-white px-8 rounded-2xl h-12 font-bold transition-all hover:scale-[1.05] active:scale-95 shadow-xl shadow-slate-900/10 gap-2"
+            >
               <span>{t("landingPage.header.getStarted", "Bắt Đầu")}</span>
               <ArrowUpRight className="h-4 w-4" />
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </motion.header>

@@ -66,5 +66,92 @@
       "address": "123/2/6 Đường số 20 Phường An Nhơn, TP. Hồ Chí Minh",
       "scan": "QUÉT MÃ QR"
     }
+  },
+  "auth": {
+    "sidebar": {
+      "badge": "Bảo Mật Thế Hệ Mới",
+      "titleLine1": "Kỷ Nguyên Mới Cho",
+      "titleLine2": "Chứng Chỉ ",
+      "titleLine3": "Số",
+      "subtitle": "Chào mừng bạn đến với hệ sinh thái xác minh chứng chỉ toàn cầu. Mọi dữ liệu của bạn đều được bảo mật và bất biến trên nền tảng Blockchain.",
+      "features": [
+        {
+          "title": "Mạng Lưới Toàn Cầu",
+          "desc": "Xác minh mọi lúc, mọi nơi trên thế giới chỉ với một click chuột."
+        },
+        {
+          "title": "Tốc Độ & Bảo Mật",
+          "desc": "Dữ liệu được mã hóa bất biến, xử lý tức thì trên công nghệ Blockchain."
+        }
+      ],
+      "footer": "© 2026 InnoGreen Certchain • Danh Tính Số Bất Biến"
+    },
+    "form": {
+      "back": "Quay lại",
+      "home": "Trang chủ",
+      "signInTitle": "Đăng Nhập",
+      "signUpTitle": "Đăng Ký",
+      "signInDesc": "Rất vui được gặp lại bạn!",
+      "signUpDesc": "Khởi tạo danh tính số của bạn ngay.",
+      "tabs": {
+        "signIn": "Đăng Nhập",
+        "signUp": "Đăng Ký"
+      },
+      "mfa": {
+        "confirmEmail": "Xác nhận email",
+        "confirmEmailDesc": "Chúng tôi đã gửi mã OTP đến ",
+        "confirmEmailDesc2": ". Vui lòng kiểm tra hộp thư.",
+        "enterOtp": "Nhập mã xác nhận",
+        "confirmBtn": "Xác nhận",
+        "cancelBtn": "Hủy",
+        "setupTitle": "Thiết lập bảo mật 2 lớp (2FA)",
+        "setupDesc": "Mở Google Authenticator và quét mã QR dưới đây:",
+        "enterAppCode": "Nhập mã 6 số từ App",
+        "setupBtn": "Xác nhận thiết lập",
+        "backBtn": "Quay lại",
+        "verifyTitle": "Xác thực bảo mật 2 lớp",
+        "verifyDesc": "Nhập mã 6 số từ ứng dụng Authenticator của bạn:"
+      },
+      "fields": {
+        "email": "Email công việc",
+        "password": "Mật khẩu",
+        "forgotPwd": "Quên mật khẩu?",
+        "fullname": "Họ và tên",
+        "regEmail": "Email",
+        "citizenId": "CCCD",
+        "phone": "Điện thoại",
+        "dob": "Ngày sinh",
+        "gender": "Giới tính",
+        "genderOpts": {
+          "male": "Nam",
+          "female": "Nữ",
+          "other": "Khác"
+        },
+        "address": "Địa chỉ cư trú",
+        "securePassword": "Mật khẩu bảo mật",
+        "placeholders": {
+          "email": "example@innogreen.com",
+          "password": "••••••••",
+          "citizenId": "Nhập 12 số CCCD",
+          "gender": "Chọn"
+        }
+      },
+      "buttons": {
+        "continue": "Tiếp tục",
+        "processing": "Đang xử lý...",
+        "createAccount": "Tạo tài khoản"
+      },
+      "alerts": {
+        "fillAll": "Vui lòng nhập đầy đủ tất cả thông tin.",
+        "cccdError": "CCCD phải có đúng 12 chữ số.",
+        "emailRequired": "Vui lòng nhập đầy đủ email và mật khẩu."
+      },
+      "footer": {
+        "noAccount": "Bạn chưa có tài khoản?",
+        "registerNow": "Đăng ký ngay",
+        "hasAccount": "Bạn đã có tài khoản?",
+        "loginNow": "Đăng nhập"
+      }
+    }
   }
 }
