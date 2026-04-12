@@ -23,8 +23,8 @@ export default function StorySection() {
                viewport={{ once: true }}
                className="text-white space-y-6 md:space-y-8 md:pr-16"
              >
-               <h2 className="text-4xl md:text-5xl font-black uppercase text-[#f2ce3c]">{t("landingPage.story.missionTitle")}</h2>
-               <p className="text-xl leading-relaxed text-slate-200 font-medium text-justify">
+               <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-[#f2ce3c]">{t("landingPage.story.missionTitle")}</h2>
+               <p className="text-lg sm:text-xl leading-relaxed text-slate-200 font-medium text-left sm:text-justify">
                  {t("landingPage.story.missionDesc")}
                </p>
                <div className="pt-4 flex items-center gap-4 text-[#f2ce3c] hover:text-white transition-colors cursor-pointer w-max">
@@ -38,14 +38,14 @@ export default function StorySection() {
                initial={{ opacity: 0, x: 30 }}
                whileInView={{ opacity: 1, x: 0 }}
                viewport={{ once: true }}
-               className="bg-white p-8 md:p-12 rounded-[2rem] shadow-2xl ml-0 md:ml-12 relative overflow-hidden"
+               className="bg-white p-6 sm:p-8 md:p-12 rounded-[2rem] shadow-2xl ml-0 md:ml-12 relative overflow-hidden"
              >
                {/* Decorative Corner */}
                <div className="absolute top-0 right-0 w-16 h-16 md:w-24 md:h-24 bg-[#214e41]" style={{ clipPath: 'polygon(100% 0, 0 0, 100% 100%)' }}></div>
                
                <h2 className="text-3xl md:text-4xl font-black uppercase text-[#214e41] mb-4 md:mb-6 relative z-10">{t("landingPage.story.aboutTitle")}</h2>
                <div className="w-16 h-1 bg-[#4f9b5a] mb-6 md:mb-8" />
-               <p className="text-lg text-slate-700 leading-relaxed font-medium text-justify relative z-10">
+               <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-medium text-left sm:text-justify relative z-10">
                  {t("landingPage.story.aboutDesc")}
                </p>
              </motion.div>
@@ -70,7 +70,7 @@ export default function StorySection() {
                  <div className="inline-flex h-12 w-12 md:h-16 md:w-16 items-center justify-center bg-[#f2ce3c] rounded-xl mb-2 md:mb-4 text-[#214e41]">
                    <Quote className="h-6 w-6 md:h-8 md:w-8 fill-current" />
                  </div>
-                 <h2 className="text-4xl sm:text-5xl font-black uppercase text-[#214e41] leading-tight">
+                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-[#214e41] leading-tight">
                     {t("landingPage.story.storyTitle").split('\n').map((line, i) => <span key={i}>{line}<br/></span>)}
                  </h2>
                  <div className="w-24 h-2 bg-[#f2ce3c]" />
@@ -99,7 +99,7 @@ export default function StorySection() {
                        <span className="text-[#f2ce3c]">{t("landingPage.story.bannerHighlight")}</span> <br/>
                        {t("landingPage.story.bannerSub").split('\n').map((line, i) => <span key={i}>{line}<br/></span>)}
                      </h3>
-                     <div className="mt-8 md:mt-12 inline-block px-6 md:px-8 py-2.5 md:py-3 border-2 border-[#f2ce3c] text-[#f2ce3c] font-bold text-lg md:text-xl tracking-[0.2em] uppercase rounded-full hover:bg-[#f2ce3c] hover:text-[#214e41] transition-colors cursor-pointer">
+                     <div className="mt-8 md:mt-12 inline-block px-4 sm:px-6 md:px-8 py-2 md:py-3 border-2 border-[#f2ce3c] text-[#f2ce3c] font-bold text-sm sm:text-lg md:text-xl tracking-[0.1em] sm:tracking-[0.2em] uppercase rounded-full hover:bg-[#f2ce3c] hover:text-[#214e41] transition-colors cursor-pointer w-full sm:w-auto overflow-hidden text-ellipsis whitespace-nowrap">
                         WWW.IGCERT.CLICK
                      </div>
                    </div>

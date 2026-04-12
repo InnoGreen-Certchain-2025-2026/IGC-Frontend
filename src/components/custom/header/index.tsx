@@ -28,7 +28,7 @@ export default function Header() {
             <img
               src="/logo/logo_original.png"
               alt="InnoGreen Certchain Logo"
-              className="h-14 w-auto object-contain"
+              className="h-10 sm:h-14 w-auto object-contain"
             />
           </motion.div>
         </Link>
@@ -44,7 +44,7 @@ export default function Header() {
           {/* Language Toggle */}
           <button 
             onClick={toggleLanguage}
-            className="flex items-center justify-center gap-2 h-10 px-4 py-2 bg-slate-50 hover:bg-slate-200 border border-slate-200 rounded-2xl transition-colors font-bold text-sm text-slate-800 shadow-sm"
+            className="flex items-center justify-center gap-1.5 sm:gap-2 h-8 sm:h-10 px-2.5 sm:px-4 py-1.5 sm:py-2 bg-slate-50 hover:bg-slate-200 border border-slate-200 rounded-xl sm:rounded-2xl transition-colors font-bold text-xs sm:text-sm text-slate-800 shadow-sm"
           >
             {i18n.language === "vi" ? (
                <>
@@ -69,9 +69,10 @@ export default function Header() {
           </Link>
           <Link to="/auth?mode=sign-up">
             <Button
-              className="bg-slate-950 hover:bg-black text-white px-8 rounded-2xl h-12 font-bold transition-all hover:scale-[1.05] active:scale-95 shadow-xl shadow-slate-900/10 gap-2"
+              className="bg-slate-950 hover:bg-black text-white px-4 sm:px-8 rounded-xl sm:rounded-2xl h-10 sm:h-12 text-xs sm:text-sm font-bold transition-all hover:scale-[1.05] active:scale-95 shadow-xl shadow-slate-900/10 gap-1 sm:gap-2"
             >
-              <span>{t("landingPage.header.getStarted", "Bắt Đầu")}</span>
+              <span className="hidden min-[400px]:inline-block">{t("landingPage.header.getStarted", "Bắt Đầu")}</span>
+              <span className="min-[400px]:hidden">Join</span>
               <ArrowUpRight className="h-4 w-4" />
             </Button>
           </Link>

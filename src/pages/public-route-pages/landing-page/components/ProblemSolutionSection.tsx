@@ -19,7 +19,7 @@ export default function ProblemSolutionSection() {
               className="space-y-10"
             >
                <div>
-                 <h2 className="text-3xl lg:text-4xl font-black text-slate-800 uppercase tracking-tight leading-tight">
+                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-800 uppercase tracking-tight leading-tight">
                    {t("landingPage.problemSolution.problemTitle").split('\n').map((line, i) => <span key={i}>{line}<br/></span>)}
                  </h2>
                  <div className="h-1.5 w-16 bg-slate-400 mt-6" />
@@ -39,10 +39,10 @@ export default function ProblemSolutionSection() {
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="space-y-8 md:space-y-10 bg-white p-6 sm:p-8 md:p-12 rounded-[2rem] md:rounded-[3rem] shadow-2xl border-t-8 border-[#214e41] relative"
+              className="space-y-6 sm:space-y-8 md:space-y-10 bg-white p-5 sm:p-8 md:p-12 rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[3rem] shadow-2xl border-t-8 border-[#214e41] relative"
             >
                <div>
-                 <h2 className="text-3xl lg:text-4xl font-black text-[#214e41] uppercase tracking-tight leading-tight">
+                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#214e41] uppercase tracking-tight leading-tight">
                    {t("landingPage.problemSolution.solutionTitle").split('\n').map((line, i) => <span key={i}>{line}<br/></span>)}
                  </h2>
                  <div className="h-1.5 w-16 bg-[#f2ce3c] mt-6" />
