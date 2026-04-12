@@ -53,7 +53,7 @@ export default function HeroSection() {
                 INNOGREEN CERTCHAIN
               </span>
             </div>
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black leading-tight uppercase tracking-tight text-white">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black leading-tight uppercase tracking-tight text-white">
               {t("landingPage.hero.verify")} <span className="text-[#f2ce3c]">{t("landingPage.hero.trust")}</span><br />
               {t("landingPage.hero.create")} <span className="text-[#f2ce3c]">{t("landingPage.hero.value")}</span>
             </h1>
@@ -65,14 +65,14 @@ export default function HeroSection() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="w-full max-w-2xl mt-8"
           >
-            <div className="relative flex items-center p-2.5 pl-8 bg-white border-4 border-[#183930] rounded-full shadow-2xl transition-all duration-500 h-20 hover:border-[#4f9b5a]">
-              <Search className="h-6 w-6 text-[#214e41] shrink-0 font-bold" />
+            <div className="relative flex items-center p-1.5 md:p-2.5 pl-4 md:pl-8 bg-white border-2 md:border-4 border-[#183930] rounded-full shadow-2xl transition-all duration-500 h-14 md:h-20 hover:border-[#4f9b5a]">
+              <Search className="h-5 w-5 md:h-6 md:w-6 text-[#214e41] shrink-0 font-bold" />
               <Input 
                 type="text" 
                 placeholder={t("landingPage.hero.placeholder")}
-                className="grow bg-transparent border-none shadow-none focus-visible:ring-0 text-slate-900 px-6 text-lg placeholder:text-slate-400 h-full font-medium"
+                className="grow bg-transparent border-none shadow-none focus-visible:ring-0 text-slate-900 px-3 md:px-6 text-sm md:text-lg placeholder:text-slate-400 h-full font-medium w-full"
               />
-              <Button className="bg-[#214e41] hover:bg-[#183930] text-[#f2ce3c] rounded-full h-full px-10 text-lg font-bold transition-all shrink-0 hover:scale-[1.02]">
+              <Button className="bg-[#214e41] hover:bg-[#183930] text-[#f2ce3c] rounded-full h-full px-6 md:px-10 text-sm md:text-lg font-bold transition-all shrink-0 hover:scale-[1.02]">
                 {t("landingPage.hero.search")}
               </Button>
             </div>
