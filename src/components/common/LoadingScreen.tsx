@@ -23,9 +23,9 @@ export default function LoadingScreen() {
   }, []);
 
   return (
-    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-slate-50 overflow-hidden">
+    <div className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-slate-50 overflow-hidden">
       {/* Background Subtle Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-slate-100 opacity-80" />
+      <div className="absolute inset-0 bg-linear-to-br from-slate-50 via-white to-slate-100 opacity-80" />
       
       {/* Abstract Animated Mesh Background matching Landing Page */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#f2ce3c] opacity-[0.03] rounded-full blur-[100px] pointer-events-none" />
@@ -92,7 +92,7 @@ export default function LoadingScreen() {
           {/* Progress Bar */}
           <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden shadow-inner">
             <motion.div 
-              className="h-full bg-gradient-to-r from-[#214e41] to-[#4f9b5a] rounded-full relative"
+              className="h-full bg-linear-to-r from-[#214e41] to-[#4f9b5a] rounded-full relative"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ ease: "easeOut", duration: 0.2 }}

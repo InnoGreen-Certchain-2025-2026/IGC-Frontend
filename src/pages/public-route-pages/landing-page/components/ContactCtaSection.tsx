@@ -39,7 +39,7 @@ export default function ContactCtaSection() {
                 </div>
              </div>
              
-             <div className="w-48 h-48 sm:w-64 sm:h-64 bg-slate-50 rounded-[1.5rem] sm:rounded-[2rem] flex flex-col items-center justify-center shrink-0 border-4 border-[#214e41] shadow-2xl p-4 sm:p-6 group hover:border-[#f2ce3c] transition-colors cursor-pointer mx-auto">
+             <div className="w-48 h-48 sm:w-64 sm:h-64 bg-slate-50 rounded-2xl sm:rounded-[2rem] flex flex-col items-center justify-center shrink-0 border-4 border-[#214e41] shadow-2xl p-4 sm:p-6 group hover:border-[#f2ce3c] transition-colors cursor-pointer mx-auto">
                 <QrCode className="w-full h-full text-[#214e41] group-hover:text-[#4f9b5a] transition-colors" />
                 <p className="font-bold text-[#214e41] mt-2 sm:mt-4 tracking-widest text-xs sm:text-base">{t("landingPage.contact.scan")}</p>
              </div>

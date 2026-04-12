@@ -99,7 +99,7 @@ export default function StorySection() {
                        <span className="text-[#f2ce3c]">{t("landingPage.story.bannerHighlight")}</span> <br/>
                        {t("landingPage.story.bannerSub").split('\n').map((line, i) => <span key={i}>{line}<br/></span>)}
                      </h3>
-                     <div className="mt-8 md:mt-12 inline-block px-4 sm:px-6 md:px-8 py-2 md:py-3 border-2 border-[#f2ce3c] text-[#f2ce3c] font-bold text-sm sm:text-lg md:text-xl tracking-[0.1em] sm:tracking-[0.2em] uppercase rounded-full hover:bg-[#f2ce3c] hover:text-[#214e41] transition-colors cursor-pointer w-full sm:w-auto overflow-hidden text-ellipsis whitespace-nowrap">
+                     <div className="mt-8 md:mt-12 inline-block px-4 sm:px-6 md:px-8 py-2 md:py-3 border-2 border-[#f2ce3c] text-[#f2ce3c] font-bold text-sm sm:text-lg md:text-xl tracking-widest sm:tracking-[0.2em] uppercase rounded-full hover:bg-[#f2ce3c] hover:text-[#214e41] transition-colors cursor-pointer w-full sm:w-auto overflow-hidden text-ellipsis whitespace-nowrap">
                         WWW.IGCERT.CLICK
                      </div>
                    </div>

@@ -49,11 +49,11 @@ export default function HeroSection() {
               <span className="h-5 w-5 sm:h-6 sm:w-6 flex items-center justify-center shrink-0">
                  <img src="/logo/logo_icon.png" alt="InnoGreen Icon" className="h-full w-full object-contain" />
               </span>
-              <span className="text-xs sm:text-sm md:text-md font-bold tracking-[0.1em] sm:tracking-[0.2em] text-white uppercase truncate">
+              <span className="text-xs sm:text-sm md:text-md font-bold tracking-widest sm:tracking-[0.2em] text-white uppercase truncate">
                 INNOGREEN CERTCHAIN
               </span>
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-7xl lg:text-8xl font-black leading-tight uppercase tracking-tight text-white break-words">
+            <h1 className="text-3xl sm:text-4xl md:text-7xl lg:text-8xl font-black leading-tight uppercase tracking-tight text-white wrap-break-word">
               {t("landingPage.hero.verify")} <span className="text-[#f2ce3c]">{t("landingPage.hero.trust")}</span><br />
               {t("landingPage.hero.create")} <span className="text-[#f2ce3c]">{t("landingPage.hero.value")}</span>
             </h1>
