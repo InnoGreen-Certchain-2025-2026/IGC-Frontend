@@ -329,7 +329,7 @@ export default function AuthPage() {
         <div className="relative z-10">
           <Link to="/" className="flex items-center space-x-3 mb-24 group">
             <img
-              src="/favicon/web-logo.png"
+              src="/logo/logo_icon.png"
               alt="IGC Logo"
               className="h-12 w-12 object-contain group-hover:scale-105 transition-transform"
             />
@@ -393,7 +393,7 @@ export default function AuthPage() {
         <div className="lg:hidden p-6 flex items-center justify-between bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-20">
           <Link to="/" className="flex items-center space-x-2">
             <img
-              src="/favicon/web-logo.png"
+              src="/logo/logo_icon.png"
               alt="IGC Logo"
               className="h-8 w-8 object-contain"
             />
