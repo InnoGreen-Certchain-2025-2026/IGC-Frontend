@@ -2,7 +2,11 @@
   "landingPage": {
     "header": {
       "signIn": "Đăng Nhập",
-      "getStarted": "Bắt Đầu"
+      "getStarted": "Bắt Đầu",
+      "intro": "Giới thiệu",
+      "verify": "Xác thực",
+      "openMenu": "Mở menu",
+      "closeMenu": "Đóng menu"
     },
     "hero": {
       "verify": "Xác minh",
@@ -65,6 +69,49 @@
       "sub": "Kết nối với InnoGreen CertChain ngay hôm nay.",
       "address": "123/2/6 Đường số 20 Phường An Nhơn, TP. Hồ Chí Minh",
       "scan": "QUÉT MÃ QR"
+    },
+    "verification": {
+      "badge": "Xác thực chứng chỉ",
+      "titlePrefix": "Xác thực chứng chỉ bằng",
+      "titleHighlight": "tệp PDF",
+      "subtitle": "Tải tệp PDF chứng chỉ để xác minh tính xác thực và hợp lệ của nó. Hệ thống sẽ kiểm tra ngay lập tức.",
+      "uploadTitle": "Tải tệp PDF để xác thực",
+      "changeFile": "Nhấp để thay đổi",
+      "dragDrop": "Kéo và thả file PDF ở đây",
+      "orClick": "hoặc nhấp để chọn file",
+      "verifyButton": "Xác thực",
+      "verifying": "Đang xác thực...",
+      "infoTitle": "Thông tin hữu ích",
+      "info1": "Xác thực chứng chỉ giúp bạn kiểm tra tính hợp lệ và tính xác thực của tài liệu.",
+      "info2": "Hãy tải tệp PDF chứng chỉ của bạn để xác minh ngay lập tức.",
+      "info3": "Hệ thống sẽ quét blockchain để kiểm tra thông tin chứng chỉ của bạn.",
+      "toasts": {
+        "pdfFileInvalid": "Vui lòng chọn đúng 1 tệp PDF để xác thực.",
+        "verifySuccess": "Xác thực tệp PDF thành công.",
+        "unexpectedError": "Đã có lỗi xảy ra. Vui lòng thử lại."
+      },
+      "modal": {
+        "successTitle": "Xác thực thành công",
+        "failedTitle": "Xác thực thất bại",
+        "valid": "Chứng chỉ hợp lệ",
+        "invalid": "Chứng chỉ không hợp lệ",
+        "certificateId": "Mã chứng chỉ",
+        "student": "Sinh viên",
+        "issuer": "Đơn vị cấp",
+        "issueDate": "Ngày cấp",
+        "close": "Đóng"
+      }
+    },
+    "footer": {
+      "description": "Hệ thống quản lý xác thực văn bằng/chứng chỉ xanh dựa trên nền tảng Blockchain và chữ ký số, kiến tạo giá trị thực cho tương lai bền vững.",
+      "linksTitle": "Liên kết",
+      "home": "Trang chủ",
+      "about": "Về dự án",
+      "features": "Tính năng",
+      "legalTitle": "Pháp lý",
+      "terms": "Điều khoản sử dụng",
+      "privacy": "Chính sách bảo mật",
+      "copyright": "© {{year}} InnoGreen Certchain. All rights reserved."
     }
   },
   "auth": {

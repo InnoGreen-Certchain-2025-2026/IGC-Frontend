@@ -25,20 +25,20 @@ export default function AccountDashboardLayout() {
   const bottomSections = selectedOrg ? undefined : USR_BOTTOM_SECTIONS;
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="igc-app-theme flex h-screen overflow-hidden bg-[#edf4f0]">
       {/* ── Sidebar (same as last context) ── */}
       <AppSidebar mainSections={mainSections} bottomSections={bottomSections} />
 
       {/* ── Content ── */}
-      <main className="flex-1 flex flex-col bg-white overflow-hidden">
-        <header className="flex items-center justify-between px-7 py-4 border-b border-gray-200 bg-white min-h-16">
-          <h1 className="text-lg font-bold text-gray-900">
+      <main className="flex-1 flex flex-col bg-[#f8fbf9] overflow-hidden">
+        <header className="flex items-center justify-between px-7 py-4 border-b border-[#d2e1da] bg-white/95 min-h-16 backdrop-blur-sm">
+          <h1 className="text-lg font-bold text-[#214e41]">
             Tài khoản người dùng
           </h1>
           <UserMenu />
         </header>
 
-        <div className="flex-1 overflow-y-auto p-7 bg-gray-50">
+        <div className="flex-1 overflow-y-auto p-7 bg-[#eef5f1]">
           <Outlet />
         </div>
       </main>

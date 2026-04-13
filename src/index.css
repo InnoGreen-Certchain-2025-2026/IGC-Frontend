@@ -8,7 +8,7 @@
   --color-primary-50: oklch(0.98 0.01 255);
   --color-primary-500: oklch(0.6 0.22 255); /* Vibrant Blue */
   --color-primary-600: oklch(0.5 0.22 255);
-  
+
   --color-accent-400: oklch(0.78 0.18 160);
   --color-accent-500: oklch(0.7 0.2 160); /* Signature InnoGreen */
   --color-accent-600: oklch(0.6 0.18 160);
@@ -68,11 +68,17 @@
 }
 
 @layer base {
-  * { border-color: var(--border); outline-color: color-mix(in srgb, var(--ring) 30%, transparent); }
-  body { 
+  * {
+    border-color: var(--border);
+    outline-color: color-mix(in srgb, var(--ring) 30%, transparent);
+  }
+  body {
     @apply bg-background text-foreground scroll-smooth font-sans antialiased;
   }
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     @apply font-display tracking-tight text-balance font-bold text-slate-950;
   }
 }
@@ -81,21 +87,134 @@
   .glass-card {
     @apply bg-white/70 backdrop-blur-2xl border border-white/50 shadow-xl shadow-slate-200/20;
   }
-  
+
   .text-gradient-trust {
     @apply bg-clip-text text-transparent bg-linear-to-br from-primary-600 via-accent-500 to-accent-600;
   }
 
   .mesh-bg {
     background-color: #fff;
-    background-image: 
-      radial-gradient(at 0% 0%, hsla(220,100%,95%,1) 0, transparent 50%), 
-      radial-gradient(at 50% 0%, hsla(150,100%,95%,1) 0, transparent 50%),
-      radial-gradient(at 100% 0%, hsla(220,100%,95%,1) 0, transparent 50%);
+    background-image:
+      radial-gradient(at 0% 0%, hsla(220, 100%, 95%, 1) 0, transparent 50%),
+      radial-gradient(at 50% 0%, hsla(150, 100%, 95%, 1) 0, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(220, 100%, 95%, 1) 0, transparent 50%);
   }
 
   .hover-float {
     @apply transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary-500/10;
+  }
+}
+
+@layer components {
+  .igc-app-theme {
+    color: #1f2937;
+  }
+
+  .igc-app-theme h1,
+  .igc-app-theme h2,
+  .igc-app-theme h3,
+  .igc-app-theme h4 {
+    color: #214e41;
+  }
+
+  .igc-app-theme [data-slot="button"]:not(.keep-original-button-color) {
+    background-color: #214e41 !important;
+    border-color: #214e41 !important;
+    color: #ffffff !important;
+  }
+
+  .igc-app-theme [data-slot="button"]:not(.keep-original-button-color):hover {
+    background-color: #183930 !important;
+    border-color: #183930 !important;
+    color: #ffffff !important;
+  }
+
+  .igc-app-theme
+    [data-slot="button"]:not(.keep-original-button-color):focus-visible {
+    border-color: #4f9b5a !important;
+    box-shadow: 0 0 0 3px rgba(79, 155, 90, 0.25) !important;
+  }
+
+  .igc-app-theme [data-slot="button"]:not(.keep-original-button-color):disabled,
+  .igc-app-theme
+    [data-slot="button"]:not(
+      .keep-original-button-color
+    )[aria-disabled="true"] {
+    background-color: #214e41 !important;
+    border-color: #214e41 !important;
+    color: #ffffff !important;
+    opacity: 0.5;
+  }
+
+  .igc-app-theme [data-slot="pagination-link"] {
+    background-color: #214e41 !important;
+    border: 1px solid #214e41 !important;
+    color: #ffffff !important;
+  }
+
+  .igc-app-theme [data-slot="pagination-link"]:hover {
+    background-color: #183930 !important;
+    border-color: #183930 !important;
+    color: #ffffff !important;
+  }
+
+  .igc-app-theme [data-slot="pagination-link"][data-active="true"] {
+    background-color: #214e41 !important;
+    border-color: #214e41 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 0 2px rgba(79, 155, 90, 0.2) !important;
+  }
+
+  .igc-app-theme [data-slot="input"] {
+    background-color: #ffffff;
+    border-color: #d2e1da;
+    color: #0f172a;
+  }
+
+  .igc-app-theme [data-slot="input"]::placeholder {
+    color: #64748b;
+  }
+
+  .igc-app-theme [data-slot="input"]:focus-visible {
+    border-color: #4f9b5a;
+    box-shadow: 0 0 0 3px rgba(79, 155, 90, 0.2);
+  }
+
+  .igc-app-theme [data-slot="badge"][data-variant="default"] {
+    background-color: #214e41;
+    color: #ffffff;
+  }
+
+  .igc-app-theme [data-slot="badge"][data-variant="secondary"] {
+    background-color: #f2ce3c;
+    color: #214e41;
+  }
+
+  .igc-app-theme [data-slot="table-container"] {
+    border-radius: 1rem;
+    border: 1px solid #dbe5e0;
+    background: #ffffff;
+  }
+
+  .igc-app-theme [data-slot="table-header"] tr {
+    background-color: #f6faf8;
+  }
+
+  .igc-app-theme [data-slot="table-head"] {
+    color: #214e41;
+    font-weight: 700;
+  }
+
+  .igc-app-theme [data-slot="table-row"]:hover {
+    background-color: #edf4f0;
+  }
+
+  .igc-app-theme .text-gray-500 {
+    color: #64748b;
+  }
+
+  .igc-app-theme .text-gray-900 {
+    color: #214e41;
   }
 }
 

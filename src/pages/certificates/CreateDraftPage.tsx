@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import { CreateDraftForm } from "@/components/certificates/CreateDraftForm";
+import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { useCreateDraftCertificate } from "@/hooks/useCertificates";
 import type { CertificateDraftPayload } from "@/types/certificate";
@@ -47,20 +48,29 @@ export default function CreateDraftPage() {
   };
 
   return (
-    <Card className="p-5">
-      <div className="mb-5">
-        <h2 className="text-xl font-semibold">Tạo chứng chỉ bản nháp</h2>
-        <p className="text-muted-foreground text-sm">
-          Điền đầy đủ thông tin bắt buộc rồi xác nhận để tạo chứng chỉ ở trạng
-          thái bản nháp.
-        </p>
-      </div>
+    <div className="space-y-5">
+      <header className="rounded-3xl border border-slate-200 bg-linear-to-br from-[#214e41] via-[#336b59] to-[#1a3a32] p-5 shadow-md text-white">
+        <div className="space-y-2">
+          <Badge className="w-fit bg-[#f2ce3c] text-[#214e41] font-semibold">
+            Tạo bản nháp
+          </Badge>
+          <h2 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+            Tạo chứng chỉ bản nháp
+          </h2>
+          <p className="max-w-3xl text-sm text-slate-100">
+            Điền đầy đủ thông tin bắt buộc rồi xác nhận để tạo chứng chỉ ở trạng
+            thái bản nháp.
+          </p>
+        </div>
+      </header>
 
-      <CreateDraftForm
-        onSubmit={handleSubmit}
-        onCancel={() => navigate(`/org/${orgCode}/certificates`)}
-        isSubmitting={createDraftMutation.isPending}
-      />
-    </Card>
+      <Card className="p-5">
+        <CreateDraftForm
+          onSubmit={handleSubmit}
+          onCancel={() => navigate(`/org/${orgCode}/certificates`)}
+          isSubmitting={createDraftMutation.isPending}
+        />
+      </Card>
+    </div>
   );
 }

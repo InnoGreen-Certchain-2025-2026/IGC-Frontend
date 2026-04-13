@@ -27,10 +27,36 @@ const modeHintMap: Record<EditorMode, (pendingName: string | null) => string> =
     },
   };
 
-function getButtonClass(isActive: boolean) {
-  return isActive
-    ? "border-blue-500 bg-blue-50 text-blue-700 hover:bg-blue-100"
-    : "border-gray-200";
+function getButtonClass(buttonMode: EditorMode, isActive: boolean) {
+  const activeRing = isActive ? "ring-2 ring-offset-1 shadow-sm" : "";
+
+  if (buttonMode === "select") {
+    return `!border-[#214e41] !bg-[#214e41] !text-white hover:!bg-[#183930] ${activeRing} ${
+      isActive ? "ring-[#4f9b5a]/40" : ""
+    }`;
+  }
+
+  if (buttonMode === "text-select") {
+    return `!border-[#f2ce3c] !bg-[#f2ce3c] !text-[#214e41] hover:!bg-[#e0bc1f] ${activeRing} ${
+      isActive ? "ring-[#d39f10]/35" : ""
+    }`;
+  }
+
+  return `!border-[#0ea5e9] !bg-[#0ea5e9] !text-white hover:!bg-[#0284c7] ${activeRing} ${
+    isActive ? "ring-[#0284c7]/35" : ""
+  }`;
+}
+
+function getHintClass(mode: EditorMode) {
+  if (mode === "select") {
+    return "bg-[#edf4f0] text-[#214e41] border border-[#cfe0d8]";
+  }
+
+  if (mode === "text-select") {
+    return "bg-[#fef6d6] text-[#7a5b00] border border-[#f6db80]";
+  }
+
+  return "bg-[#e0f2fe] text-[#075985] border border-[#9fd8f8]";
 }
 
 export default function Toolbar({
@@ -46,7 +72,7 @@ export default function Toolbar({
         <Button
           type="button"
           variant="outline"
-          className={getButtonClass(mode === "select")}
+          className={`keep-original-button-color ${getButtonClass("select", mode === "select")}`}
           onClick={() => onModeChange("select")}
         >
           <MousePointer2 className="size-4" />
@@ -56,7 +82,7 @@ export default function Toolbar({
         <Button
           type="button"
           variant="outline"
-          className={getButtonClass(mode === "text-select")}
+          className={`keep-original-button-color ${getButtonClass("text-select", mode === "text-select")}`}
           onClick={() => onModeChange("text-select")}
         >
           <Type className="size-4" />
@@ -66,7 +92,7 @@ export default function Toolbar({
         <Button
           type="button"
           variant="outline"
-          className={getButtonClass(mode === "draw")}
+          className={`keep-original-button-color ${getButtonClass("draw", mode === "draw")}`}
           onClick={() => onModeChange("draw")}
         >
           <Square className="size-4" />
@@ -89,7 +115,7 @@ export default function Toolbar({
         {pendingName ? (
           <Badge
             variant="outline"
-            className="ml-1 border-blue-200 bg-blue-50 text-blue-700 max-w-[300px] truncate"
+            className="ml-1 max-w-75 truncate border-[#f6db80] bg-[#fef6d6] text-[#7a5b00]"
             title={pendingName}
           >
             Tên field:{" "}
@@ -100,7 +126,9 @@ export default function Toolbar({
         ) : null}
       </div>
 
-      <p className="mt-2 text-sm text-gray-600 break-words whitespace-normal">
+      <p
+        className={`mt-2 rounded-lg px-2.5 py-2 text-sm wrap-break-word whitespace-normal ${getHintClass(mode)}`}
+      >
         {modeHintMap[mode](pendingName)}
       </p>
     </div>
