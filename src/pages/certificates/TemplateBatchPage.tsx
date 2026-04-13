@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { FileText, Loader2, RefreshCw, Upload } from "lucide-react";
 import { toast } from "sonner";
@@ -74,6 +74,7 @@ export default function TemplateBatchPage() {
   const [form, setForm] = useState<UploadState>(initialState);
   const [submittedBatchId, setSubmittedBatchId] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const handledTerminalBatchRef = useRef<string | null>(null);
 
   const {
     progress,
@@ -208,6 +209,50 @@ export default function TemplateBatchPage() {
 
   const canSubmit = Boolean(templateId && orgId);
 
+  useEffect(() => {
+    if (!submittedBatchId || !progress) {
+      return;
+    }
+
+    const upperStatus = progress.status.toUpperCase();
+    const isTerminal =
+      Boolean(progress.finishedAt) ||
+      ["COMPLETED", "SUCCESS", "DONE", "FAILED", "CANCELLED"].includes(
+        upperStatus,
+      );
+
+    if (!isTerminal) {
+      return;
+    }
+
+    if (handledTerminalBatchRef.current === submittedBatchId) {
+      return;
+    }
+
+    handledTerminalBatchRef.current = submittedBatchId;
+
+    const isSuccessTerminal =
+      ["COMPLETED", "SUCCESS", "DONE"].includes(upperStatus) &&
+      progress.failureCount === 0 &&
+      progress.successCount > 0;
+
+    if (isSuccessTerminal) {
+      toast.success("Tạo batch thành công");
+      navigate(`/org/${orgCode}/certificates`, {
+        replace: true,
+        state: {
+          activeTab: "SIGNED",
+          refreshedAt: Date.now(),
+        },
+      });
+      return;
+    }
+
+    if (["FAILED", "CANCELLED"].includes(upperStatus)) {
+      toast.error("Batch không thành công. Vui lòng kiểm tra lại dữ liệu.");
+    }
+  }, [navigate, orgCode, progress, submittedBatchId]);
+
   if (!hasRequiredContext) {
     return (
       <Card className="border-dashed p-6 text-sm text-slate-600">
@@ -218,25 +263,32 @@ export default function TemplateBatchPage() {
 
   return (
     <div className="space-y-5">
-      <header className="flex flex-col gap-4 rounded-3xl border border-slate-200 bg-linear-to-br from-white via-slate-50 to-emerald-50 p-5 shadow-sm lg:flex-row lg:items-end lg:justify-between">
+      <header className="flex flex-col gap-4 rounded-3xl border border-slate-200 bg-linear-to-br from-[#214e41] via-[#336b59] to-[#1a3a32] p-5 shadow-md text-white lg:flex-row lg:items-end lg:justify-between">
         <div className="space-y-2">
-          <Badge variant="secondary">Batch certificates</Badge>
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
+          <Badge className="w-fit bg-[#f2ce3c] text-[#214e41] font-semibold">
+            Batch certificates
+          </Badge>
+          <h1 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
             Tạo chứng chỉ hàng loạt
           </h1>
-          <p className="max-w-3xl text-sm text-slate-600">
+          <p className="max-w-3xl text-sm text-slate-100">
             Upload Excel, chữ ký tay và chứng chỉ số để tạo batch theo template.
             Tiến độ được cập nhật realtime bằng polling mỗi 1-2 giây.
           </p>
         </div>
 
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" onClick={handleDownloadExcelTemplate}>
+          <Button
+            variant="outline"
+            className="keep-original-button-color border-[#0ea5e9] bg-[#0ea5e9] text-white hover:bg-[#0284c7]"
+            onClick={handleDownloadExcelTemplate}
+          >
             <FileText className="size-4" />
             Tải Excel mẫu
           </Button>
           <Button
             variant="ghost"
+            className="keep-original-button-color border-[#0ea5e9] bg-[#0ea5e9] text-white hover:bg-[#0284c7]"
             onClick={() =>
               navigate(
                 `/org/${orgCode}/certificates/templates/${safeTemplateId}`,

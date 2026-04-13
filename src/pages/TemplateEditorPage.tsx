@@ -97,6 +97,16 @@ export default function TemplateEditorPage() {
     [error, lastSavedAt, saveLoading],
   );
 
+  const handleSaveAndBack = async () => {
+    const isSaved = await saveSchema();
+    if (!isSaved) return;
+
+    navigate(`/org/${orgCode}/certificates/templates`, {
+      replace: true,
+      state: { refreshedAt: Date.now() },
+    });
+  };
+
   if (!templateId) {
     return <Navigate to={`/org/${orgCode}/certificates/templates`} replace />;
   }
@@ -120,21 +130,30 @@ export default function TemplateEditorPage() {
 
   return (
     <div className="space-y-4">
-      <header className="rounded-2xl border bg-white p-4 shadow-sm">
+      <header className="rounded-3xl border border-slate-200 bg-linear-to-br from-[#214e41] via-[#336b59] to-[#1a3a32] p-5 shadow-md text-white">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div className="space-y-1">
-            <h1 className="text-xl font-semibold text-slate-900">
+          <div className="space-y-2">
+            <Badge className="w-fit bg-[#f2ce3c] text-[#214e41] font-semibold">
+              Tạo template
+            </Badge>
+            <h1 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
               Template Editor
             </h1>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-slate-100">
               {template?.name ?? "Đang tải template..."}
             </p>
             <div className="flex flex-wrap gap-2 pt-1">
-              <Badge variant="secondary">orgId: {resolvedOrgId}</Badge>
-              <Badge variant="outline">templateId: {templateId}</Badge>
-              <Badge variant="outline">{saveStatus}</Badge>
+              <Badge className="bg-[#edf4f0] text-[#214e41]">
+                orgId: {resolvedOrgId}
+              </Badge>
+              <Badge className="bg-white/90 text-[#214e41]">
+                templateId: {templateId}
+              </Badge>
+              <Badge className="bg-white/90 text-[#214e41]">{saveStatus}</Badge>
               {organization?.code ? (
-                <Badge variant="outline">orgCode: {organization.code}</Badge>
+                <Badge className="bg-white/90 text-[#214e41]">
+                  orgCode: {organization.code}
+                </Badge>
               ) : null}
             </div>
           </div>
@@ -143,6 +162,7 @@ export default function TemplateEditorPage() {
             <Button
               type="button"
               variant="outline"
+              className="keep-original-button-color border-[#214e41] bg-[#214e41] text-white hover:bg-[#183930]"
               onClick={() => addField()}
               disabled={metadataLoading || pdfLoading}
             >
@@ -152,6 +172,7 @@ export default function TemplateEditorPage() {
             <Button
               type="button"
               variant="outline"
+              className="keep-original-button-color border-[#0ea5e9] bg-[#0ea5e9] text-white hover:bg-[#0284c7]"
               onClick={reloadAll}
               disabled={metadataLoading || pdfLoading}
             >
@@ -160,7 +181,8 @@ export default function TemplateEditorPage() {
             </Button>
             <Button
               type="button"
-              onClick={saveSchema}
+              className="keep-original-button-color border border-[#f2ce3c] bg-[#f2ce3c] text-[#214e41] hover:bg-[#e0bc1f]"
+              onClick={handleSaveAndBack}
               disabled={saveLoading || metadataLoading}
             >
               {saveLoading ? (
@@ -219,7 +241,7 @@ export default function TemplateEditorPage() {
         </span>
         <button
           type="button"
-          className="font-medium text-blue-700 underline-offset-2 hover:underline"
+          className="font-medium text-[#214e41] underline-offset-2 hover:underline"
           onClick={() => navigate(`/org/${orgCode}/certificates/templates`)}
         >
           Quay lại danh sách template

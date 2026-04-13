@@ -138,24 +138,24 @@ export default function AccountLayout() {
         />
 
         <div className="text-center">
-          <p className="text-lg font-semibold text-gray-900">
+          <p className="text-lg font-semibold text-[#214e41]">
             {name ?? "Người dùng"}
           </p>
-          <p className="text-sm text-gray-500">{email ?? ""}</p>
+          <p className="text-sm text-slate-600">{email ?? ""}</p>
         </div>
       </div>
 
       {/* ── Tab bar ── */}
-      <div className="flex justify-center border-b border-gray-200 mb-6">
+      <div className="flex justify-center border-b border-slate-200 mb-6 overflow-x-auto">
         {TABS.map((tab) => (
           <NavLink
             key={tab.to}
             to={tab.to}
             className={({ isActive }) =>
-              `px-5 py-2.5 text-sm font-medium transition-colors duration-150 border-b-2 -mb-px ${
+              `px-5 py-2.5 text-sm font-medium transition-colors duration-150 border-b-3 -mb-px whitespace-nowrap ${
                 isActive
-                  ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  ? "border-[#183930] text-[#214e41]"
+                  : "border-transparent text-slate-600 hover:text-[#214e41] hover:border-[#183930]"
               }`
             }
           >
