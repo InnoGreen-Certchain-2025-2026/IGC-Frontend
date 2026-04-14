@@ -40,9 +40,6 @@ export async function checkSignature(
         params: {
           orgId,
         },
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
       },
     );
 
@@ -78,9 +75,6 @@ export async function uploadSignature(
       {
         params: {
           orgId,
-        },
-        headers: {
-          "Content-Type": "multipart/form-data",
         },
       },
     );

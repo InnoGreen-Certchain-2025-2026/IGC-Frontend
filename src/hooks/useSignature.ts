@@ -60,43 +60,40 @@ function getUserFriendlyErrorMessage(error: string): string {
  *   }
  * }
  */
-export function useSignature(): UseSignatureReturn {
+export function useSignature(): UseSignatureReturn & {
+  warning: string | null;
+} {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [warning, setWarning] = useState<string | null>(null);
   const [isSignatureUsed, setIsSignatureUsed] = useState(false);
+
+  const extractError = (err: any) => {
+    return err?.response?.data?.message || err?.message || "Có lỗi xảy ra";
+  };
 
   const checkSignatureFile = useCallback(
     async (orgId: number, file: File): Promise<boolean | null> => {
       try {
         setLoading(true);
         setError(null);
+        setWarning(null);
 
-        // Client-side validation first
         if (!isValidSignatureFile(file)) {
-          setError(
-            "Tệp không hợp lệ. Vui lòng tải lên ảnh JPG hoặc PNG (tối đa 5MB)",
-          );
+          setError("Tệp không hợp lệ. JPG/PNG <= 5MB");
           return null;
         }
 
-        // Call backend API - returns boolean
-        // true = signature already used
-        // false = signature is new
         const isUsed = await checkSignature(orgId, file);
         setIsSignatureUsed(isUsed);
 
         if (isUsed) {
-          setError(
-            "Chữ ký này đã được đăng ký. Chọn chữ ký khác hoặc xác nhận để thay thế.",
-          );
+          setWarning("Chữ ký đã tồn tại. Bạn có muốn thay thế không?");
         }
 
         return isUsed;
       } catch (err) {
-        const rawErrorMessage =
-          err instanceof Error ? err.message : "Lỗi khi kiểm tra chữ ký";
-        const errorMessage = getUserFriendlyErrorMessage(rawErrorMessage);
-        setError(errorMessage);
+        setError(getUserFriendlyErrorMessage(extractError(err)));
         return null;
       } finally {
         setLoading(false);
@@ -114,15 +111,13 @@ export function useSignature(): UseSignatureReturn {
         const result = await uploadSignature(orgId, file);
 
         if (result) {
-          setIsSignatureUsed(false); // Reset after successful upload
+          setIsSignatureUsed(false);
+          setWarning(null);
           return true;
         }
         return false;
       } catch (err) {
-        const rawErrorMessage =
-          err instanceof Error ? err.message : "Lỗi khi tải chữ ký lên";
-        const errorMessage = getUserFriendlyErrorMessage(rawErrorMessage);
-        setError(errorMessage);
+        setError(getUserFriendlyErrorMessage(extractError(err)));
         return false;
       } finally {
         setLoading(false);
@@ -134,12 +129,14 @@ export function useSignature(): UseSignatureReturn {
   const reset = useCallback(() => {
     setLoading(false);
     setError(null);
+    setWarning(null);
     setIsSignatureUsed(false);
   }, []);
 
   return {
     loading,
     error,
+    warning,
     isSignatureUsed,
     checkSignatureFile,
     uploadSignatureFile,
