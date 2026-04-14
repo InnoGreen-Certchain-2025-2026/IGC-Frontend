@@ -1,7 +1,6 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef } from "react";
 import { useSignature } from "@/hooks/useSignature";
-import SignatureCropper from "./SignatureCropper"; // ✅ NEW
-
+import { SignatureCropDialog } from "./SignatureCropDialog";
 import {
   Dialog,
   DialogContent,
@@ -9,7 +8,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,7 +17,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import { Upload, Check, AlertCircle, Loader2, X } from "lucide-react";
+import { Upload } from "lucide-react";
 
 interface SignatureUploadDialogProps {
   open: boolean;
@@ -28,8 +26,6 @@ interface SignatureUploadDialogProps {
   hasExistingSignature: boolean;
   onSuccess?: () => void;
 }
-
-type UploadStep = "select" | "checking" | "uploading";
 
 export function SignatureUploadDialog({
   open,
@@ -41,217 +37,139 @@ export function SignatureUploadDialog({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [croppedFile, setCroppedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  // ✅ NEW: crop states
-  const [rawImage, setRawImage] = useState<string | null>(null);
-  const [showCropper, setShowCropper] = useState(false);
-
-  const [step, setStep] = useState<UploadStep>("select");
+  const [showCrop, setShowCrop] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   const {
     loading,
     error,
-    isSignatureUsed,
-    checkSignatureFile,
+    checkSignatureFile, // 👉 chỉ dùng check chữ ký
     uploadSignatureFile,
     reset,
   } = useSignature();
 
-  /* =========================================================
-     SELECT FILE → OPEN CROPPER
-     ========================================================= */
-  const handleFileSelect = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (!file) return;
+  // 👉 chọn file
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setRawImage(e.target?.result as string);
-        setShowCropper(true); // 👉 mở cropper
-      };
-      reader.readAsDataURL(file);
-    },
-    [],
-  );
-
-  /* =========================================================
-     AFTER CROP
-     ========================================================= */
-  const handleCropComplete = useCallback((file: File) => {
     setSelectedFile(file);
 
-    const url = URL.createObjectURL(file);
-    setPreviewUrl(url);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setPreviewUrl(e.target?.result as string);
 
-    setShowCropper(false);
-  }, []);
+      onOpenChange(false);
+      setShowCrop(true);
+    };
+    reader.readAsDataURL(file);
+  };
 
-  /* =========================================================
-     CLOSE
-     ========================================================= */
-  const handleClose = useCallback(() => {
-    setSelectedFile(null);
-    setPreviewUrl(null);
-    setRawImage(null);
-    setShowCropper(false);
-    setStep("select");
-    reset();
-    onOpenChange(false);
-  }, [reset, onOpenChange]);
+  // 👉 crop xong
+  const handleCropDone = (data: { original: File; resized: File }) => {
+    console.log("🔥 ORIGINAL:", data.original.size);
+    console.log("🔥 RESIZED:", data.resized.size);
 
-  /* =========================================================
-     UPLOAD
-     ========================================================= */
-  const handleUploadSignature = useCallback(async () => {
-    if (!selectedFile) return;
+    setCroppedFile(data.resized);
 
-    try {
-      setStep("uploading");
+    // 👉 ĐÓNG CROP NGAY (QUAN TRỌNG)
+    setShowCrop(false);
 
-      await uploadSignatureFile(orgId, selectedFile);
+    // 👉 CHẠY API ASYNC (KHÔNG BLOCK UI)
+    setTimeout(async () => {
+      try {
+        const isValid = await checkSignatureFile(orgId, data.original);
 
-      toast.success(
-        hasExistingSignature
-          ? "Đã cập nhật chữ ký"
-          : "Đăng ký chữ ký thành công",
-      );
+        if (!isValid) {
+          toast.error("Đây không phải chữ ký hợp lệ");
+          return;
+        }
 
-      setShowConfirmDialog(false);
+        setShowConfirmDialog(true);
+      } catch (err) {
+        console.error("❌ ERROR:", err);
+        toast.error("Lỗi khi kiểm tra chữ ký");
+      }
+    }, 0);
+  };
+
+  // 👉 upload (sau khi user confirm)
+  const handleUpload = async () => {
+    if (!selectedFile || !croppedFile) return;
+
+    const success = await uploadSignatureFile(orgId, selectedFile, croppedFile);
+
+    if (success) {
+      toast.success("Upload thành công");
       handleClose();
       onSuccess?.();
-    } catch (err: any) {
-      setStep("select");
-      toast.error(err.message || "Upload thất bại");
+    } else {
+      toast.error(error || "Upload thất bại");
     }
-  }, [
-    selectedFile,
-    orgId,
-    uploadSignatureFile,
-    hasExistingSignature,
-    handleClose,
-    onSuccess,
-  ]);
+  };
 
-  /* =========================================================
-     CHECK
-     ========================================================= */
-  const handleCheckAndUpload = useCallback(async () => {
-    if (!selectedFile) return;
+  const handleClose = () => {
+    setSelectedFile(null);
+    setCroppedFile(null);
+    setPreviewUrl(null);
+    setShowCrop(false);
+    setShowConfirmDialog(false);
+    reset();
+    onOpenChange(false);
+  };
 
-    try {
-      setStep("checking");
-
-      const isUsed = await checkSignatureFile(orgId, selectedFile);
-
-      if (isUsed) {
-        setShowConfirmDialog(true);
-        setStep("select");
-      } else {
-        await handleUploadSignature();
-      }
-    } catch (err: any) {
-      setStep("select");
-      toast.error(err.message || "Kiểm tra thất bại");
-    }
-  }, [selectedFile, orgId, checkSignatureFile, handleUploadSignature]);
-
-  /* =========================================================
-     UI
-     ========================================================= */
   return (
     <>
       <Dialog open={open} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>
-              {hasExistingSignature ? "Đặt chữ ký thay thế" : "Đăng ký chữ ký"}
-            </DialogTitle>
-            <DialogDescription>
-              Tải lên và crop chữ ký của bạn
-            </DialogDescription>
+            <DialogTitle>Upload chữ ký</DialogTitle>
+            <DialogDescription>Upload ảnh và crop chữ ký</DialogDescription>
           </DialogHeader>
 
-          {step === "select" && (
-            <div className="space-y-4">
-              {/* Upload */}
-              <div
-                className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer"
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/jpeg,image/png"
-                  onChange={handleFileSelect}
-                  className="hidden"
-                />
+          <div
+            className="border-2 border-dashed p-6 text-center cursor-pointer"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/png,image/jpeg"
+              onChange={handleFileSelect}
+              className="hidden"
+            />
+            <Upload className="mx-auto mb-2" />
+            <p>Chọn ảnh</p>
+          </div>
 
-                <Upload className="mx-auto mb-2" />
-                <p>Chọn ảnh chữ ký</p>
-              </div>
-
-              {/* Preview */}
-              {previewUrl && (
-                <div className="relative">
-                  <img
-                    src={previewUrl}
-                    className="w-full h-32 object-contain"
-                  />
-                  <button
-                    onClick={() => {
-                      setSelectedFile(null);
-                      setPreviewUrl(null);
-                    }}
-                    className="absolute top-2 right-2"
-                  >
-                    <X />
-                  </button>
-                </div>
-              )}
-
-              {/* Actions */}
-              <div className="flex gap-3">
-                <Button variant="outline" onClick={handleClose}>
-                  Hủy
-                </Button>
-                <Button
-                  onClick={handleCheckAndUpload}
-                  disabled={!selectedFile || loading}
-                >
-                  {loading ? "Đang xử lý..." : "Tiếp tục"}
-                </Button>
-              </div>
-            </div>
+          {previewUrl && (
+            <img src={previewUrl} className="mt-4 max-h-40 mx-auto" />
           )}
         </DialogContent>
       </Dialog>
 
-      {/* ✅ CROPPER */}
-      {showCropper && rawImage && (
-        <SignatureCropper
-          imageSrc={rawImage}
-          open={showCropper}
-          onClose={() => setShowCropper(false)}
-          onCropComplete={handleCropComplete}
+      {/* crop */}
+      {showCrop && previewUrl && (
+        <SignatureCropDialog
+          image={previewUrl}
+          onCropDone={handleCropDone}
+          onCancel={() => setShowCrop(false)}
         />
       )}
 
-      {/* CONFIRM */}
-      <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+      {/* confirm */}
+      <AlertDialog open={showConfirmDialog}>
         <AlertDialogContent>
-          <AlertDialogTitle>Chữ ký đã tồn tại</AlertDialogTitle>
+          <AlertDialogTitle>Xác nhận đăng ký chữ ký</AlertDialogTitle>
           <AlertDialogDescription>
-            Bạn muốn thay thế chữ ký hiện tại?
+            Bạn có muốn sử dụng chữ ký này không?
           </AlertDialogDescription>
-
           <div className="flex justify-end gap-2">
             <AlertDialogCancel>Hủy</AlertDialogCancel>
-            <AlertDialogAction onClick={handleUploadSignature}>
-              Xác nhận
-            </AlertDialogAction>
+            <AlertDialogAction onClick={handleUpload}>Đồng ý</AlertDialogAction>
           </div>
         </AlertDialogContent>
       </AlertDialog>

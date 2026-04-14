@@ -63,20 +63,20 @@ export async function checkSignature(
  */
 export async function uploadSignature(
   orgId: number,
-  file: File,
+  originalFile: File,
+  croppedFile: File
 ): Promise<boolean> {
   const formData = new FormData();
-  formData.append("file", file);
+  formData.append("originalFile", originalFile);
+  formData.append("croppedFile", croppedFile);
 
   try {
     const response = await axiosInstance.post<any>(
       "/api/signature/upload",
       formData,
       {
-        params: {
-          orgId,
-        },
-      },
+        params: { orgId },
+      }
     );
 
     return response.data.data;

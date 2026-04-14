@@ -12,7 +12,11 @@ interface UseSignatureReturn {
 
   // Methods
   checkSignatureFile: (orgId: number, file: File) => Promise<boolean | null>;
-  uploadSignatureFile: (orgId: number, file: File) => Promise<boolean>;
+  uploadSignatureFile: (
+    orgId: number,
+    originalFile: File,
+    croppedFile: File
+  ) => Promise<boolean>;
   reset: () => void;
 }
 
@@ -22,7 +26,6 @@ interface UseSignatureReturn {
 function getUserFriendlyErrorMessage(error: string): string {
   const lowerError = error.toLowerCase();
 
-  // Check for invalid signature format errors
   if (
     lowerError.includes("not a valid signature") ||
     lowerError.includes("không phải chữ ký hợp lệ") ||
@@ -31,7 +34,6 @@ function getUserFriendlyErrorMessage(error: string): string {
     return "Chữ ký không phù hợp. Vui lòng tải lên ảnh chữ ký hợp lệ.";
   }
 
-  // Check for file format errors
   if (
     lowerError.includes("file is required") ||
     lowerError.includes("tệp được yêu cầu")
@@ -39,48 +41,28 @@ function getUserFriendlyErrorMessage(error: string): string {
     return "Vui lòng chọn tệp chữ ký để tải lên.";
   }
 
-  // Return original error if no mapping found
   return error;
 }
 
-/**
- * Custom hook for managing signature upload flow
- *
- * Usage:
- * const { loading, error, checkSignatureFile, uploadSignatureFile } = useSignature();
- *
- * // In component
- * const handleFileSelect = async (file: File) => {
- *   const isUsed = await checkSignatureFile(orgId, file);
- *   if (!isUsed) {
- *     await uploadSignatureFile(orgId, file);
- *   } else {
- *     // Show confirmation dialog
- *     // If confirmed, call uploadSignatureFile(orgId, file)
- *   }
- * }
- */
-export function useSignature(): UseSignatureReturn & {
-  warning: string | null;
-} {
+export function useSignature(): UseSignatureReturn {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [warning, setWarning] = useState<string | null>(null);
   const [isSignatureUsed, setIsSignatureUsed] = useState(false);
 
-  const extractError = (err: any) => {
-    return err?.response?.data?.message || err?.message || "Có lỗi xảy ra";
-  };
-
+  /**
+   * Check signature (chỉ dùng file gốc để hash)
+   */
   const checkSignatureFile = useCallback(
     async (orgId: number, file: File): Promise<boolean | null> => {
       try {
         setLoading(true);
         setError(null);
-        setWarning(null);
 
+        // validate file gốc
         if (!isValidSignatureFile(file)) {
-          setError("Tệp không hợp lệ. JPG/PNG <= 5MB");
+          setError(
+            "Tệp không hợp lệ. Vui lòng tải lên ảnh JPG hoặc PNG (tối đa 5MB)"
+          );
           return null;
         }
 
@@ -88,55 +70,81 @@ export function useSignature(): UseSignatureReturn & {
         setIsSignatureUsed(isUsed);
 
         if (isUsed) {
-          setWarning("Chữ ký đã tồn tại. Bạn có muốn thay thế không?");
+          setError(
+            "Chữ ký này đã được đăng ký. Chọn chữ ký khác hoặc xác nhận để thay thế."
+          );
         }
 
         return isUsed;
       } catch (err) {
-        setError(getUserFriendlyErrorMessage(extractError(err)));
+        const rawErrorMessage =
+          err instanceof Error ? err.message : "Lỗi khi kiểm tra chữ ký";
+        setError(getUserFriendlyErrorMessage(rawErrorMessage));
         return null;
       } finally {
         setLoading(false);
       }
     },
-    [],
+    []
   );
 
+  /**
+   * Upload signature (2 file: original + cropped)
+   */
   const uploadSignatureFile = useCallback(
-    async (orgId: number, file: File): Promise<boolean> => {
+    async (
+      orgId: number,
+      originalFile: File,
+      croppedFile: File
+    ): Promise<boolean> => {
       try {
         setLoading(true);
         setError(null);
 
-        const result = await uploadSignature(orgId, file);
+        // validate cả 2 file
+        if (!isValidSignatureFile(originalFile)) {
+          setError("Ảnh gốc không hợp lệ (JPG/PNG, tối đa 5MB)");
+          return false;
+        }
+
+        if (!isValidSignatureFile(croppedFile)) {
+          setError("Ảnh đã cắt không hợp lệ");
+          return false;
+        }
+
+        const result = await uploadSignature(
+          orgId,
+          originalFile,
+          croppedFile
+        );
 
         if (result) {
           setIsSignatureUsed(false);
-          setWarning(null);
           return true;
         }
+
         return false;
       } catch (err) {
-        setError(getUserFriendlyErrorMessage(extractError(err)));
+        const rawErrorMessage =
+          err instanceof Error ? err.message : "Lỗi khi tải chữ ký lên";
+        setError(getUserFriendlyErrorMessage(rawErrorMessage));
         return false;
       } finally {
         setLoading(false);
       }
     },
-    [],
+    []
   );
 
   const reset = useCallback(() => {
     setLoading(false);
     setError(null);
-    setWarning(null);
     setIsSignatureUsed(false);
   }, []);
 
   return {
     loading,
     error,
-    warning,
     isSignatureUsed,
     checkSignatureFile,
     uploadSignatureFile,
