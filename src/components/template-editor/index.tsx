@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import { FileUp, ZoomIn, ZoomOut, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
@@ -341,6 +342,21 @@ export default function TemplateEditor({
 
   return (
     <div className="space-y-4">
+      <header className="rounded-3xl border border-slate-200 bg-linear-to-br from-[#214e41] via-[#336b59] to-[#1a3a32] p-5 shadow-md text-white">
+        <div className="space-y-2">
+          <Badge className="w-fit bg-[#f2ce3c] text-[#214e41] font-semibold">
+            Template
+          </Badge>
+          <h2 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+            Trình chỉnh sửa template
+          </h2>
+          <p className="max-w-3xl text-sm text-slate-100">
+            Upload PDF, bôi text hoặc vẽ vùng để thêm field, sau đó lưu schema
+            template ngay trên cùng một màn hình.
+          </p>
+        </div>
+      </header>
+
       {/* Compact horizontal guidance + actions bar */}
       <div className="rounded-xl border bg-white p-4 shadow-sm">
         <div className="grid gap-3 xl:grid-cols-[minmax(0,1fr)_320px] xl:items-stretch">

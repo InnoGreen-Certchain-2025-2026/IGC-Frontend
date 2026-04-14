@@ -2,7 +2,11 @@
   "landingPage": {
     "header": {
       "signIn": "Sign In",
-      "getStarted": "Get Started"
+      "getStarted": "Get Started",
+      "intro": "About",
+      "verify": "Verification",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu"
     },
     "hero": {
       "verify": "Verify",
@@ -65,6 +69,49 @@
       "sub": "Connect with InnoGreen CertChain today.",
       "address": "123/2/6 Street 20, An Nhon Ward, Ho Chi Minh City",
       "scan": "SCAN QR CODE"
+    },
+    "verification": {
+      "badge": "Certificate Verification",
+      "titlePrefix": "Verify certificate by",
+      "titleHighlight": "PDF file",
+      "subtitle": "Upload your certificate PDF to validate authenticity and integrity. The system checks instantly.",
+      "uploadTitle": "Upload PDF to verify",
+      "changeFile": "Click to change",
+      "dragDrop": "Drag and drop your PDF file here",
+      "orClick": "or click to choose file",
+      "verifyButton": "Verify",
+      "verifying": "Verifying...",
+      "infoTitle": "Helpful information",
+      "info1": "Certificate verification helps you check document validity and authenticity.",
+      "info2": "Upload your certificate PDF for instant validation.",
+      "info3": "The system scans blockchain records to verify your certificate information.",
+      "toasts": {
+        "pdfFileInvalid": "Please select exactly one valid PDF file to verify.",
+        "verifySuccess": "PDF verification completed successfully.",
+        "unexpectedError": "An unexpected error occurred. Please try again."
+      },
+      "modal": {
+        "successTitle": "Verification successful",
+        "failedTitle": "Verification failed",
+        "valid": "Certificate is valid",
+        "invalid": "Certificate is invalid",
+        "certificateId": "Certificate ID",
+        "student": "Student",
+        "issuer": "Issuer",
+        "issueDate": "Issue date",
+        "close": "Close"
+      }
+    },
+    "footer": {
+      "description": "A green diploma and certificate management and verification system built on Blockchain and digital signatures, creating real value for a sustainable future.",
+      "linksTitle": "Links",
+      "home": "Home",
+      "about": "About project",
+      "features": "Features",
+      "legalTitle": "Legal",
+      "terms": "Terms of use",
+      "privacy": "Privacy policy",
+      "copyright": "© {{year}} InnoGreen Certchain. All rights reserved."
     }
   },
   "auth": {

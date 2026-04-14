@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import { CertificatesSkeleton } from "@/components/certificates/CertificatesSkeleton";
 import { CertificatesTable } from "@/components/certificates/CertificatesTable";
 import { CertificateEmptyState } from "@/components/certificates/CertificateEmptyState";
@@ -17,6 +18,7 @@ import {
 import type { CertificateRecord } from "@/types/certificate";
 import { CERTIFICATE_TEXTS, DEFAULT_LOCALE } from "@/pages/certificates/texts";
 import { ApiBusinessError } from "@/types/certificate";
+import { Grid2x2, Plus, Search } from "lucide-react";
 
 interface LocationState {
   highlightCertificateId?: string;
@@ -122,29 +124,47 @@ export default function CertificateManagementPage() {
 
   return (
     <div className="space-y-5">
-      <header className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h2 className="text-2xl font-semibold tracking-tight">
-            {text.dashboardTitle}
-          </h2>
-          <p className="text-muted-foreground text-sm">
-            {text.dashboardDescription}
-          </p>
+      <header className="rounded-3xl border border-slate-200 bg-linear-to-br from-[#214e41] via-[#336b59] to-[#1a3a32] p-5 shadow-md text-white">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div className="space-y-2">
+            <Badge className="w-fit bg-[#f2ce3c] text-[#214e41] font-semibold">
+              Tổng quan
+            </Badge>
+            <h2 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+              {text.dashboardTitle}
+            </h2>
+            <p className="max-w-3xl text-sm text-slate-100">
+              {text.dashboardDescription}
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button
+              onClick={goToCreateDraft}
+              className="keep-original-button-color bg-[#f2ce3c] hover:bg-[#e0bc1f] text-[#214e41] font-semibold border border-[#f2ce3c]"
+            >
+              <Plus className="size-4" />
+              {text.actions.createDraft}
+            </Button>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-2 sm:flex-row">
-          <Button onClick={goToCreateDraft}>{text.actions.createDraft}</Button>
+        <div className="mt-5 flex flex-col gap-3 md:flex-row md:items-center">
+          <div className="relative flex flex-1 items-center h-11 px-3 md:px-4 bg-white border-2 border-[#183930] rounded-full shadow-md transition-all duration-300 hover:border-[#4f9b5a]">
+            <Search className="size-4 text-[#214e41] shrink-0" />
+            <Input
+              value={searchKeyword}
+              onChange={(event) => setSearchKeyword(event.target.value)}
+              placeholder={text.searchPlaceholder}
+              className="grow bg-transparent border-none shadow-none focus-visible:ring-0 text-slate-900 px-2 md:px-3 placeholder:text-slate-400 h-full font-medium min-w-0"
+            />
+          </div>
+          <Badge className="gap-1 w-fit bg-[#f2ce3c] text-[#214e41] font-semibold">
+            <Grid2x2 className="size-3.5" />
+            {drafts.length + signed.length + revoked.length} chứng chỉ
+          </Badge>
         </div>
       </header>
-
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <Input
-          value={searchKeyword}
-          onChange={(event) => setSearchKeyword(event.target.value)}
-          className="w-full md:max-w-sm"
-          placeholder={text.searchPlaceholder}
-        />
-      </div>
 
       <Tabs
         value={activeTab}
@@ -152,10 +172,25 @@ export default function CertificateManagementPage() {
           setActiveTab(value as "DRAFT" | "SIGNED" | "REVOKED")
         }
       >
-        <TabsList>
-          <TabsTrigger value="DRAFT">{text.tabs.draft}</TabsTrigger>
-          <TabsTrigger value="SIGNED">{text.tabs.signed}</TabsTrigger>
-          <TabsTrigger value="REVOKED">{text.tabs.revoked}</TabsTrigger>
+        <TabsList className="rounded-xl bg-white border border-slate-200 p-1">
+          <TabsTrigger
+            value="DRAFT"
+            className="data-[state=active]:bg-[#214e41] data-[state=active]:text-white"
+          >
+            {text.tabs.draft}
+          </TabsTrigger>
+          <TabsTrigger
+            value="SIGNED"
+            className="data-[state=active]:bg-[#214e41] data-[state=active]:text-white"
+          >
+            {text.tabs.signed}
+          </TabsTrigger>
+          <TabsTrigger
+            value="REVOKED"
+            className="data-[state=active]:bg-[#214e41] data-[state=active]:text-white"
+          >
+            {text.tabs.revoked}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="DRAFT" className="pt-3">
