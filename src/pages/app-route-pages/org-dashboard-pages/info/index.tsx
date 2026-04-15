@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router";
 import { useAppSelector } from "@/features/hooks";
 import { getOrganizationByIdApi } from "@/services/organizationService";
 import { checkOrganizationHasSignature } from "@/services/signatureService";
@@ -40,6 +41,7 @@ const ROLE_LABELS: Record<string, string> = {
  * Fetches full org details via getOrganizationByIdApi and displays them.
  */
 export default function OrgInfoPage() {
+  const location = useLocation();
   const selectedOrg = useAppSelector(
     (state) => state.organization.selectedOrganization,
   );
@@ -82,6 +84,13 @@ export default function OrgInfoPage() {
       cancelled = true;
     };
   }, [selectedOrg?.id]);
+
+  useEffect(() => {
+    const state = location.state as { openSignatureDialog?: boolean } | null;
+    if (state?.openSignatureDialog) {
+      setSignatureDialogOpen(true);
+    }
+  }, [location.state]);
 
   if (!selectedOrg?.id) {
     return (

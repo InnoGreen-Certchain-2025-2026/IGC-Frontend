@@ -35,7 +35,6 @@ function buildBulkCertificateFormData(payload: BulkCertificateUploadPayload) {
   const formData = new FormData();
   formData.append("orgId", String(payload.orgId));
   formData.append("excelFile", payload.excelFile);
-  formData.append("signatureImage", payload.signatureImage);
   formData.append("userCertificate", payload.userCertificate);
   formData.append("certificatePassword", payload.certificatePassword);
   return formData;

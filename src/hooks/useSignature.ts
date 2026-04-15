@@ -15,7 +15,7 @@ interface UseSignatureReturn {
   uploadSignatureFile: (
     orgId: number,
     originalFile: File,
-    croppedFile: File
+    croppedFile: File,
   ) => Promise<boolean>;
   reset: () => void;
 }
@@ -61,19 +61,15 @@ export function useSignature(): UseSignatureReturn {
         // validate file gốc
         if (!isValidSignatureFile(file)) {
           setError(
-            "Tệp không hợp lệ. Vui lòng tải lên ảnh JPG hoặc PNG (tối đa 5MB)"
+            "Tệp không hợp lệ. Vui lòng tải lên ảnh JPG hoặc PNG (tối đa 5MB)",
           );
           return null;
         }
 
         const isUsed = await checkSignature(orgId, file);
-        setIsSignatureUsed(isUsed);
-
-        if (isUsed) {
-          setError(
-            "Chữ ký này đã được đăng ký. Chọn chữ ký khác hoặc xác nhận để thay thế."
-          );
-        }
+        // Backend currently returns whether the image is a valid signature.
+        // Keep this field for backward compatibility with existing UI components.
+        setIsSignatureUsed(false);
 
         return isUsed;
       } catch (err) {
@@ -85,7 +81,7 @@ export function useSignature(): UseSignatureReturn {
         setLoading(false);
       }
     },
-    []
+    [],
   );
 
   /**
@@ -95,7 +91,7 @@ export function useSignature(): UseSignatureReturn {
     async (
       orgId: number,
       originalFile: File,
-      croppedFile: File
+      croppedFile: File,
     ): Promise<boolean> => {
       try {
         setLoading(true);
@@ -112,11 +108,7 @@ export function useSignature(): UseSignatureReturn {
           return false;
         }
 
-        const result = await uploadSignature(
-          orgId,
-          originalFile,
-          croppedFile
-        );
+        const result = await uploadSignature(orgId, originalFile, croppedFile);
 
         if (result) {
           setIsSignatureUsed(false);
@@ -133,7 +125,7 @@ export function useSignature(): UseSignatureReturn {
         setLoading(false);
       }
     },
-    []
+    [],
   );
 
   const reset = useCallback(() => {

@@ -71,7 +71,6 @@ export interface BatchProgressResponse {
 export interface BulkCertificateUploadPayload {
   orgId: number;
   excelFile: File;
-  signatureImage: File;
   userCertificate: File;
   certificatePassword: string;
 }

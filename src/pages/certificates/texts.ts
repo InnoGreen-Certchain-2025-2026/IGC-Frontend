@@ -2,14 +2,12 @@ export const CERTIFICATE_TEXTS = {
   vi: {
     dashboardTitle: "Quản lý chứng chỉ",
     dashboardDescription:
-      "Quản lý đầy đủ vòng đời chứng chỉ: Bản nháp, Ký số, Tra cứu, Thu hồi và Cấp lại.",
+      "Quản lý đầy đủ vòng đời chứng chỉ: Ký số, Tra cứu, Thu hồi và Cấp lại.",
     tabs: {
-      draft: "Bản nháp",
       signed: "Đã ký",
       revoked: "Đã thu hồi",
     },
     actions: {
-      createDraft: "Tạo bản nháp",
       sign: "Ký số",
       revoke: "Thu hồi",
       reissue: "Cấp lại",
@@ -25,21 +23,18 @@ export const CERTIFICATE_TEXTS = {
     },
     searchPlaceholder: "Tìm theo mã chứng chỉ hoặc tên sinh viên",
     empty: {
-      draft: "Chưa có chứng chỉ bản nháp.",
       signed: "Chưa có chứng chỉ đã ký.",
       revoked: "Chưa có chứng chỉ đã thu hồi.",
     },
     status: {
-      DRAFT: "Bản nháp",
       SIGNED: "Đã ký",
       REVOKED: "Đã thu hồi",
       EXPIRED: "Hết hạn",
     },
     notifications: {
-      createDraftSuccess: "Tạo chứng chỉ bản nháp thành công.",
       signSuccess: "Ký số chứng chỉ thành công.",
       revokeSuccess: "Thu hồi chứng chỉ thành công.",
-      reissueSuccess: "Cấp lại chứng chỉ thành công và tạo bản nháp mới.",
+      reissueSuccess: "Cấp lại chứng chỉ thành công.",
       claimSuccess: "Bạn đã nhận chứng chỉ vào tài khoản.",
       claimNeedLogin: "Vui lòng đăng nhập để nhận chứng chỉ.",
       claimClaimedByOther: "Chứng chỉ này đã được nhận bởi tài khoản khác.",

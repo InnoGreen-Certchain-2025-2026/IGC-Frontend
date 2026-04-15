@@ -63,16 +63,6 @@ export const createDraftCertificateApi = async (
   return parseApiResponse(response.data, fallback);
 };
 
-export const getDraftCertificatesApi = async (): Promise<
-  CertificateRecord[]
-> => {
-  const response = await axiosInstance.get<
-    ApiResponse<CertificateRecord[] | null>
-  >("/api/certificates/drafts");
-
-  return parseApiResponse(response.data, []);
-};
-
 export const getSignedCertificatesApi = async (): Promise<
   CertificateRecord[]
 > => {
@@ -144,7 +134,7 @@ export const reissueCertificateApi = async (
   return parseApiResponse(response.data, {
     certificateId,
     studentName: "",
-    status: "DRAFT",
+    status: "SIGNED",
   });
 };
 

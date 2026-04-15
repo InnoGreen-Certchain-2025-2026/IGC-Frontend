@@ -1,20 +1,17 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   claimCertificateOwnershipApi,
-  createDraftCertificateApi,
   downloadClaimCertificatePdfApi,
   getClaimCertificatePreviewApi,
-  getDraftCertificatesApi,
   getRevokedCertificatesApi,
   getSignedCertificatesApi,
-  reissueCertificateApi,
   revokeCertificateApi,
+  reissueCertificateApi,
   signCertificateApi,
   verifyCertificateByIdApi,
   verifyCertificateByPdfFileApi,
 } from "@/services/certificateApi";
 import type {
-  CertificateIssuePayload,
   CertificateRecord,
   ClaimCertificateResponse,
   SignCertificatePayload,
@@ -22,7 +19,6 @@ import type {
 } from "@/types/certificate";
 
 export const certificateQueryKeys = {
-  draft: ["certificates", "drafts"] as const,
   signed: ["certificates", "signed"] as const,
   revoked: ["certificates", "revoked"] as const,
   claimPreview: (claimCode: string) =>
@@ -30,11 +26,6 @@ export const certificateQueryKeys = {
 };
 
 export const useCertificateDashboardData = () => {
-  const draftQuery = useQuery<CertificateRecord[]>({
-    queryKey: certificateQueryKeys.draft,
-    queryFn: getDraftCertificatesApi,
-  });
-
   const signedQuery = useQuery<CertificateRecord[]>({
     queryKey: certificateQueryKeys.signed,
     queryFn: getSignedCertificatesApi,
@@ -46,33 +37,11 @@ export const useCertificateDashboardData = () => {
   });
 
   return {
-    draftQuery,
     signedQuery,
     revokedQuery,
-    isLoading:
-      draftQuery.isLoading || signedQuery.isLoading || revokedQuery.isLoading,
-    isFetching:
-      draftQuery.isFetching ||
-      signedQuery.isFetching ||
-      revokedQuery.isFetching,
+    isLoading: signedQuery.isLoading || revokedQuery.isLoading,
+    isFetching: signedQuery.isFetching || revokedQuery.isFetching,
   };
-};
-
-export const useCreateDraftCertificate = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (payload: CertificateIssuePayload) =>
-      createDraftCertificateApi(payload),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: certificateQueryKeys.draft,
-      });
-      await queryClient.invalidateQueries({
-        queryKey: certificateQueryKeys.signed,
-      });
-    },
-  });
 };
 
 export const useSignCertificate = () => {
@@ -83,7 +52,6 @@ export const useSignCertificate = () => {
       signCertificateApi(payload),
     onSuccess: async () => {
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: certificateQueryKeys.draft }),
         queryClient.invalidateQueries({
           queryKey: certificateQueryKeys.signed,
         }),
@@ -121,7 +89,6 @@ export const useReissueCertificate = () => {
         queryClient.invalidateQueries({
           queryKey: certificateQueryKeys.signed,
         }),
-        queryClient.invalidateQueries({ queryKey: certificateQueryKeys.draft }),
         queryClient.invalidateQueries({
           queryKey: certificateQueryKeys.revoked,
         }),

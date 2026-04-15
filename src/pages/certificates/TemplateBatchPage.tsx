@@ -21,18 +21,17 @@ import { templateApi } from "@/services/templateApi";
 import { triggerBlobDownload } from "@/lib/download";
 import { useOrganizationContext } from "@/hooks/useOrganizationContext";
 import { useBatchProgressPolling } from "@/hooks/useBatchProgressPolling";
+import { checkOrganizationHasSignature } from "@/services/signatureService";
 import type { TemplateResponse } from "@/types/template";
 
 type UploadState = {
   excelFile: File | null;
-  signatureImage: File | null;
   userCertificate: File | null;
   certificatePassword: string;
 };
 
 const initialState: UploadState = {
   excelFile: null,
-  signatureImage: null,
   userCertificate: null,
   certificatePassword: "",
 };
@@ -47,13 +46,6 @@ function isSignatureCertificateFile(file: File | null) {
   if (!file) return false;
   const lowerName = file.name.toLowerCase();
   return lowerName.endsWith(".p12") || lowerName.endsWith(".pfx");
-}
-
-function isImageFile(file: File | null) {
-  if (!file) return false;
-  return (
-    file.type.startsWith("image/") || /\.(png|jpg|jpeg|webp)$/i.test(file.name)
-  );
 }
 
 function getFileLabel(file: File | null) {
@@ -71,6 +63,8 @@ export default function TemplateBatchPage() {
   const safeOrgId = orgId ?? 0;
   const [template, setTemplate] = useState<TemplateResponse | null>(null);
   const [isLoadingTemplate, setIsLoadingTemplate] = useState(false);
+  const [isCheckingSignature, setIsCheckingSignature] = useState(false);
+  const [hasSignature, setHasSignature] = useState<boolean | null>(null);
   const [form, setForm] = useState<UploadState>(initialState);
   const [submittedBatchId, setSubmittedBatchId] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -122,13 +116,52 @@ export default function TemplateBatchPage() {
     };
   }, [hasRequiredContext, safeOrgId, safeTemplateId]);
 
+  useEffect(() => {
+    if (!orgId || !orgCode) {
+      return;
+    }
+
+    let cancelled = false;
+
+    const checkSignatureReady = async () => {
+      setIsCheckingSignature(true);
+      try {
+        const exists = await checkOrganizationHasSignature(orgId);
+        if (cancelled) {
+          return;
+        }
+
+        setHasSignature(exists);
+        if (!exists) {
+          toast.error(
+            "Tổ chức chưa có chữ ký đang hoạt động. Vui lòng đăng ký chữ ký trước.",
+          );
+          navigate(`/org/${orgCode}/info`, {
+            replace: true,
+            state: { openSignatureDialog: true },
+          });
+        }
+      } catch {
+        if (!cancelled) {
+          setHasSignature(false);
+        }
+      } finally {
+        if (!cancelled) {
+          setIsCheckingSignature(false);
+        }
+      }
+    };
+
+    checkSignatureReady();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [navigate, orgCode, orgId]);
+
   const validationError = useMemo(() => {
     if (!form.excelFile || !isSpreadsheetFile(form.excelFile)) {
       return "File Excel phải là .xlsx hoặc .xls";
-    }
-
-    if (!form.signatureImage || !isImageFile(form.signatureImage)) {
-      return "Vui lòng chọn ảnh chữ ký hợp lệ";
     }
 
     if (
@@ -159,6 +192,18 @@ export default function TemplateBatchPage() {
       return;
     }
 
+    if (!hasSignature) {
+      toast.error(
+        "Tổ chức chưa có chữ ký đang hoạt động. Vui lòng đăng ký chữ ký trước.",
+      );
+      if (orgCode) {
+        navigate(`/org/${orgCode}/info`, {
+          state: { openSignatureDialog: true },
+        });
+      }
+      return;
+    }
+
     if (validationError) {
       toast.error(validationError);
       return;
@@ -170,7 +215,6 @@ export default function TemplateBatchPage() {
         {
           orgId: safeOrgId,
           excelFile: form.excelFile!,
-          signatureImage: form.signatureImage!,
           userCertificate: form.userCertificate!,
           certificatePassword: form.certificatePassword,
         },
@@ -185,6 +229,18 @@ export default function TemplateBatchPage() {
           : "Không thể tạo batch";
       setSubmitError(message);
       toast.error(message);
+
+      const normalized = message.toLowerCase();
+      const shouldRedirectToSignature =
+        normalized.includes("active signature") ||
+        normalized.includes("signature") ||
+        normalized.includes("s3");
+
+      if (shouldRedirectToSignature && orgCode) {
+        navigate(`/org/${orgCode}/info`, {
+          state: { openSignatureDialog: true },
+        });
+      }
     }
   };
 
@@ -207,7 +263,10 @@ export default function TemplateBatchPage() {
     }
   };
 
-  const canSubmit = Boolean(templateId && orgId);
+  const canSubmit =
+    Boolean(templateId && orgId) &&
+    !isCheckingSignature &&
+    hasSignature === true;
 
   useEffect(() => {
     if (!submittedBatchId || !progress) {
@@ -272,8 +331,8 @@ export default function TemplateBatchPage() {
             Tạo chứng chỉ hàng loạt
           </h1>
           <p className="max-w-3xl text-sm text-slate-100">
-            Upload Excel, chữ ký tay và chứng chỉ số để tạo batch theo template.
-            Tiến độ được cập nhật realtime bằng polling mỗi 1-2 giây.
+            Upload Excel và chữ ký số để tạo batch theo template. Chữ ký sẽ được
+            lấy tự động từ chữ ký đang hoạt động của tổ chức.
           </p>
         </div>
 
@@ -306,30 +365,30 @@ export default function TemplateBatchPage() {
           <CardHeader className="border-b bg-slate-50/80 pb-4">
             <CardTitle className="text-base">Thông tin batch</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 p-5">
-            <div className="space-y-2">
-              <Label>Template</Label>
-              <div className="rounded-xl border bg-slate-50 p-3 text-sm text-slate-700">
-                {isLoadingTemplate ? (
-                  <span className="inline-flex items-center gap-2 text-slate-500">
-                    <Loader2 className="size-4 animate-spin" /> Đang tải
-                    template...
-                  </span>
-                ) : (
-                  <>
-                    <div className="font-medium text-slate-900">
-                      {template?.name ?? "Template đang chọn"}
-                    </div>
-                    <div className="text-xs text-slate-500">
-                      {template?.fields.length ?? 0} fields
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-
+          <CardContent className="p-5">
             <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
+              <div className="space-y-2 md:col-span-2">
+                <Label>Template</Label>
+                <div className="rounded-xl border bg-slate-50 p-3 text-sm text-slate-700">
+                  {isLoadingTemplate ? (
+                    <span className="inline-flex items-center gap-2 text-slate-500">
+                      <Loader2 className="size-4 animate-spin" /> Đang tải
+                      template...
+                    </span>
+                  ) : (
+                    <>
+                      <div className="font-medium text-slate-900">
+                        {template?.name ?? "Template đang chọn"}
+                      </div>
+                      <div className="text-xs text-slate-500">
+                        {template?.fields.length ?? 0} fields
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <div className="space-y-2 md:col-span-2">
                 <Label htmlFor="excelFile">File Excel</Label>
                 <Input
                   id="excelFile"
@@ -343,28 +402,9 @@ export default function TemplateBatchPage() {
                   {getFileLabel(form.excelFile)}
                 </p>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="signatureImage">Ảnh chữ ký</Label>
-                <Input
-                  id="signatureImage"
-                  type="file"
-                  accept="image/*"
-                  onChange={(event) =>
-                    handleChange(
-                      "signatureImage",
-                      event.target.files?.[0] ?? null,
-                    )
-                  }
-                />
-                <p className="text-xs text-slate-500">
-                  {getFileLabel(form.signatureImage)}
-                </p>
-              </div>
-            </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="userCertificate">Chứng chỉ số</Label>
+                <Label htmlFor="userCertificate">Chữ ký số</Label>
                 <Input
                   id="userCertificate"
                   type="file"
@@ -381,7 +421,7 @@ export default function TemplateBatchPage() {
                 </p>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="certificatePassword">Mật khẩu chứng chỉ</Label>
+                <Label htmlFor="certificatePassword">Mật khẩu chữ ký số</Label>
                 <Input
                   id="certificatePassword"
                   type="password"
@@ -399,6 +439,17 @@ export default function TemplateBatchPage() {
                 <Upload className="size-4" />
                 Tạo batch
               </Button>
+              {isCheckingSignature ? (
+                <p className="self-center text-sm text-slate-600">
+                  Đang kiểm tra chữ ký của tổ chức...
+                </p>
+              ) : null}
+              {hasSignature === false ? (
+                <p className="self-center text-sm text-amber-700">
+                  Tổ chức chưa có chữ ký hoạt động. Vui lòng cập nhật tại trang
+                  thông tin tổ chức.
+                </p>
+              ) : null}
               {validationError ? (
                 <p className="self-center text-sm text-rose-600">
                   {validationError}

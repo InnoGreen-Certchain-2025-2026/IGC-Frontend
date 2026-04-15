@@ -25,9 +25,8 @@ import { CERTIFICATE_TEXTS, DEFAULT_LOCALE } from "@/pages/certificates/texts";
 
 interface CertificatesTableProps {
   records: CertificateRecord[];
-  activeTab: "DRAFT" | "SIGNED" | "REVOKED";
+  activeTab: "SIGNED" | "REVOKED";
   highlightCertificateId?: string;
-  onSign: (record: CertificateRecord) => void;
   onRevoke: (certificateId: string) => Promise<void>;
   onReissue: (certificateId: string) => Promise<void>;
   isRevokePending: boolean;
@@ -38,7 +37,6 @@ export function CertificatesTable({
   records,
   activeTab,
   highlightCertificateId,
-  onSign,
   onRevoke,
   onReissue,
   isReissuePending,
@@ -48,10 +46,9 @@ export function CertificatesTable({
   const [pendingCertificateId, setPendingCertificateId] = useState<string>("");
 
   const titleByTab = useMemo(() => {
-    if (activeTab === "DRAFT") return text.tabs.draft;
     if (activeTab === "SIGNED") return text.tabs.signed;
     return text.tabs.revoked;
-  }, [activeTab, text.tabs.draft, text.tabs.revoked, text.tabs.signed]);
+  }, [activeTab, text.tabs.revoked, text.tabs.signed]);
 
   return (
     <div className="rounded-lg border bg-white">
@@ -86,12 +83,6 @@ export function CertificatesTable({
                 <TableCell>{record.claimCode ?? "-"}</TableCell>
                 <TableCell>{record.claimExpiry ?? "-"}</TableCell>
                 <TableCell className="space-x-2 text-right">
-                  {activeTab === "DRAFT" ? (
-                    <Button size="sm" onClick={() => onSign(record)}>
-                      {text.actions.sign}
-                    </Button>
-                  ) : null}
-
                   {activeTab === "SIGNED" ? (
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
@@ -144,8 +135,8 @@ export function CertificatesTable({
                             Cấp lại chứng chỉ?
                           </AlertDialogTitle>
                           <AlertDialogDescription>
-                            Thao tác cấp lại sẽ tạo một chứng chỉ bản nháp mới
-                            từ bản ghi đã thu hồi này.
+                            Thao tác cấp lại sẽ kích hoạt chứng chỉ này lại ngay
+                            lập tức.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
