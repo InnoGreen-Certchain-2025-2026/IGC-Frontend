@@ -10,28 +10,24 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
+import { SignatureCropDialog } from "./SignatureCropDialog";
 
 interface SignatureUploadProps {
   orgId: number;
   onSuccess?: () => void;
 }
 
-/**
- * Example component demonstrating signature upload flow
- *
- * Flow:
- * 1. User selects signature image file
- * 2. File is checked against backend (validity + duplicate check)
- * 3. If used, show confirmation dialog
- * 4. If confirmed or new, signature is uploaded
- */
 export function SignatureUploadExample({
   orgId,
   onSuccess,
 }: SignatureUploadProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  const [originalFile, setOriginalFile] = useState<File | null>(null);
+  const [croppedFile, setCroppedFile] = useState<File | null>(null);
+
+  const [showCrop, setShowCrop] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [pendingFile, setPendingFile] = useState<File | null>(null);
 
   const {
     loading,
@@ -42,51 +38,68 @@ export function SignatureUploadExample({
     reset,
   } = useSignature();
 
+  // 👉 chọn file
   const handleFileSelect = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // Create preview
+    reset();
+
+    setOriginalFile(file);
+
     const reader = new FileReader();
     reader.onload = (e) => {
       setPreviewUrl(e.target?.result as string);
+      setShowCrop(true); // mở crop
     };
     reader.readAsDataURL(file);
+  };
 
-    reset();
+  // 👉 sau khi crop
+  const handleCropDone = async (data: { original: File; resized: File }) => {
+    console.log("🔥 ORIGINAL:", data.original.size);
+    console.log("🔥 RESIZED:", data.resized.size);
 
-    // Check the signature
-    const isUsed = await checkSignatureFile(orgId, file);
+    setCroppedFile(data.resized); // dùng để upload
 
-    if (isUsed === null) {
-      // Error during check
-      return;
-    }
+    try {
+      // 👉 QUAN TRỌNG: check bằng ảnh FULL
+      const isValid = await checkSignatureFile(orgId, data.original);
 
-    if (isUsed) {
-      // Signature already used - save file and show confirmation dialog
-      setPendingFile(file);
+      if (!isValid) {
+        toast.error("Đây không phải chữ ký hợp lệ");
+        return;
+      }
+
       setShowConfirmDialog(true);
-    } else {
-      // New signature - upload directly
-      await handleUploadSignature(file);
+    } catch (err) {
+      console.error("❌ ERROR:", err);
+      toast.error("Lỗi khi kiểm tra chữ ký");
     }
   };
 
-  const handleUploadSignature = async (file: File) => {
-    const success = await uploadSignatureFile(orgId, file);
+  // 👉 upload
+  const handleUpload = async (original: File, cropped: File) => {
+    const success = await uploadSignatureFile(orgId, original, cropped);
 
     if (success) {
       toast.success("Tải chữ ký thành công");
-      setShowConfirmDialog(false);
-      setPreviewUrl(null);
-      setPendingFile(null);
+      handleReset();
       onSuccess?.();
     } else {
       toast.error(error || "Lỗi khi tải chữ ký");
     }
+  };
+
+  const handleReset = () => {
+    setPreviewUrl(null);
+    setOriginalFile(null);
+    setCroppedFile(null);
+    setShowCrop(false);
+    setShowConfirmDialog(false);
+    reset();
   };
 
   return (
@@ -123,22 +136,22 @@ export function SignatureUploadExample({
           </div>
         )}
 
-        {/* Error message */}
+        {/* Error */}
         {error && !isSignatureUsed && (
           <div className="p-3 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
             {error}
           </div>
         )}
 
-        {/* Loading state */}
+        {/* Loading */}
         {loading && (
           <div className="text-center text-sm text-gray-500">
             Đang xử lý chữ ký...
           </div>
         )}
 
-        {/* Confirmation Dialog for used signatures */}
-        {isSignatureUsed && pendingFile && (
+        {/* Confirm dialog */}
+        {isSignatureUsed && originalFile && croppedFile && (
           <AlertDialog
             open={showConfirmDialog}
             onOpenChange={setShowConfirmDialog}
@@ -146,17 +159,12 @@ export function SignatureUploadExample({
             <AlertDialogContent>
               <AlertDialogTitle>Chữ ký đã được sử dụng</AlertDialogTitle>
               <AlertDialogDescription>
-                Chữ ký này đã được đăng ký cho tổ chức của bạn rồi. Bạn có muốn
-                thay thế chữ ký hiện tại bằng chữ ký này không?
+                Chữ ký này đã tồn tại. Bạn có muốn thay thế không?
               </AlertDialogDescription>
               <div className="flex gap-2 justify-end">
                 <AlertDialogCancel>Hủy</AlertDialogCancel>
                 <AlertDialogAction
-                  onClick={() => {
-                    if (pendingFile) {
-                      handleUploadSignature(pendingFile);
-                    }
-                  }}
+                  onClick={() => handleUpload(originalFile, croppedFile)}
                   disabled={loading}
                 >
                   {loading ? "Đang xử lý..." : "Thay thế chữ ký"}
@@ -166,6 +174,15 @@ export function SignatureUploadExample({
           </AlertDialog>
         )}
       </div>
+
+      {/* 👉 Crop dialog */}
+      {showCrop && previewUrl && (
+        <SignatureCropDialog
+          image={previewUrl}
+          onCropDone={handleCropDone}
+          onCancel={() => setShowCrop(false)}
+        />
+      )}
     </Card>
   );
 }

@@ -1,18 +1,13 @@
 import { useParams, NavLink, Outlet } from "react-router";
 
 /**
- * Layout for organization certificates section. Uses internal tabs
- * to switch between list, creation form and verification tools.
+ * Layout for organization certificates section.
  */
 export default function OrgCertificatesPage() {
   const { orgCode } = useParams<{ orgCode: string }>();
 
   const TABS = [
     { to: `/org/${orgCode}/certificates`, label: "Tổng quan", end: true },
-    {
-      to: `/org/${orgCode}/certificates/create-draft`,
-      label: "Tạo bản nháp",
-    },
     {
       to: `/org/${orgCode}/certificates/templates/new`,
       label: "Tạo template",

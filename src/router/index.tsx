@@ -43,7 +43,6 @@ import OrgSettingsPage from "@/pages/app-route-pages/org-dashboard-pages/setting
 import OrgInvitesPage from "@/pages/app-route-pages/org-dashboard-pages/invites";
 import MembersLayout from "@/pages/app-route-pages/org-dashboard-pages/members/MembersLayout";
 import CertificateManagementPage from "@/pages/certificates/CertificateManagementPage";
-import CreateDraftPage from "@/pages/certificates/CreateDraftPage";
 import ClaimVerificationPage from "@/pages/certificates/ClaimVerificationPage";
 import VerifyCertificateFilePage from "@/pages/certificates/VerifyCertificateFilePage";
 import TemplateListPage from "@/pages/certificates/TemplateListPage";
@@ -135,7 +134,6 @@ export const router = createBrowserRouter([
             element: <OrgCertificatesPage />,
             children: [
               { index: true, element: <CertificateManagementPage /> },
-              { path: "create-draft", element: <CreateDraftPage /> },
               { path: "templates", element: <TemplateListPage /> },
               { path: "templates/new", element: <TemplateCreatePage /> },
               {

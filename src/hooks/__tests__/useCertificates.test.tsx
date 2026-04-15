@@ -5,13 +5,6 @@ import { describe, expect, it, vi } from "vitest";
 import { useCertificateDashboardData } from "@/hooks/useCertificates";
 
 vi.mock("@/services/certificateApi", () => ({
-  getDraftCertificatesApi: vi.fn(async () => [
-    {
-      certificateId: "DRAFT-01",
-      studentName: "Draft Student",
-      status: "DRAFT",
-    },
-  ]),
   getSignedCertificatesApi: vi.fn(async () => [
     {
       certificateId: "SIGNED-01",
@@ -38,7 +31,7 @@ vi.mock("@/services/certificateApi", () => ({
 }));
 
 describe("useCertificateDashboardData", () => {
-  it("loads draft, signed and revoked lists", async () => {
+  it("loads signed and revoked lists", async () => {
     const queryClient = new QueryClient({
       defaultOptions: {
         queries: {
@@ -56,12 +49,10 @@ describe("useCertificateDashboardData", () => {
     });
 
     await waitFor(() => {
-      expect(result.current.draftQuery.data).toHaveLength(1);
       expect(result.current.signedQuery.data).toHaveLength(1);
       expect(result.current.revokedQuery.data).toHaveLength(1);
     });
 
-    expect(result.current.draftQuery.data?.[0].certificateId).toBe("DRAFT-01");
     expect(result.current.signedQuery.data?.[0].certificateId).toBe(
       "SIGNED-01",
     );

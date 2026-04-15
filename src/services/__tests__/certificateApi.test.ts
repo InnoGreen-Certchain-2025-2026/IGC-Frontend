@@ -64,7 +64,7 @@ describe("certificateApi parser", () => {
         data: {
           certificateId: "CERT-100",
           studentName: "John Doe",
-          status: "DRAFT",
+          status: "SIGNED",
         },
       },
     });
@@ -88,7 +88,7 @@ describe("certificateApi parser", () => {
     });
 
     expect(result.certificateId).toBe("CERT-100");
-    expect(result.status).toBe("DRAFT");
+    expect(result.status).toBe("SIGNED");
   });
 
   it("sends form-data for sign request", async () => {
