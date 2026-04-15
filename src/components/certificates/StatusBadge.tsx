@@ -14,7 +14,8 @@ const statusClassNameMap: Record<CertificateStatus, string> = {
 };
 
 export function StatusBadge({ status }: StatusBadgeProps) {
-  const text = CERTIFICATE_TEXTS[DEFAULT_LOCALE].status[status] ?? status;
+  const statusTexts = CERTIFICATE_TEXTS[DEFAULT_LOCALE].status as Record<string, string>;
+  const text = statusTexts[status] ?? status;
 
   return (
     <Badge variant="outline" className={statusClassNameMap[status]}>

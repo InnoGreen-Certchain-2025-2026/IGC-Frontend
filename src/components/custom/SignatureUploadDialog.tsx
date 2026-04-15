@@ -34,7 +34,6 @@ export function SignatureUploadDialog({
   open,
   onOpenChange,
   orgId,
-  hasExistingSignature,
   onSuccess,
 }: SignatureUploadDialogProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -53,7 +52,6 @@ export function SignatureUploadDialog({
   const [otp, setOtp] = useState("");
 
   const {
-    loading,
     error,
     checkSignatureFile,
     uploadSignatureFile,
@@ -94,7 +92,7 @@ export function SignatureUploadDialog({
         }
 
         setShowConfirmDialog(true);
-      } catch (err) {
+      } catch {
         toast.error("Lỗi khi kiểm tra chữ ký");
       }
     }, 0);
@@ -119,8 +117,8 @@ export function SignatureUploadDialog({
       } else {
         toast.error("Gửi OTP thất bại");
       }
-    } catch (e: any) {
-      toast.error(e.message);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : String(e));
     }
   };
 
@@ -152,8 +150,8 @@ export function SignatureUploadDialog({
       } else {
         toast.error(error || "Upload thất bại");
       }
-    } catch (e: any) {
-      toast.error(e.message);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : String(e));
     }
   };
 
