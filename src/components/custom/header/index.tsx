@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
 import { LogIn, ArrowUpRight, Menu, X } from "lucide-react";
@@ -8,10 +8,25 @@ import HeaderNavigation from "./HeaderNavigation";
 
 export default function Header() {
   const { t, i18n } = useTranslation();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleLanguage = () => {
     i18n.changeLanguage(i18n.language === "vi" ? "en" : "vi");
+  };
+
+  const scrollToContact = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsMobileMenuOpen(false);
+    if (location.pathname === "/") {
+      document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      navigate("/");
+      setTimeout(() => {
+        document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+      }, 400);
+    }
   };
 
   return (
@@ -23,14 +38,17 @@ export default function Header() {
     >
       <div className="container mx-auto flex h-16 md:h-20 items-center justify-between px-4 md:gap-8">
         {/* Logo - Left */}
-        <Link to="/" className="flex items-center space-x-3 group shrink-0">
-          <motion.div whileHover={{ scale: 1.05 }} className="p-1">
+        <Link to="/" className="flex items-center gap-2 sm:gap-3 group shrink-0">
+          <motion.div whileHover={{ scale: 1.05 }}>
             <img
-              src="/logo/logo_original.png"
-              alt="InnoGreen Certchain Logo"
-              className="h-9 sm:h-10 md:h-14 w-auto object-contain"
+              src="/logo/logo_icon.png"
+              alt="InnoGreen Icon"
+              className="h-9 w-9 sm:h-10 sm:w-10 md:h-12 md:w-12 object-contain"
             />
           </motion.div>
+          <span className="text-2xl sm:text-3xl md:text-4xl font-black text-[#214e41] tracking-tight leading-none">
+            IGC
+          </span>
         </Link>
 
         {/* Navigation - Center */}
@@ -159,6 +177,13 @@ export default function Header() {
                 className="block rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 hover:text-[#214e41] transition-colors"
               >
                 {t("landingPage.header.verify", "Xác thực")}
+              </Link>
+              <Link
+                to="/#contact"
+                onClick={scrollToContact}
+                className="block rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 hover:text-[#214e41] transition-colors"
+              >
+                {t("landingPage.header.contact", "Liên hệ")}
               </Link>
 
               <div className="grid grid-cols-2 gap-2 pt-1">
