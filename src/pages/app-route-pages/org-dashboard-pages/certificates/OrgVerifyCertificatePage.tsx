@@ -1,14 +1,9 @@
-import { useRef, useState, type ChangeEvent, type FormEvent } from "react";
+import { useRef, useState, type ChangeEvent } from "react";
 import { AlertTriangle, FileCheck2, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  useVerifyCertificateById,
-  useVerifyCertificateByPdfFile,
-} from "@/hooks/useCertificates";
+import { useVerifyCertificateByPdfFile } from "@/hooks/useCertificates";
 import { CERTIFICATE_TEXTS, DEFAULT_LOCALE } from "@/pages/certificates/texts";
 import {
   ApiBusinessError,
@@ -18,13 +13,11 @@ import {
 export default function OrgVerifyCertificatePage() {
   const text = CERTIFICATE_TEXTS[DEFAULT_LOCALE];
   const [file, setFile] = useState<File | null>(null);
-  const [certificateId, setCertificateId] = useState("");
   const [result, setResult] = useState<VerifyCertificateFileResponse | null>(
     null,
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
   const verifyByFileMutation = useVerifyCertificateByPdfFile();
-  const verifyByIdMutation = useVerifyCertificateById();
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const nextFile = e.target.files?.[0] ?? null;
@@ -55,28 +48,6 @@ export default function OrgVerifyCertificatePage() {
       const payload = await verifyByFileMutation.mutateAsync(file);
       setResult(payload);
       toast.success(text.notifications.verifyFileSuccess);
-    } catch (error) {
-      if (error instanceof ApiBusinessError) {
-        toast.error(error.message);
-        return;
-      }
-
-      toast.error(text.notifications.unexpectedError);
-    }
-  };
-
-  const handleVerifyById = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const normalizedId = certificateId.trim();
-    if (!normalizedId) {
-      toast.error("Vui lòng nhập mã certificateId.");
-      return;
-    }
-
-    try {
-      const payload = await verifyByIdMutation.mutateAsync(normalizedId);
-      setResult(payload);
-      toast.success("Xác thực theo mã chứng chỉ thành công.");
     } catch (error) {
       if (error instanceof ApiBusinessError) {
         toast.error(error.message);
