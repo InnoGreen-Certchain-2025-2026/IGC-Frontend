@@ -12,12 +12,15 @@ export default function Footer() {
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-16 mb-24 max-w-6xl mx-auto">
           <div className="md:col-span-2 space-y-8">
-            <Link to="/" className="inline-block">
+            <Link to="/" className="inline-flex items-center gap-4">
               <img
-                src="/logo/logo_original.png"
-                alt="InnoGreen Certchain Logo"
-                className="h-16 w-auto object-contain"
+                src="/logo/logo_icon.png"
+                alt="InnoGreen Icon"
+                className="h-20 w-20 object-contain"
               />
+              <span className="text-5xl font-black text-[#214e41] tracking-tight leading-none">
+                IGC
+              </span>
             </Link>
             <p className="text-slate-600 max-w-sm leading-relaxed font-medium">
               {t("landingPage.footer.description")}

@@ -4,7 +4,9 @@
       "signIn": "Đăng Nhập",
       "getStarted": "Bắt Đầu",
       "intro": "Giới thiệu",
+      "about": "Về chúng tôi",
       "verify": "Xác thực",
+      "contact": "Liên hệ",
       "openMenu": "Mở menu",
       "closeMenu": "Đóng menu"
     },
@@ -65,10 +67,29 @@
       "bannerSub": "dựa trên nền tảng blockchain\nvà chữ ký số"
     },
     "contact": {
-      "title": "Làm việc với chúng tôi",
-      "sub": "Kết nối với InnoGreen CertChain ngay hôm nay.",
-      "address": "123/2/6 Đường số 20 Phường An Nhơn, TP. Hồ Chí Minh",
-      "scan": "QUÉT MÃ QR"
+      "badge": "Liên hệ",
+      "title": "Hãy cùng",
+      "titleHighlight": "kết nối",
+      "sub": "Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ bạn.",
+      "infoTitle": "Thông tin liên hệ",
+      "address": "Đại học Bách Khoa Tp.HCM, Q. Thủ Đức, Tp.HCM",
+      "website": "Truy cập website",
+      "scan": "QUÉT MÃ",
+      "form": {
+        "title": "Gửi thông tin",
+        "fullName": "Họ và tên",
+        "fullNamePlaceholder": "Nguyễn Văn A",
+        "email": "Email",
+        "emailPlaceholder": "email@company.com",
+        "company": "Công ty",
+        "companyPlaceholder": "Tên công ty / tổ chức",
+        "description": "Nội dung",
+        "descriptionPlaceholder": "Bạn muốn trao đổi về điều gì?",
+        "submit": "Gửi liên hệ",
+        "sending": "Đang gửi...",
+        "successTitle": "Gửi thành công!",
+        "successDesc": "Chúng tôi sẽ liên hệ lại với bạn trong thời gian sớm nhất."
+      }
     },
     "verification": {
       "badge": "Xác thực chứng chỉ",

@@ -4,7 +4,9 @@
       "signIn": "Sign In",
       "getStarted": "Get Started",
       "intro": "About",
+      "about": "About Us",
       "verify": "Verification",
+      "contact": "Contact",
       "openMenu": "Open menu",
       "closeMenu": "Close menu"
     },
@@ -65,10 +67,29 @@
       "bannerSub": "based on blockchain\nand digital signatures"
     },
     "contact": {
-      "title": "Work With Us",
-      "sub": "Connect with InnoGreen CertChain today.",
-      "address": "123/2/6 Street 20, An Nhon Ward, Ho Chi Minh City",
-      "scan": "SCAN QR CODE"
+      "badge": "Contact",
+      "title": "Let's",
+      "titleHighlight": "connect",
+      "sub": "We are always ready to listen and support you.",
+      "infoTitle": "Contact Information",
+      "address": "Ho Chi Minh City University of Technology, Thu Duc, HCMC",
+      "website": "Visit website",
+      "scan": "SCAN CODE",
+      "form": {
+        "title": "Send your info",
+        "fullName": "Full Name",
+        "fullNamePlaceholder": "John Doe",
+        "email": "Email",
+        "emailPlaceholder": "email@company.com",
+        "company": "Company",
+        "companyPlaceholder": "Company / organization name",
+        "description": "Message",
+        "descriptionPlaceholder": "What would you like to discuss?",
+        "submit": "Send message",
+        "sending": "Sending...",
+        "successTitle": "Sent successfully!",
+        "successDesc": "We will get back to you as soon as possible."
+      }
     },
     "verification": {
       "badge": "Certificate Verification",

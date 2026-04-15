@@ -8,7 +8,7 @@ export default function StorySection() {
   return (
     <>
       {/* DIAGONAL SPLIT SECTION (Sứ mệnh & Về dự án) */}
-      <section className="relative overflow-hidden py-20 md:py-32 bg-slate-50 min-h-[500px] md:min-h-[600px] flex items-center">
+      <section id="story" className="relative overflow-hidden py-20 md:py-32 bg-slate-50 min-h-[500px] md:min-h-[600px] flex items-center">
          {/* Geometric Background Shapes mimicking Brochure Layout */}
          <div className="absolute top-0 right-0 w-full md:w-[60%] h-full bg-[#f2ce3c] opacity-20 md:opacity-100" style={{ clipPath: 'polygon(15% 0, 100% 0, 100% 100%, 0% 100%)' }}></div>
          <div className="absolute top-0 left-0 w-full md:w-[55%] h-[110%] bg-[#214e41]" style={{ clipPath: 'polygon(0 0, 100% 0, 85% 100%, 0 100%)', transform: 'translateY(-5%)' }}></div>
