@@ -77,7 +77,7 @@ export default function SecurityPage() {
   };
 
   return (
-    <Card className="shadow-sm">
+    <Card className="shadow-sm h-auto border-none shadow-none lg:border lg:shadow-sm ">
       <CardHeader>
         <CardTitle className="text-lg">Đổi mật khẩu</CardTitle>
       </CardHeader>

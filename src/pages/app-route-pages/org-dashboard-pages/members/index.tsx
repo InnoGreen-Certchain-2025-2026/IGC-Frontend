@@ -332,7 +332,7 @@ function MemberRow({
               alt={member.name}
               className="object-cover"
             />
-            <AvatarFallback className="bg-linear-to-br from-blue-50 to-blue-100 text-blue-600 text-xs font-semibold">
+            <AvatarFallback className="bg-linear-to-br from-green-50 to-green-100 text-primary-600 text-xs font-semibold">
               {getAvatarFallback(member.name)}
             </AvatarFallback>
           </Avatar>

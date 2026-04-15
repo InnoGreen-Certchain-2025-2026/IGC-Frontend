@@ -98,35 +98,13 @@ export default function OrgVerifyCertificatePage() {
         </p>
       </Card>
 
-      <Card className="p-5">
-        <form className="space-y-3" onSubmit={handleVerifyById}>
-          <Label htmlFor="org-certificateId">Xác thực theo certificateId</Label>
-          <div className="flex flex-col gap-2 sm:flex-row">
-            <Input
-              id="org-certificateId"
-              value={certificateId}
-              onChange={(event) => setCertificateId(event.target.value)}
-              placeholder="Nhập mã certificateId"
-            />
-            <Button
-              type="submit"
-              disabled={verifyByIdMutation.isPending || !certificateId.trim()}
-            >
-              {verifyByIdMutation.isPending
-                ? "Đang xác thực..."
-                : text.actions.verify}
-            </Button>
-          </div>
-        </form>
-      </Card>
-
       <div
-        className="relative flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-lg cursor-pointer hover:border-blue-500"
+        className="relative flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-lg cursor-pointer hover:border-green-600"
         onClick={() => fileInputRef.current?.click()}
       >
         {file ? (
           <>
-            <FileText className="w-12 h-12 text-blue-500" />
+            <FileText className="w-12 h-12 text-primary-600" />
             <p className="mt-2 text-gray-800 font-medium">{file.name}</p>
             <button
               type="button"

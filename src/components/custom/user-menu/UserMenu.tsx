@@ -41,7 +41,7 @@ export default function UserMenu() {
             {avatarUrl && (
               <AvatarImage src={getS3Url(avatarUrl)} alt={name ?? ""} />
             )}
-            <AvatarFallback className="bg-blue-100 text-blue-700 text-sm font-semibold">
+            <AvatarFallback className="bg-primary-100 text-green-700 text-sm font-semibold">
               {getAvatarFallback(name)}
             </AvatarFallback>
           </Avatar>

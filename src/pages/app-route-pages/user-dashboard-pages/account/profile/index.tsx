@@ -91,7 +91,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <Card className="shadow-sm">
+    <Card className="shadow-sm h-auto border-none shadow-none lg:border lg:shadow-sm max-w-3xl mx-auto">
       <CardHeader>
         <CardTitle className="text-lg">Thông tin cá nhân</CardTitle>
       </CardHeader>
@@ -119,7 +119,7 @@ export default function ProfilePage() {
               id="citizenIdNumber"
               value={form.citizenIdNumber}
               disabled
-              className="bg-slate-50 border-slate-100 font-medium"
+              className="bg-primary-50 border-primary-100 font-medium"
             />
             <p className="text-[10px] text-slate-400 font-medium italic">
               * Mã định danh này không thể tự thay đổi. Nếu có sai sót, vui lòng liên hệ quản trị viên.
@@ -191,7 +191,7 @@ export default function ProfilePage() {
             <Button
               type="submit"
               disabled={updateLoading}
-              className="min-w-[120px]"
+              className="min-w-30"
             >
               {updateLoading ? (
                 <>
