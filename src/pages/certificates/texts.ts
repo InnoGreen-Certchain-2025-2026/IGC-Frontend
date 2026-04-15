@@ -27,6 +27,7 @@ export const CERTIFICATE_TEXTS = {
       revoked: "Chưa có chứng chỉ đã thu hồi.",
     },
     status: {
+      DRAFT: "Bản nháp",
       SIGNED: "Đã ký",
       REVOKED: "Đã thu hồi",
       EXPIRED: "Hết hạn",

@@ -34,7 +34,6 @@ export function SignatureUploadDialog({
   open,
   onOpenChange,
   orgId,
-  hasExistingSignature,
   onSuccess,
 }: SignatureUploadDialogProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -52,13 +51,8 @@ export function SignatureUploadDialog({
 
   const [otp, setOtp] = useState("");
 
-  const {
-    loading,
-    error,
-    checkSignatureFile,
-    uploadSignatureFile,
-    reset,
-  } = useSignature();
+  const { error, checkSignatureFile, uploadSignatureFile, reset } =
+    useSignature();
 
   const { handleSendOtp, handleVerifyOtp } = useOtp();
 
@@ -142,7 +136,7 @@ export function SignatureUploadDialog({
       const success = await uploadSignatureFile(
         orgId,
         selectedFile!,
-        croppedFile!
+        croppedFile!,
       );
 
       if (success) {
