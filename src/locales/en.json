@@ -1,0 +1,225 @@
+{
+  "landingPage": {
+    "header": {
+      "signIn": "Sign In",
+      "getStarted": "Get Started",
+      "intro": "About",
+      "about": "About Us",
+      "verify": "Verification",
+      "contact": "Contact",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu"
+    },
+    "hero": {
+      "verify": "Verify",
+      "trust": "trust",
+      "create": "Create",
+      "value": "value",
+      "placeholder": "Enter certificate code to verify...",
+      "search": "Verify Now"
+    },
+    "stats": {
+      "established": "Established",
+      "support": "Support",
+      "responseTime": "Response Time"
+    },
+    "problemSolution": {
+      "problemTitle": "System Problems",
+      "problemList": [
+        "Rising rate of fake diplomas",
+        "Manual verification takes 3-7 days",
+        "High storage and paper costs"
+      ],
+      "solutionTitle": "Our Solutions",
+      "solutionList": [
+        "Certificate verification via Blockchain",
+        "Instant QR code scanning",
+        "AI-powered anomaly detection"
+      ]
+    },
+    "targetAudience": {
+      "title": "Target Audience",
+      "university": "University",
+      "universityDesc": "Training Institution",
+      "student": "Student",
+      "studentDesc": "Learner",
+      "organization": "Organization",
+      "organizationDesc": "Recruitment Enterprise"
+    },
+    "features": {
+      "title": "Features",
+      "issue": "Issuance",
+      "issueDesc": "Certificates are unique. Digital signatures ensure anti-forgery.",
+      "store": "Storage",
+      "storeDesc": "Using blockchain technology. Ensuring data immutability.",
+      "verify": "Verification",
+      "verifyDesc": "Direct file lookup on the system. Fast, accurate, transparent."
+    },
+    "story": {
+      "missionTitle": "Mission",
+      "missionDesc": "InnoGreen CertChain envisions a future where all certificates are verified instantly, transparently, and securely — contributing to a modern, green, and sustainable education system, and increasing the high-quality workforce.",
+      "aboutTitle": "About the Project",
+      "aboutDesc": "A green certificate management and verification system based on Blockchain and digital signature technology to digitize the entire issuance, storage, and verification process, thereby minimizing fraud, saving operational costs, and protecting the environment by reducing traditional paper certificates.",
+      "storyTitle": "Inspiring Story",
+      "storyDesc": "Currently, the issue of fake certificates is increasingly prevalent in educational institutions. Traditional storage and verification processes waste time for both learners and recruiting enterprises. Relying on paper certificates leads to uncontrollable errors and fraud. This is the motivation for the research team to propose a new solution, aiming to improve transparency, accuracy, and efficiency in certificate management.",
+      "bannerSystem": "Management and verification system for",
+      "bannerHighlight": "green certificates",
+      "bannerSub": "based on blockchain\nand digital signatures"
+    },
+    "contact": {
+      "badge": "Contact",
+      "title": "Let's",
+      "titleHighlight": "connect",
+      "sub": "We are always ready to listen and support you.",
+      "infoTitle": "Contact Information",
+      "address": "Ho Chi Minh City University of Technology, Thu Duc, HCMC",
+      "website": "Visit website",
+      "scan": "SCAN CODE",
+      "form": {
+        "title": "Send your info",
+        "fullName": "Full Name",
+        "fullNamePlaceholder": "John Doe",
+        "email": "Email",
+        "emailPlaceholder": "email@company.com",
+        "company": "Company",
+        "companyPlaceholder": "Company / organization name",
+        "description": "Message",
+        "descriptionPlaceholder": "What would you like to discuss?",
+        "submit": "Send message",
+        "sending": "Sending...",
+        "successTitle": "Sent successfully!",
+        "successDesc": "We will get back to you as soon as possible."
+      }
+    },
+    "verification": {
+      "badge": "Certificate Verification",
+      "titlePrefix": "Verify certificate by",
+      "titleHighlight": "PDF file",
+      "subtitle": "Upload your certificate PDF to validate authenticity and integrity. The system checks instantly.",
+      "uploadTitle": "Upload PDF to verify",
+      "changeFile": "Click to change",
+      "dragDrop": "Drag and drop your PDF file here",
+      "orClick": "or click to choose file",
+      "verifyButton": "Verify",
+      "verifying": "Verifying...",
+      "infoTitle": "Helpful information",
+      "info1": "Certificate verification helps you check document validity and authenticity.",
+      "info2": "Upload your certificate PDF for instant validation.",
+      "info3": "The system scans blockchain records to verify your certificate information.",
+      "toasts": {
+        "pdfFileInvalid": "Please select exactly one valid PDF file to verify.",
+        "verifySuccess": "PDF verification completed successfully.",
+        "unexpectedError": "An unexpected error occurred. Please try again."
+      },
+      "modal": {
+        "successTitle": "Verification successful",
+        "failedTitle": "Verification failed",
+        "valid": "Certificate is valid",
+        "invalid": "Certificate is invalid",
+        "certificateId": "Certificate ID",
+        "student": "Student",
+        "issuer": "Issuer",
+        "issueDate": "Issue date",
+        "close": "Close"
+      }
+    },
+    "footer": {
+      "description": "A green diploma and certificate management and verification system built on Blockchain and digital signatures, creating real value for a sustainable future.",
+      "linksTitle": "Links",
+      "home": "Home",
+      "about": "About project",
+      "features": "Features",
+      "legalTitle": "Legal",
+      "terms": "Terms of use",
+      "privacy": "Privacy policy",
+      "copyright": "© {{year}} InnoGreen Certchain. All rights reserved."
+    }
+  },
+  "auth": {
+    "sidebar": {
+      "badge": "Next-Gen Verification",
+      "titleLine1": "New Era For",
+      "titleLine2": "Digital ",
+      "titleLine3": "Certificates",
+      "subtitle": "Welcome to the global certificate verification ecosystem. All your data is secured and immutable on the Blockchain platform.",
+      "features": [
+        {
+          "title": "Global Network",
+          "desc": "Verify anytime, anywhere in the world with just one click."
+        },
+        {
+          "title": "Speed & Security",
+          "desc": "Data is immutably encrypted and processed instantly on Blockchain technology."
+        }
+      ],
+      "footer": "© 2026 InnoGreen Certchain • Immutable Digital Identity"
+    },
+    "form": {
+      "back": "Back",
+      "home": "Home",
+      "signInTitle": "Sign In",
+      "signUpTitle": "Sign Up",
+      "signInDesc": "Welcome back!",
+      "signUpDesc": "Create your digital identity now.",
+      "tabs": {
+        "signIn": "Sign In",
+        "signUp": "Sign Up"
+      },
+      "mfa": {
+        "confirmEmail": "Confirm Email",
+        "confirmEmailDesc": "We have sent an OTP code to ",
+        "confirmEmailDesc2": ". Please check your inbox.",
+        "enterOtp": "Enter verification code",
+        "confirmBtn": "Confirm",
+        "cancelBtn": "Cancel",
+        "setupTitle": "Setup 2-Factor Authentication (2FA)",
+        "setupDesc": "Open Google Authenticator and scan the QR code below:",
+        "enterAppCode": "Enter 6-digit code from App",
+        "setupBtn": "Confirm Setup",
+        "backBtn": "Back",
+        "verifyTitle": "2-Factor Authentication",
+        "verifyDesc": "Enter the 6-digit code from your Authenticator app:"
+      },
+      "fields": {
+        "email": "Work Email",
+        "password": "Password",
+        "forgotPwd": "Forgot password?",
+        "fullname": "Full Name",
+        "regEmail": "Email",
+        "citizenId": "Citizen ID",
+        "phone": "Phone Number",
+        "dob": "Date of Birth",
+        "gender": "Gender",
+        "genderOpts": {
+          "male": "Male",
+          "female": "Female",
+          "other": "Other"
+        },
+        "address": "Residential Address",
+        "securePassword": "Secure Password",
+        "placeholders": {
+          "email": "example@innogreen.com",
+          "password": "••••••••",
+          "citizenId": "Enter 12 digits ID",
+          "gender": "Select"
+        }
+      },
+      "buttons": {
+        "continue": "Continue",
+        "processing": "Processing...",
+        "createAccount": "Create Account"
+      },
+      "alerts": {
+        "fillAll": "Please fill in all the required information.",
+        "cccdError": "Citizen ID must be exactly 12 digits.",
+        "emailRequired": "Please enter both email and password."
+      },
+      "footer": {
+        "noAccount": "Don't have an account?",
+        "registerNow": "Sign up now",
+        "hasAccount": "Already have an account?",
+        "loginNow": "Sign in"
+      }
+    }
+  }
+}

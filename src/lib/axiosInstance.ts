@@ -1,10 +1,11 @@
 import axios, { type InternalAxiosRequestConfig, type AxiosError } from "axios";
 import type { DefaultAuthResponse } from "@/types/auth/DefaultAuthResponse";
 
-const BASE_URL = import.meta.env.VITE_API_URL;
+const BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ?? import.meta.env.VITE_API_URL ?? "";
 
 const axiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: BASE_URL || undefined,
   withCredentials: true,
   // headers: {
   //   "Content-Type": "application/json",

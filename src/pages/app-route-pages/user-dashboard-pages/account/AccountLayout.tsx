@@ -114,7 +114,7 @@ export default function AccountLayout() {
               alt={name ?? ""}
               className="object-cover"
             />
-            <AvatarFallback className="bg-primary-100 text-primary-800 text-3xl font-bold">
+            <AvatarFallback className="bg-blue-100 text-blue-700 text-3xl font-bold">
               {getAvatarFallback(name)}
             </AvatarFallback>
           </Avatar>
@@ -134,29 +134,28 @@ export default function AccountLayout() {
           ref={fileInputRef}
           className="hidden"
           accept="image/*"
-          title="Tải ảnh đại diện"
           onChange={handleFileChange}
         />
 
         <div className="text-center">
-          <p className="text-lg font-semibold text-gray-900">
+          <p className="text-lg font-semibold text-[#214e41]">
             {name ?? "Người dùng"}
           </p>
-          <p className="text-sm text-gray-500">{email ?? ""}</p>
+          <p className="text-sm text-slate-600">{email ?? ""}</p>
         </div>
       </div>
 
       {/* ── Tab bar ── */}
-      <div className="mb-6 flex justify-center border-b border-primary-100">
+      <div className="flex justify-center border-b border-slate-200 mb-6 overflow-x-auto">
         {TABS.map((tab) => (
           <NavLink
             key={tab.to}
             to={tab.to}
             className={({ isActive }) =>
-              `-mb-px border-b-2 px-5 py-2.5 text-sm font-medium transition-colors duration-150 ${
+              `px-5 py-2.5 text-sm font-medium transition-colors duration-150 border-b-3 -mb-px whitespace-nowrap ${
                 isActive
-                  ? "border-primary-600 text-primary-700"
-                  : "border-transparent text-gray-500 hover:border-primary-200 hover:text-primary-700"
+                  ? "border-[#183930] text-[#214e41]"
+                  : "border-transparent text-slate-600 hover:text-[#214e41] hover:border-[#183930]"
               }`
             }
           >
@@ -166,10 +165,7 @@ export default function AccountLayout() {
       </div>
 
       {/* ── Sub-page content ── */}
-
       <Outlet />
-
-      
 
       {/* ── Image Cropper Modal ── */}
       <ImageCropperComponent

@@ -7,8 +7,9 @@ import { useAppSelector } from "@/features/hooks";
  */
 export default function ProtectedRoute() {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  const hasToken = !!localStorage.getItem("access_token");
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !hasToken) {
     return <Navigate to="/auth" replace />;
   }
 

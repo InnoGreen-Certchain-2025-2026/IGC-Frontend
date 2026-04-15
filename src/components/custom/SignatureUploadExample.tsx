@@ -17,13 +17,13 @@ interface SignatureUploadProps {
 }
 
 /**
- * Example component demonstrating signature upload and confirmation flow
+ * Example component demonstrating signature upload flow
  *
  * Flow:
  * 1. User selects signature image file
  * 2. File is checked against backend (validity + duplicate check)
  * 3. If used, show confirmation dialog
- * 4. If confirmed, signature is saved
+ * 4. If confirmed or new, signature is uploaded
  */
 export function SignatureUploadExample({
   orgId,
@@ -31,14 +31,14 @@ export function SignatureUploadExample({
 }: SignatureUploadProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
 
   const {
     loading,
     error,
-    signatureData,
     isSignatureUsed,
     checkSignatureFile,
-    confirmSignatureUpload,
+    uploadSignatureFile,
     reset,
   } = useSignature();
 
@@ -58,34 +58,41 @@ export function SignatureUploadExample({
     reset();
 
     // Check the signature
-    const result = await checkSignatureFile(orgId, file);
+    const isUsed = await checkSignatureFile(orgId, file);
 
-    if (result && isSignatureUsed) {
-      // Show confirmation dialog if signature is already used
+    if (isUsed === null) {
+      // Error during check
+      return;
+    }
+
+    if (isUsed) {
+      // Signature already used - save file and show confirmation dialog
+      setPendingFile(file);
       setShowConfirmDialog(true);
-    } else if (result) {
-      // Auto-confirm if signature is not used
-      await handleConfirmSignature(result.hash);
+    } else {
+      // New signature - upload directly
+      await handleUploadSignature(file);
     }
   };
 
-  const handleConfirmSignature = async (hash: string) => {
-    const success = await confirmSignatureUpload(orgId, hash);
+  const handleUploadSignature = async (file: File) => {
+    const success = await uploadSignatureFile(orgId, file);
 
     if (success) {
-      toast.success("Tải chữ ký lên thành công");
+      toast.success("Tải chữ ký thành công");
       setShowConfirmDialog(false);
       setPreviewUrl(null);
+      setPendingFile(null);
       onSuccess?.();
     } else {
-      toast.error(error || "Xác nhận chữ ký thất bại");
+      toast.error(error || "Lỗi khi tải chữ ký");
     }
   };
 
   return (
     <Card className="p-6">
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Tải chữ ký lên</h3>
+        <h3 className="text-lg font-semibold">Tải lên chữ ký</h3>
 
         <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition">
           <input
@@ -98,7 +105,7 @@ export function SignatureUploadExample({
           />
           <label htmlFor="signature-upload" className="cursor-pointer block">
             <p className="text-sm text-gray-600">
-              Nhấp để tải lên hoặc kéo thả tệp
+              Nhấp để tải lên hoặc kéo và thả
             </p>
             <p className="text-xs text-gray-400">JPG hoặc PNG (tối đa 5MB)</p>
           </label>
@@ -110,7 +117,7 @@ export function SignatureUploadExample({
             <p className="text-sm font-medium mb-2">Xem trước:</p>
             <img
               src={previewUrl}
-              alt="Xem trước chữ ký"
+              alt="Signature preview"
               className="max-h-40 border rounded"
             />
           </div>
@@ -131,7 +138,7 @@ export function SignatureUploadExample({
         )}
 
         {/* Confirmation Dialog for used signatures */}
-        {signatureData && isSignatureUsed && (
+        {isSignatureUsed && pendingFile && (
           <AlertDialog
             open={showConfirmDialog}
             onOpenChange={setShowConfirmDialog}
@@ -139,20 +146,20 @@ export function SignatureUploadExample({
             <AlertDialogContent>
               <AlertDialogTitle>Chữ ký đã được sử dụng</AlertDialogTitle>
               <AlertDialogDescription>
-                Chữ ký này đã được đăng ký cho tổ chức của bạn. Bạn có muốn
+                Chữ ký này đã được đăng ký cho tổ chức của bạn rồi. Bạn có muốn
                 thay thế chữ ký hiện tại bằng chữ ký này không?
               </AlertDialogDescription>
               <div className="flex gap-2 justify-end">
                 <AlertDialogCancel>Hủy</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={() => {
-                    if (signatureData?.hash) {
-                      handleConfirmSignature(signatureData.hash);
+                    if (pendingFile) {
+                      handleUploadSignature(pendingFile);
                     }
                   }}
                   disabled={loading}
                 >
-                  {loading ? "Đang xác nhận..." : "Thay thế chữ ký"}
+                  {loading ? "Đang xử lý..." : "Thay thế chữ ký"}
                 </AlertDialogAction>
               </div>
             </AlertDialogContent>

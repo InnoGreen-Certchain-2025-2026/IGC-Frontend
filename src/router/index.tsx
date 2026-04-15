@@ -1,19 +1,40 @@
+import { lazy } from "react";
 import { createBrowserRouter, Navigate } from "react-router";
-import LandingPage from "@/pages/public-route-pages/landing-page";
-import AuthPage from "@/pages/public-route-pages/auth-page";
+import Header from "@/components/custom/header";
+import Footer from "@/components/custom/footer";
+
+// Bỏ delay giả lập, sử dụng lazy thật sự để load nhanh nhất có thể
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const fastLazy = (factory: () => Promise<any>) => lazy(factory);
+
+const LandingPage = fastLazy(
+  () => import("@/pages/public-route-pages/landing-page"),
+);
+const AuthPage = fastLazy(() => import("@/pages/public-route-pages/auth-page"));
+const VerificationSectionPage = fastLazy(
+  () =>
+    import("@/pages/public-route-pages/landing-page/components/VerificationSection"),
+);
+import LoadingScreen from "@/components/common/LoadingScreen";
 
 import ProtectedRoute from "@/components/custom/protected-route/ProtectedRoute";
 import PublicOnlyRoute from "@/components/custom/protected-route/PublicOnlyRoute";
 
 // ── User Dashboard ──
-import UserDashboardLayout from "@/pages/app-route-pages/user-dashboard-pages/UserDashboardLayout";
+const UserDashboardLayout = fastLazy(
+  () =>
+    import("@/pages/app-route-pages/user-dashboard-pages/UserDashboardLayout"),
+);
 import GeneralPage from "@/pages/app-route-pages/user-dashboard-pages/general";
 import CertificatesPage from "@/pages/app-route-pages/user-dashboard-pages/certificates";
 import OrganizationsPage from "@/pages/app-route-pages/user-dashboard-pages/organizations";
 import CreateOrganizationPage from "@/pages/app-route-pages/user-dashboard-pages/create-organization";
 
 // ── Organization Dashboard ──
-import OrgDashboardLayout from "@/pages/app-route-pages/org-dashboard-pages/OrgDashboardLayout";
+const OrgDashboardLayout = fastLazy(
+  () =>
+    import("@/pages/app-route-pages/org-dashboard-pages/OrgDashboardLayout"),
+);
 import OrgOverviewPage from "@/pages/app-route-pages/org-dashboard-pages/overview";
 import OrgMembersPage from "@/pages/app-route-pages/org-dashboard-pages/members";
 import OrgInfoPage from "@/pages/app-route-pages/org-dashboard-pages/info";
@@ -25,7 +46,12 @@ import CertificateManagementPage from "@/pages/certificates/CertificateManagemen
 import CreateDraftPage from "@/pages/certificates/CreateDraftPage";
 import ClaimVerificationPage from "@/pages/certificates/ClaimVerificationPage";
 import VerifyCertificateFilePage from "@/pages/certificates/VerifyCertificateFilePage";
-import OrgVerifyCertificatePage from "@/pages/app-route-pages/org-dashboard-pages/certificates/OrgVerifyCertificatePage";
+import TemplateListPage from "@/pages/certificates/TemplateListPage";
+import TemplateCreatePage from "@/pages/certificates/TemplateCreatePage";
+import TemplateEditPage from "@/pages/certificates/TemplateEditPage";
+import TemplateDetailPage from "@/pages/certificates/TemplateDetailPage";
+import TemplateBatchPage from "@/pages/certificates/TemplateBatchPage";
+import TemplateEditorPage from "@/pages/TemplateEditorPage";
 
 // ── Account (standalone) ──
 import AccountDashboardLayout from "@/pages/app-route-pages/account-pages/AccountDashboardLayout";
@@ -35,12 +61,12 @@ import SecurityPage from "@/pages/app-route-pages/user-dashboard-pages/account/s
 
 export const router = createBrowserRouter([
   {
-    path: "/verify",
-    element: <VerifyCertificateFilePage />,
-  },
-  {
     path: "/claim",
     element: <ClaimVerificationPage />,
+  },
+  {
+    path: "/loading",
+    element: <LoadingScreen />,
   },
   {
     path: "/verify/file",
@@ -52,6 +78,18 @@ export const router = createBrowserRouter([
     element: <PublicOnlyRoute />,
     children: [
       { path: "/", element: <LandingPage /> },
+      {
+        path: "/verify",
+        element: (
+          <div className="flex flex-col min-h-screen font-sans bg-white text-slate-900 selection:bg-[#f2ce3c] selection:text-[#214e41]">
+            <Header />
+            <main className="grow">
+              <VerificationSectionPage />
+            </main>
+            <Footer />
+          </div>
+        ),
+      },
       { path: "/auth", element: <AuthPage /> },
     ],
   },
@@ -98,7 +136,25 @@ export const router = createBrowserRouter([
             children: [
               { index: true, element: <CertificateManagementPage /> },
               { path: "create-draft", element: <CreateDraftPage /> },
-              { path: "verify", element: <OrgVerifyCertificatePage /> },
+              { path: "templates", element: <TemplateListPage /> },
+              { path: "templates/new", element: <TemplateCreatePage /> },
+              {
+                path: "templates/:templateId",
+                element: <TemplateDetailPage />,
+              },
+              {
+                path: "templates/:templateId/edit",
+                element: <TemplateEditPage />,
+              },
+              {
+                path: "template-editor/:templateId",
+                element: <TemplateEditorPage />,
+              },
+              {
+                path: "templates/:templateId/bulk",
+                element: <TemplateBatchPage />,
+              },
+              { path: "template-editor", element: <TemplateCreatePage /> },
             ],
           },
           { path: "settings", element: <OrgSettingsPage /> },

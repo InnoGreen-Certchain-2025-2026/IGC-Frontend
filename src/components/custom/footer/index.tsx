@@ -1,54 +1,97 @@
 import { Link } from "react-router";
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-white pt-24 pb-12">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-16 mb-24">
+    <footer className="w-full border-t border-slate-200 bg-linear-to-b from-slate-50/70 to-white pt-24 pb-12 overflow-hidden relative">
+      <div className="absolute bottom-0 left-0 w-full h-2 bg-linear-to-r from-[#214e41] via-[#4f9b5a] to-[#f2ce3c]"></div>
+
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-16 mb-24 max-w-6xl mx-auto">
           <div className="md:col-span-2 space-y-8">
-            <div className="flex items-center space-x-2">
-              <div className="bg-slate-900 p-1.5 rounded-lg">
-                <img
-                  src="/favicon/web-logo.png"
-                  alt="IGC Logo"
-                  className="h-6 w-6 object-contain brightness-0 invert"
-                />
-              </div>
-              <span className="text-2xl font-black text-slate-900 tracking-tighter font-display">IGC</span>
-            </div>
-            <p className="text-slate-500 max-w-sm leading-relaxed font-medium">
-              Nền tảng số hóa chứng chỉ tiên phong trên Blockchain, mang lại sự minh bạch và tin cậy tuyệt đối cho giáo dục toàn cầu.
+            <Link to="/" className="inline-flex items-center gap-4">
+              <img
+                src="/logo/logo_icon.png"
+                alt="InnoGreen Icon"
+                className="h-20 w-20 object-contain"
+              />
+              <span className="text-5xl font-black text-[#214e41] tracking-tight leading-none">
+                IGC
+              </span>
+            </Link>
+            <p className="text-slate-600 max-w-sm leading-relaxed font-medium">
+              {t("landingPage.footer.description")}
             </p>
           </div>
-          
+
           <div>
-            <h4 className="font-bold text-slate-900 mb-8 uppercase tracking-[0.2em] text-[10px] font-display">Sản phẩm</h4>
+            <h4 className="font-bold text-[#214e41] mb-8 uppercase tracking-[0.2em] text-xs">
+              {t("landingPage.footer.linksTitle")}
+            </h4>
             <ul className="space-y-4 text-slate-500 font-medium text-sm">
-              <li><a href="#" className="hover:text-slate-900 transition-colors">Trang chủ</a></li>
-              <li><a href="#about" className="hover:text-slate-900 transition-colors">Giới thiệu</a></li>
-              <li><a href="#targets" className="hover:text-slate-900 transition-colors">Hệ sinh thái</a></li>
+              <li>
+                <Link to="/" className="hover:text-[#4f9b5a] transition-colors">
+                  {t("landingPage.footer.home")}
+                </Link>
+              </li>
+              <li>
+                <a
+                  href="#about"
+                  className="hover:text-[#4f9b5a] transition-colors"
+                >
+                  {t("landingPage.footer.about")}
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#targets"
+                  className="hover:text-[#4f9b5a] transition-colors"
+                >
+                  {t("landingPage.footer.features")}
+                </a>
+              </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-bold text-slate-900 mb-8 uppercase tracking-[0.2em] text-[10px] font-display">Pháp lý</h4>
+            <h4 className="font-bold text-[#214e41] mb-8 uppercase tracking-[0.2em] text-xs">
+              {t("landingPage.footer.legalTitle")}
+            </h4>
             <ul className="space-y-4 text-slate-500 font-medium text-sm">
-              <li><Link to="#" className="hover:text-slate-900 transition-colors">Điều khoản</Link></li>
-              <li><Link to="#" className="hover:text-slate-900 transition-colors">Bảo mật</Link></li>
-              <li><Link to="#" className="hover:text-slate-900 transition-colors">Cookie Policy</Link></li>
+              <li>
+                <Link to="#" className="hover:text-[#4f9b5a] transition-colors">
+                  {t("landingPage.footer.terms")}
+                </Link>
+              </li>
+              <li>
+                <Link to="#" className="hover:text-[#4f9b5a] transition-colors">
+                  {t("landingPage.footer.privacy")}
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
 
-        <div className="pt-12 border-t border-slate-50 flex flex-col md:flex-row justify-between items-center gap-8">
-          <p className="text-sm text-slate-400 font-medium">
-            &copy; {currentYear} InnoGreen Certchain (IGC). All rights reserved.
+        <div className="pt-12 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-8 max-w-6xl mx-auto">
+          <p className="text-sm text-slate-400 font-medium tracking-wide">
+            {t("landingPage.footer.copyright", { year: currentYear })}
           </p>
           <div className="flex space-x-8">
-             <div className="text-slate-300 hover:text-slate-900 transition-colors cursor-pointer text-sm font-bold">Twitter</div>
-             <div className="text-slate-300 hover:text-slate-900 transition-colors cursor-pointer text-sm font-bold">LinkedIn</div>
+            <a
+              href="#"
+              className="text-slate-300 hover:text-[#214e41] transition-colors text-sm font-bold uppercase tracking-widest"
+            >
+              Facebook
+            </a>
+            <a
+              href="#"
+              className="text-slate-300 hover:text-[#214e41] transition-colors text-sm font-bold uppercase tracking-widest"
+            >
+              LinkedIn
+            </a>
           </div>
         </div>
       </div>

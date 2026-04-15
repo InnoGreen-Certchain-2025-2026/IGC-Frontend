@@ -1,0 +1,225 @@
+{
+  "landingPage": {
+    "header": {
+      "signIn": "Đăng Nhập",
+      "getStarted": "Bắt Đầu",
+      "intro": "Giới thiệu",
+      "about": "Về chúng tôi",
+      "verify": "Xác thực",
+      "contact": "Liên hệ",
+      "openMenu": "Mở menu",
+      "closeMenu": "Đóng menu"
+    },
+    "hero": {
+      "verify": "Xác minh",
+      "trust": "niềm tin",
+      "create": "Kiến tạo",
+      "value": "giá trị",
+      "placeholder": "Nhập mã chứng chỉ để tra cứu...",
+      "search": "Tra cứu ngay"
+    },
+    "stats": {
+      "established": "Thành lập",
+      "support": "Hỗ trợ",
+      "responseTime": "Thời gian phản hồi"
+    },
+    "problemSolution": {
+      "problemTitle": "Vấn đề hệ thống hiện tại mang lại",
+      "problemList": [
+        "Nạn bằng giả đang gia tăng",
+        "Xác minh thủ công mất 3-7 ngày",
+        "Tốn giấy, chi phí lưu trữ cao"
+      ],
+      "solutionTitle": "Hệ thống chúng tôi giải quyết được",
+      "solutionList": [
+        "Xác thực văn bằng bằng Blockchain",
+        "Quét QR code kiểm tra ngay",
+        "Kết hợp AI phát hiện bất thường"
+      ]
+    },
+    "targetAudience": {
+      "title": "Đối tượng hướng đến",
+      "university": "Đại học",
+      "universityDesc": "Đơn vị đào tạo",
+      "student": "Sinh viên",
+      "studentDesc": "Người học",
+      "organization": "Tổ chức",
+      "organizationDesc": "Doanh nghiệp tuyển dụng"
+    },
+    "features": {
+      "title": "Tính năng",
+      "issue": "Cấp phát",
+      "issueDesc": "Văn bằng/chứng chỉ là độc nhất. Chữ ký số đảm bảo chống giả mạo.",
+      "store": "Lưu trữ",
+      "storeDesc": "Sử dụng công nghệ blockchain. Đảm bảo tính bất biến của dữ liệu.",
+      "verify": "Xác thực",
+      "verifyDesc": "Tra cứu file trực tiếp trên hệ thống. Nhanh chóng, chính xác, minh bạch."
+    },
+    "story": {
+      "missionTitle": "Sứ mệnh",
+      "missionDesc": "InnoGreen CertChain hướng đến một tương lai nơi mọi văn bằng/chứng chỉ đều được xác thực tức thời, minh bạch và đáng tin cậy — góp phần xây dựng nền giáo dục hiện đại, xanh và bền vững, gia tăng nguồn lao động chất lượng cao.",
+      "aboutTitle": "Về dự án",
+      "aboutDesc": "Hệ thống quản lý xác thực văn bằng/chứng chỉ xanh dựa trên nền tảng Blockchain và chữ ký số nhằm số hóa toàn bộ quy trình cấp phát, lưu trữ và xác thực văn bằng/chứng chỉ, từ đó hạn chế gian lận trong sử dụng, giúp tiết kiệm chi phí vận hành và góp phần bảo vệ môi trường thông qua việc giảm sử dụng văn bằng/chứng chỉ giấy truyền thống.",
+      "storyTitle": "Câu chuyện truyền cảm hứng",
+      "storyDesc": "Hiện nay, vấn nạn sử dụng văn bằng/chứng chỉ giả mạo đang ngày càng nhiều trong các cơ sở giáo dục. Quy trình lưu trữ xác thực truyền thống gây mất thời gian cho người học và các doanh nghiệp tuyển dụng. Việc phụ thuộc văn bằng/chứng chỉ giấy dẫn đến nguy cơ sai sót và gian lận khó kiểm soát. Đây chính là động lực để nhóm nghiên cứu và đề xuất một giải pháp mới, nhằm nâng cao tính minh bạch, chính xác và hiệu quả trong việc quản lý văn bằng/chứng chỉ.",
+      "bannerSystem": "Hệ thống quản lý và xác thực",
+      "bannerHighlight": "văn bằng/chứng chỉ xanh",
+      "bannerSub": "dựa trên nền tảng blockchain\nvà chữ ký số"
+    },
+    "contact": {
+      "badge": "Liên hệ",
+      "title": "Hãy cùng",
+      "titleHighlight": "kết nối",
+      "sub": "Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ bạn.",
+      "infoTitle": "Thông tin liên hệ",
+      "address": "Đại học Bách Khoa Tp.HCM, Q. Thủ Đức, Tp.HCM",
+      "website": "Truy cập website",
+      "scan": "QUÉT MÃ",
+      "form": {
+        "title": "Gửi thông tin",
+        "fullName": "Họ và tên",
+        "fullNamePlaceholder": "Nguyễn Văn A",
+        "email": "Email",
+        "emailPlaceholder": "email@company.com",
+        "company": "Công ty",
+        "companyPlaceholder": "Tên công ty / tổ chức",
+        "description": "Nội dung",
+        "descriptionPlaceholder": "Bạn muốn trao đổi về điều gì?",
+        "submit": "Gửi liên hệ",
+        "sending": "Đang gửi...",
+        "successTitle": "Gửi thành công!",
+        "successDesc": "Chúng tôi sẽ liên hệ lại với bạn trong thời gian sớm nhất."
+      }
+    },
+    "verification": {
+      "badge": "Xác thực chứng chỉ",
+      "titlePrefix": "Xác thực chứng chỉ bằng",
+      "titleHighlight": "tệp PDF",
+      "subtitle": "Tải tệp PDF chứng chỉ để xác minh tính xác thực và hợp lệ của nó. Hệ thống sẽ kiểm tra ngay lập tức.",
+      "uploadTitle": "Tải tệp PDF để xác thực",
+      "changeFile": "Nhấp để thay đổi",
+      "dragDrop": "Kéo và thả file PDF ở đây",
+      "orClick": "hoặc nhấp để chọn file",
+      "verifyButton": "Xác thực",
+      "verifying": "Đang xác thực...",
+      "infoTitle": "Thông tin hữu ích",
+      "info1": "Xác thực chứng chỉ giúp bạn kiểm tra tính hợp lệ và tính xác thực của tài liệu.",
+      "info2": "Hãy tải tệp PDF chứng chỉ của bạn để xác minh ngay lập tức.",
+      "info3": "Hệ thống sẽ quét blockchain để kiểm tra thông tin chứng chỉ của bạn.",
+      "toasts": {
+        "pdfFileInvalid": "Vui lòng chọn đúng 1 tệp PDF để xác thực.",
+        "verifySuccess": "Xác thực tệp PDF thành công.",
+        "unexpectedError": "Đã có lỗi xảy ra. Vui lòng thử lại."
+      },
+      "modal": {
+        "successTitle": "Xác thực thành công",
+        "failedTitle": "Xác thực thất bại",
+        "valid": "Chứng chỉ hợp lệ",
+        "invalid": "Chứng chỉ không hợp lệ",
+        "certificateId": "Mã chứng chỉ",
+        "student": "Sinh viên",
+        "issuer": "Đơn vị cấp",
+        "issueDate": "Ngày cấp",
+        "close": "Đóng"
+      }
+    },
+    "footer": {
+      "description": "Hệ thống quản lý xác thực văn bằng/chứng chỉ xanh dựa trên nền tảng Blockchain và chữ ký số, kiến tạo giá trị thực cho tương lai bền vững.",
+      "linksTitle": "Liên kết",
+      "home": "Trang chủ",
+      "about": "Về dự án",
+      "features": "Tính năng",
+      "legalTitle": "Pháp lý",
+      "terms": "Điều khoản sử dụng",
+      "privacy": "Chính sách bảo mật",
+      "copyright": "© {{year}} InnoGreen Certchain. All rights reserved."
+    }
+  },
+  "auth": {
+    "sidebar": {
+      "badge": "Bảo Mật Thế Hệ Mới",
+      "titleLine1": "Kỷ Nguyên Mới Cho",
+      "titleLine2": "Chứng Chỉ ",
+      "titleLine3": "Số",
+      "subtitle": "Chào mừng bạn đến với hệ sinh thái xác minh chứng chỉ toàn cầu. Mọi dữ liệu của bạn đều được bảo mật và bất biến trên nền tảng Blockchain.",
+      "features": [
+        {
+          "title": "Mạng Lưới Toàn Cầu",
+          "desc": "Xác minh mọi lúc, mọi nơi trên thế giới chỉ với một click chuột."
+        },
+        {
+          "title": "Tốc Độ & Bảo Mật",
+          "desc": "Dữ liệu được mã hóa bất biến, xử lý tức thì trên công nghệ Blockchain."
+        }
+      ],
+      "footer": "© 2026 InnoGreen Certchain • Danh Tính Số Bất Biến"
+    },
+    "form": {
+      "back": "Quay lại",
+      "home": "Trang chủ",
+      "signInTitle": "Đăng Nhập",
+      "signUpTitle": "Đăng Ký",
+      "signInDesc": "Rất vui được gặp lại bạn!",
+      "signUpDesc": "Khởi tạo danh tính số của bạn ngay.",
+      "tabs": {
+        "signIn": "Đăng Nhập",
+        "signUp": "Đăng Ký"
+      },
+      "mfa": {
+        "confirmEmail": "Xác nhận email",
+        "confirmEmailDesc": "Chúng tôi đã gửi mã OTP đến ",
+        "confirmEmailDesc2": ". Vui lòng kiểm tra hộp thư.",
+        "enterOtp": "Nhập mã xác nhận",
+        "confirmBtn": "Xác nhận",
+        "cancelBtn": "Hủy",
+        "setupTitle": "Thiết lập bảo mật 2 lớp (2FA)",
+        "setupDesc": "Mở Google Authenticator và quét mã QR dưới đây:",
+        "enterAppCode": "Nhập mã 6 số từ App",
+        "setupBtn": "Xác nhận thiết lập",
+        "backBtn": "Quay lại",
+        "verifyTitle": "Xác thực bảo mật 2 lớp",
+        "verifyDesc": "Nhập mã 6 số từ ứng dụng Authenticator của bạn:"
+      },
+      "fields": {
+        "email": "Email công việc",
+        "password": "Mật khẩu",
+        "forgotPwd": "Quên mật khẩu?",
+        "fullname": "Họ và tên",
+        "regEmail": "Email",
+        "citizenId": "CCCD",
+        "phone": "Điện thoại",
+        "dob": "Ngày sinh",
+        "gender": "Giới tính",
+        "genderOpts": {
+          "male": "Nam",
+          "female": "Nữ",
+          "other": "Khác"
+        },
+        "address": "Địa chỉ cư trú",
+        "securePassword": "Mật khẩu bảo mật",
+        "placeholders": {
+          "email": "example@innogreen.com",
+          "password": "••••••••",
+          "citizenId": "Nhập 12 số CCCD",
+          "gender": "Chọn"
+        }
+      },
+      "buttons": {
+        "continue": "Tiếp tục",
+        "processing": "Đang xử lý...",
+        "createAccount": "Tạo tài khoản"
+      },
+      "alerts": {
+        "fillAll": "Vui lòng nhập đầy đủ tất cả thông tin.",
+        "cccdError": "CCCD phải có đúng 12 chữ số.",
+        "emailRequired": "Vui lòng nhập đầy đủ email và mật khẩu."
+      },
+      "footer": {
+        "noAccount": "Bạn chưa có tài khoản?",
+        "registerNow": "Đăng ký ngay",
+        "hasAccount": "Bạn đã có tài khoản?",
+        "loginNow": "Đăng nhập"
+      }
+    }
+  }
+}

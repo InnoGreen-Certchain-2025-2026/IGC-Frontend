@@ -82,7 +82,7 @@ export default function CertificatesPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button
-                      className="inline-flex items-center px-5 py-1.5 border border-transparent text-xs font-medium rounded-lg shadow-sm text-white bg-primary-600 hover:bg-primary-700 active:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                      className="inline-flex items-center px-3 py-1.5 border border-[#214e41] text-xs font-medium rounded shadow-sm text-white bg-[#214e41] hover:bg-[#183930] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4f9b5a]"
                       onClick={async () => {
                         try {
                           const { filename, blob } =
