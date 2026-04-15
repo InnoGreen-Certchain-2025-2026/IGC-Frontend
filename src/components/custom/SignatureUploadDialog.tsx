@@ -1,5 +1,7 @@
 import { useState, useRef } from "react";
 import { useSignature } from "@/hooks/useSignature";
+import { useOtp } from "@/hooks/useOTP";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { SignatureCropDialog } from "./SignatureCropDialog";
 import {
   Dialog,
@@ -16,6 +18,7 @@ import {
   AlertDialogDescription,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Upload } from "lucide-react";
 
@@ -36,20 +39,28 @@ export function SignatureUploadDialog({
 }: SignatureUploadDialogProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const { user } = useCurrentUser(); // ✅ lấy user
+  const userEmail = user?.email; // ⚠️ nếu BE khác thì sửa lại field này
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [croppedFile, setCroppedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const [showCrop, setShowCrop] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [showOtpDialog, setShowOtpDialog] = useState(false);
+
+  const [otp, setOtp] = useState("");
 
   const {
     loading,
     error,
-    checkSignatureFile, // 👉 chỉ dùng check chữ ký
+    checkSignatureFile,
     uploadSignatureFile,
     reset,
   } = useSignature();
+
+  const { handleSendOtp, handleVerifyOtp } = useOtp();
 
   // 👉 chọn file
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,15 +81,9 @@ export function SignatureUploadDialog({
 
   // 👉 crop xong
   const handleCropDone = (data: { original: File; resized: File }) => {
-    console.log("🔥 ORIGINAL:", data.original.size);
-    console.log("🔥 RESIZED:", data.resized.size);
-
     setCroppedFile(data.resized);
-
-    // 👉 ĐÓNG CROP NGAY (QUAN TRỌNG)
     setShowCrop(false);
 
-    // 👉 CHẠY API ASYNC (KHÔNG BLOCK UI)
     setTimeout(async () => {
       try {
         const isValid = await checkSignatureFile(orgId, data.original);
@@ -90,24 +95,65 @@ export function SignatureUploadDialog({
 
         setShowConfirmDialog(true);
       } catch (err) {
-        console.error("❌ ERROR:", err);
         toast.error("Lỗi khi kiểm tra chữ ký");
       }
     }, 0);
   };
 
-  // 👉 upload (sau khi user confirm)
-  const handleUpload = async () => {
-    if (!selectedFile || !croppedFile) return;
+  // 👉 confirm → gửi OTP
+  const handleConfirmReplace = async () => {
+    try {
+      if (!userEmail) {
+        toast.error("Không lấy được email người dùng");
+        return;
+      }
 
-    const success = await uploadSignatureFile(orgId, selectedFile, croppedFile);
+      console.log("Sending OTP to:", userEmail);
 
-    if (success) {
-      toast.success("Upload thành công");
-      handleClose();
-      onSuccess?.();
-    } else {
-      toast.error(error || "Upload thất bại");
+      const ok = await handleSendOtp(userEmail);
+
+      if (ok) {
+        toast.success("Đã gửi OTP về email");
+        setShowConfirmDialog(false);
+        setShowOtpDialog(true);
+      } else {
+        toast.error("Gửi OTP thất bại");
+      }
+    } catch (e: any) {
+      toast.error(e.message);
+    }
+  };
+
+  // 👉 verify OTP → upload
+  const handleVerifyOtpAndUpload = async () => {
+    try {
+      if (!userEmail) {
+        toast.error("Không lấy được email người dùng");
+        return;
+      }
+
+      const valid = await handleVerifyOtp(userEmail, otp);
+
+      if (!valid) {
+        toast.error("OTP không đúng");
+        return;
+      }
+
+      const success = await uploadSignatureFile(
+        orgId,
+        selectedFile!,
+        croppedFile!
+      );
+
+      if (success) {
+        toast.success("Upload thành công");
+        handleClose();
+        onSuccess?.();
+      } else {
+        toast.error(error || "Upload thất bại");
+      }
+    } catch (e: any) {
+      toast.error(e.message);
     }
   };
 
@@ -117,12 +163,15 @@ export function SignatureUploadDialog({
     setPreviewUrl(null);
     setShowCrop(false);
     setShowConfirmDialog(false);
+    setShowOtpDialog(false);
+    setOtp("");
     reset();
     onOpenChange(false);
   };
 
   return (
     <>
+      {/* Upload dialog */}
       <Dialog open={open} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -163,13 +212,40 @@ export function SignatureUploadDialog({
       {/* confirm */}
       <AlertDialog open={showConfirmDialog}>
         <AlertDialogContent>
-          <AlertDialogTitle>Xác nhận đăng ký chữ ký</AlertDialogTitle>
+          <AlertDialogTitle>Xác nhận thay đổi chữ ký</AlertDialogTitle>
           <AlertDialogDescription>
-            Bạn có muốn sử dụng chữ ký này không?
+            Bạn có chắc muốn thay đổi chữ ký? Hệ thống sẽ gửi OTP để xác nhận.
           </AlertDialogDescription>
           <div className="flex justify-end gap-2">
             <AlertDialogCancel>Hủy</AlertDialogCancel>
-            <AlertDialogAction onClick={handleUpload}>Đồng ý</AlertDialogAction>
+            <AlertDialogAction onClick={handleConfirmReplace}>
+              Xác nhận
+            </AlertDialogAction>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* OTP dialog */}
+      <AlertDialog open={showOtpDialog}>
+        <AlertDialogContent>
+          <AlertDialogTitle>Nhập OTP</AlertDialogTitle>
+          <AlertDialogDescription>
+            Vui lòng nhập OTP đã gửi về email của bạn
+          </AlertDialogDescription>
+
+          <Input
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            placeholder="Nhập OTP"
+          />
+
+          <div className="flex justify-end gap-2 mt-4">
+            <AlertDialogCancel onClick={() => setShowOtpDialog(false)}>
+              Hủy
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={handleVerifyOtpAndUpload}>
+              Xác nhận
+            </AlertDialogAction>
           </div>
         </AlertDialogContent>
       </AlertDialog>
