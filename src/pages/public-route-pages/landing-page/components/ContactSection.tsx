@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
+import { submitContactFormApi } from "@/services/contactService";
 
 interface ContactFormData {
   fullName: string;
@@ -35,7 +36,7 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 export default function ContactSection() {
   const { t } = useTranslation();
   const [form, setForm] = useState<ContactFormData>(initialForm);
-  const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [focused, setFocused] = useState<string | null>(null);
 
   const handleChange = (
@@ -47,12 +48,16 @@ export default function ContactSection() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
-    await new Promise((res) => setTimeout(res, 1500));
-    setStatus("success");
-    setTimeout(() => {
-      setForm(initialForm);
-      setStatus("idle");
-    }, 3000);
+    try {
+      await submitContactFormApi(form);
+      setStatus("success");
+      setTimeout(() => {
+        setForm(initialForm);
+        setStatus("idle");
+      }, 3000);
+    } catch {
+      setStatus("error");
+    }
   };
 
   const fields = [
@@ -93,7 +98,7 @@ export default function ContactSection() {
   const contactItems = [
     {
       icon: <MapPin className="h-5 w-5" />,
-      label: t("landingPage.contact.address", "Đại học Bách Khoa Tp.HCM, Q. Thủ Đức, Tp.HCM"),
+      label: t("landingPage.contact.address", "Trường Đại học Công nghiệp Tp.HCM, P. Hạnh Thông, Tp.HCM"),
       highlight: false,
     },
     {
@@ -344,6 +349,15 @@ export default function ContactSection() {
                       </>
                     )}
                   </Button>
+
+                  {status === "error" && (
+                    <p className="text-sm font-semibold text-red-600 text-center">
+                      {t(
+                        "landingPage.contact.form.error",
+                        "Gửi thất bại. Vui lòng thử lại sau."
+                      )}
+                    </p>
+                  )}
                 </form>
               )}
             </motion.div>
