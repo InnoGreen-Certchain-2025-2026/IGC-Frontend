@@ -40,9 +40,9 @@ const PLANS = [
     id: "BASIC" as const,
     name: "Gói Basic",
     description: "Phù hợp trung tâm nhỏ",
-    price: "300k",
+    price: "299k",
     period: "1 tháng",
-    limit: "3000 chứng chỉ 1 năm",
+    limit: "2000 chứng chỉ 1 năm",
     includes: [
       "Cấp chứng chỉ PDF",
       "Xác thực bằng file hash",
@@ -59,7 +59,7 @@ const PLANS = [
     id: "PRO" as const,
     name: "Gói Pro",
     description: "Phù hợp trường đại học",
-    price: "2 triệu",
+    price: "1.999.999đ",
     period: "/ tháng",
     limit: "10, 000 chứng chỉ năm",
     includes: [
@@ -80,7 +80,7 @@ const PLANS = [
     id: "ENTERPRISE" as const,
     name: "Gói Enterprise",
     description: "Tổ chức lớn",
-    price: "10 triệu",
+    price: "9.999.999đ",
     period: "tháng hoặc custom",
     limit: "Không giới hạn",
     includes: [
