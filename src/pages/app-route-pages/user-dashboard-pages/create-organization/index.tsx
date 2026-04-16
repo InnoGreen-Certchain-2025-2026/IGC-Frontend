@@ -37,39 +37,106 @@ const STEPS = [
 
 const PLANS = [
   {
-    id: "FREE" as const,
-    name: "Cá nhân (Miễn phí)",
-    description: "Phù hợp cho cá nhân khởi đầu",
-    price: "0đ",
-    features: [
-      "Tối đa 5 bằng cấp/tháng",
-      "Xác thực cơ bản",
-      "Hỗ trợ cộng đồng",
+    id: "BASIC" as const,
+    name: "Gói Basic",
+    description: "Phù hợp trung tâm nhỏ",
+    price: "300k",
+    period: "1 tháng",
+    limit: "3000 chứng chỉ 1 năm",
+    includes: [
+      "Cấp chứng chỉ PDF",
+      "Xác thực bằng file hash",
+      "Lưu trữ S3",
+      "API cơ bản",
+    ],
+    support: [
+      "Email support",
+      "Tài liệu hướng dẫn",
     ],
     icon: Building2,
   },
   {
     id: "PRO" as const,
-    name: "Chuyên nghiệp",
-    description: "Dành cho các tổ chức giáo dục vừa",
-    price: "990.000đ/tháng",
-    features: [
-      "Bằng cấp không giới hạn",
-      "Tùy chỉnh thương hiệu",
-      "Hỗ trợ 24/7",
+    name: "Gói Pro",
+    description: "Phù hợp trường đại học",
+    price: "2 triệu",
+    period: "/ tháng",
+    limit: "10, 000 chứng chỉ năm",
+    includes: [
+      "Bao gồm basic",
+      "Ghi hash lên blockchain",
+      "Quản trị cho admin",
+      "Hỗ trợ full API",
+    ],
+    support: [
+      "Support 24/07",
+      "Hướng dẫn triển khai",
+      "Thống kê cơ bản",
     ],
     icon: Zap,
     popular: true,
   },
   {
     id: "ENTERPRISE" as const,
-    name: "Doanh nghiệp",
-    description: "Giải pháp toàn diện cho tập đoàn",
-    price: "Liên hệ",
-    features: ["API tích hợp", "Quản lý nhiều chi nhánh", "Bảo mật nâng cao"],
+    name: "Gói Enterprise",
+    description: "Tổ chức lớn",
+    price: "10 triệu",
+    period: "tháng hoặc custom",
+    limit: "Không giới hạn",
+    includes: [
+      "Bao gồm Pro",
+      "Blockchain riêng",
+      "Sever riêng",
+    ],
+    support: [
+      "Hỗ trợ riêng",
+      "Tư vấn kỹ thuật",
+    ],
     icon: ShieldCheck,
   },
 ];
+
+const PLAN_STYLES: Record<string, {
+  border: string;
+  borderActive: string;
+  iconBg: string;
+  iconBgActive: string;
+  title: string;
+  price: string;
+  badge: string;
+  desc: string;
+}> = {
+  BASIC: {
+    border: "hover:border-slate-400 hover:shadow-slate-200 hover:-translate-y-1 border-gray-100",
+    borderActive: "border-slate-500 bg-slate-50/70 shadow-slate-200 ring-4 ring-slate-500/10 -translate-y-1",
+    iconBg: "bg-slate-100 text-slate-500",
+    iconBgActive: "bg-slate-600 text-white",
+    title: "text-slate-800",
+    price: "text-slate-800",
+    badge: "bg-slate-600 text-white",
+    desc: "text-slate-500",
+  },
+  PRO: {
+    border: "hover:border-emerald-400 hover:shadow-emerald-200 hover:-translate-y-2 border-emerald-100",
+    borderActive: "border-emerald-500 bg-emerald-50/90 shadow-emerald-200 shadow-xl ring-4 ring-emerald-500/20 -translate-y-2",
+    iconBg: "bg-emerald-100 text-emerald-500",
+    iconBgActive: "bg-emerald-500 text-white",
+    title: "text-emerald-700",
+    price: "text-emerald-700",
+    badge: "bg-emerald-500 text-white shadow-md shadow-emerald-500/20",
+    desc: "text-emerald-600/80",
+  },
+  ENTERPRISE: {
+    border: "hover:border-indigo-400 hover:shadow-indigo-200 hover:-translate-y-1 border-indigo-100",
+    borderActive: "border-indigo-500 bg-indigo-50/70 shadow-indigo-200 ring-4 ring-indigo-500/10 -translate-y-1",
+    iconBg: "bg-indigo-100 text-indigo-500",
+    iconBgActive: "bg-indigo-600 text-white",
+    title: "text-indigo-800",
+    price: "text-indigo-800",
+    badge: "bg-indigo-600 text-white",
+    desc: "text-indigo-500/80",
+  }
+};
 
 export default function CreateOrganizationPage() {
   const navigate = useNavigate();
@@ -92,7 +159,7 @@ export default function CreateOrganizationPage() {
     contactName: "",
     contactEmail: "",
     contactPhone: "",
-    servicePlan: "FREE",
+    servicePlan: "BASIC",
   });
 
   // Logo file state
@@ -234,7 +301,7 @@ export default function CreateOrganizationPage() {
                     isCompleted
                       ? "bg-primary"
                       : isActive
-                          ? "bg-primary/80"
+                        ? "bg-primary/80"
                         : "bg-gray-100",
                   )}
                 />
@@ -574,52 +641,71 @@ export default function CreateOrganizationPage() {
 
         {/* Step 2: Service Plans */}
         {step === 2 && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-in fade-in slide-in-from-right-2 duration-300">
-            {PLANS.map((p) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-in fade-in slide-in-from-right-2 duration-300 md:items-end">
+            {PLANS.map((p) => {
+              const styles = PLAN_STYLES[p.id];
+              const isSelected = formData.servicePlan === p.id;
+              
+              return (
               <div
                 key={p.id}
                 onClick={() => setFormData({ ...formData, servicePlan: p.id })}
                 className={cn(
-                  "relative flex flex-col p-6 rounded-xl border-2 cursor-pointer transition-all hover:shadow-md",
-                  formData.servicePlan === p.id
-                    ? "border-primary-600 bg-primary-50/30"
-                    : "border-gray-100 bg-white hover:border-gray-200",
+                  "relative flex flex-col p-6 rounded-2xl border-2 cursor-pointer transition-all duration-300",
+                  isSelected
+                    ? styles.borderActive
+                    : cn("bg-white", styles.border)
                 )}
               >
                 {p.popular && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-primary-600 text-white text-[0.65rem] font-bold uppercase tracking-wider rounded-full">
+                  <span className={cn("absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 text-[0.65rem] font-bold uppercase tracking-wider rounded-full", styles.badge)}>
                     Khuyên dùng
                   </span>
                 )}
                 <div
                   className={cn(
-                    "w-10 h-10 rounded-lg flex items-center justify-center mb-4 transition-colors",
-                    formData.servicePlan === p.id
-                      ? "bg-primary-600 text-white"
-                      : "bg-gray-100 text-gray-500",
+                    "w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-colors mx-auto shadow-sm",
+                    isSelected ? styles.iconBgActive : styles.iconBg,
                   )}
                 >
-                  <p.icon size={20} />
+                  <p.icon size={24} />
                 </div>
-                <h4 className="font-bold text-gray-900 mb-1">{p.name}</h4>
-                <p className="text-xs text-gray-500 mb-4">{p.description}</p>
-                <p className="text-lg font-bold text-gray-900 mb-4">
-                  {p.price}
-                </p>
+                <h4 className={cn("font-extrabold mb-2 text-center text-xl", styles.title)}>{p.name}</h4>
+                <p className={cn("text-[0.85rem] italic mb-4 text-center px-4", styles.desc)}>{p.description}</p>
+                
+                <div className={cn("text-center mb-4 transition-colors", styles.price)}>
+                  <span className="text-2xl font-black">{p.price}</span>
+                  <span className="text-[0.95rem] font-semibold ml-1 opacity-80">{p.period}</span>
+                </div>
+                
+                <p className={cn("text-[0.95rem] font-bold mb-6 text-center pb-6 border-b border-gray-100", styles.title)}>{p.limit}</p>
 
-                <div className="space-y-2 mt-auto">
-                  {p.features.map((f, i) => (
-                    <div
-                      key={i}
-                      className="flex items-center gap-2 text-[0.75rem] text-gray-600"
-                    >
-                      <Check size={12} className="text-primary-600 shrink-0" />
-                      <span>{f}</span>
+                <div className="space-y-4 mt-auto px-2">
+                  <div>
+                    <h5 className={cn("font-bold text-[0.95rem] mb-3 text-center", styles.title)}>Bao gồm:</h5>
+                    <div className="space-y-2.5 flex flex-col items-center">
+                      {p.includes.map((f, i) => (
+                        <div key={i} className="flex items-center text-[0.9rem] text-gray-600 text-center gap-2">
+                          <Check size={14} className={isSelected ? styles.title : "text-gray-300"} />
+                          <span>{f}</span>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </div>
+                  <div className="pt-2">
+                    <h5 className={cn("font-bold text-[0.95rem] mb-3 mt-4 text-center", styles.title)}>Hỗ trợ</h5>
+                    <div className="space-y-2.5 flex flex-col items-center">
+                      {p.support.map((f, i) => (
+                        <div key={i} className="flex items-center text-[0.9rem] text-gray-600 text-center gap-2">
+                          <Check size={14} className={isSelected ? styles.title : "text-gray-300"} />
+                          <span>{f}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
-            ))}
+            )})}
           </div>
         )}
 
