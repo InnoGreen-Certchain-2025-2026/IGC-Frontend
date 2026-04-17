@@ -31,6 +31,21 @@ export function setupAxiosInterceptors(opts: {
 // ============================================================
 let refreshPromise: Promise<string> | null = null;
 
+const isContactEndpoint = (url?: string): boolean => {
+  if (!url) return false;
+
+  const path = (() => {
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+      return new URL(url).pathname;
+    }
+
+    const normalized = url.startsWith("/") ? url : `/${url}`;
+    return normalized;
+  })();
+
+  return path === "/contact" || path.startsWith("/contact/") || path === "/api/contact" || path.startsWith("/api/contact/");
+};
+
 const performRefreshToken = async (): Promise<string> => {
   try {
     const response = await axios.post(`${BASE_URL}/auth/refresh`, null, {
@@ -57,7 +72,7 @@ const performRefreshToken = async (): Promise<string> => {
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("access_token");
-    const isContactRequest = config.url?.includes("/contact");
+    const isContactRequest = isContactEndpoint(config.url);
 
     if (token && !config.url?.includes("/auth/refresh") && !isContactRequest) {
       config.headers = config.headers ?? {};
@@ -89,7 +104,7 @@ axiosInstance.interceptors.response.use(
     if (
       originalRequest.url?.includes("/auth/login") ||
       originalRequest.url?.includes("/auth/refresh") ||
-      originalRequest.url?.includes("/contact")
+      isContactEndpoint(originalRequest.url)
     ) {
       return Promise.reject(error);
     }
