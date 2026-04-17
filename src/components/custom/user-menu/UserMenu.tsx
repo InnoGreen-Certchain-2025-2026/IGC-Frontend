@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/features/hooks";
 import { logout } from "@/features/auth/authSlice";
 import { logoutApi } from "@/services/authService";
 import { getAvatarFallback, getS3Url } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -19,6 +20,7 @@ import { LogOut, User, ChevronDown } from "lucide-react";
  * containing account and logout actions.
  */
 export default function UserMenu() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { name, email, avatarUrl } = useAppSelector((state) => state.auth);
@@ -47,7 +49,7 @@ export default function UserMenu() {
           </Avatar>
           <div className="flex flex-col items-start leading-tight">
             <span className="text-[0.82rem] font-semibold text-gray-900">
-              {name ?? "Người dùng"}
+              {name ?? t("dashboard.userMenu.defaultName", "Người dùng")}
             </span>
             <span className="text-[0.7rem] text-gray-500">{email ?? ""}</span>
           </div>
@@ -57,13 +59,13 @@ export default function UserMenu() {
 
       <DropdownMenuContent align="end" className="w-56">
         <div className="px-3 py-2">
-          <p className="text-sm font-medium">{name ?? "Người dùng"}</p>
+          <p className="text-sm font-medium">{name ?? t("dashboard.userMenu.defaultName", "Người dùng")}</p>
           <p className="text-xs text-muted-foreground">{email ?? ""}</p>
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => navigate("/account")}>
           <User className="mr-2 h-4 w-4" />
-          Tài khoản
+          {t("dashboard.userMenu.account", "Tài khoản")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -71,7 +73,7 @@ export default function UserMenu() {
           className="text-red-600 focus:text-red-600"
         >
           <LogOut className="mr-2 h-4 w-4" />
-          Đăng xuất
+          {t("dashboard.userMenu.logout", "Đăng xuất")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

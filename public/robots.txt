@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Disallow private and dashboard areas
+Disallow: /usr/
+Disallow: /org/
+
+Sitemap: https://innogreencertchain.com/sitemap.xml

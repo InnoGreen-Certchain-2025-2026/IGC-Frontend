@@ -17,5 +17,5 @@ export interface CreateOrganizationRequest {
   contactPhone: string;
 
   // THÔNG TIN GÓI DỊCH VỤ
-  servicePlan: "FREE" | "PRO" | "ENTERPRISE";
+  servicePlan: "BASIC" | "PRO" | "ENTERPRISE";
 }

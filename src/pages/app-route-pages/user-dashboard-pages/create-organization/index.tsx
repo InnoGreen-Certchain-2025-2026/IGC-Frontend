@@ -35,43 +35,56 @@ const STEPS = [
   { title: "Hoàn tất", description: "Kiểm tra & Tạo", icon: ShieldCheck },
 ];
 
-const PLANS = [
-  {
-    id: "FREE" as const,
-    name: "Cá nhân (Miễn phí)",
-    description: "Phù hợp cho cá nhân khởi đầu",
-    price: "0đ",
-    features: [
-      "Tối đa 5 bằng cấp/tháng",
-      "Xác thực cơ bản",
-      "Hỗ trợ cộng đồng",
-    ],
-    icon: Building2,
+import { useTranslation } from "react-i18next";
+
+const PLAN_STYLES: Record<string, {
+  border: string;
+  borderActive: string;
+  iconBg: string;
+  iconBgActive: string;
+  title: string;
+  price: string;
+  badge: string;
+  desc: string;
+  exceedPrice: string;
+}> = {
+  BASIC: {
+    border: "hover:border-slate-400 hover:shadow-slate-200 hover:-translate-y-1 border-gray-200",
+    borderActive: "border-slate-500 bg-slate-50/70 shadow-slate-200 ring-4 ring-slate-500/10 -translate-y-1",
+    iconBg: "bg-slate-100 text-slate-500",
+    iconBgActive: "bg-slate-600 text-white",
+    title: "text-slate-800",
+    price: "text-slate-800",
+    badge: "bg-slate-600 text-white",
+    desc: "text-slate-500",
+    exceedPrice: "text-red-600",
   },
-  {
-    id: "PRO" as const,
-    name: "Chuyên nghiệp",
-    description: "Dành cho các tổ chức giáo dục vừa",
-    price: "990.000đ/tháng",
-    features: [
-      "Bằng cấp không giới hạn",
-      "Tùy chỉnh thương hiệu",
-      "Hỗ trợ 24/7",
-    ],
-    icon: Zap,
-    popular: true,
+  PRO: {
+    border: "hover:border-[#2d6a4f] hover:shadow-[#2d6a4f]/20 hover:-translate-y-2 border-[#2d6a4f]/30",
+    borderActive: "border-[#2d6a4f] bg-emerald-50/50 shadow-[#2d6a4f]/20 shadow-xl ring-4 ring-[#2d6a4f]/20 -translate-y-2 z-10",
+    iconBg: "bg-emerald-100 text-[#2d6a4f]",
+    iconBgActive: "bg-[#2d6a4f] text-white",
+    title: "text-[#2d6a4f]",
+    price: "text-[#2d6a4f]",
+    badge: "bg-[#2d6a4f] text-white shadow-md shadow-[#2d6a4f]/20",
+    desc: "text-emerald-700/80",
+    exceedPrice: "text-red-500",
   },
-  {
-    id: "ENTERPRISE" as const,
-    name: "Doanh nghiệp",
-    description: "Giải pháp toàn diện cho tập đoàn",
-    price: "Liên hệ",
-    features: ["API tích hợp", "Quản lý nhiều chi nhánh", "Bảo mật nâng cao"],
-    icon: ShieldCheck,
-  },
-];
+  ENTERPRISE: {
+    border: "hover:border-indigo-400 hover:shadow-indigo-200 hover:-translate-y-1 border-indigo-200",
+    borderActive: "border-indigo-500 bg-indigo-50/70 shadow-indigo-200 ring-4 ring-indigo-500/10 -translate-y-1",
+    iconBg: "bg-indigo-100 text-indigo-500",
+    iconBgActive: "bg-indigo-600 text-white",
+    title: "text-indigo-800",
+    price: "text-indigo-800",
+    badge: "bg-indigo-600 text-white",
+    desc: "text-indigo-500/80",
+    exceedPrice: "text-red-600",
+  }
+};
 
 export default function CreateOrganizationPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const step = parseInt(searchParams.get("step") || "1", 10);
@@ -79,6 +92,55 @@ export default function CreateOrganizationPage() {
   const setStep = (newStep: number) => {
     setSearchParams({ step: newStep.toString() }, { replace: true });
   };
+
+  const PLANS = [
+    {
+      id: "BASIC" as const,
+      name: t("landingPage.pricing.plans.basic.name"),
+      description: t("landingPage.pricing.plans.basic.description"),
+      price: t("landingPage.pricing.plans.basic.price"),
+      period: t("landingPage.pricing.plans.basic.period"),
+      limit: t("landingPage.pricing.plans.basic.limit"),
+      customText: t("landingPage.pricing.plans.basic.customText"),
+      exceedPrice: t("landingPage.pricing.plans.basic.exceedPrice"),
+      featuresTitle: t("landingPage.pricing.plans.basic.featuresTitle"),
+      includes: t("landingPage.pricing.plans.basic.includes", { returnObjects: true }) as string[],
+      supportTitle: t("landingPage.pricing.plans.basic.supportTitle"),
+      support: t("landingPage.pricing.plans.basic.support", { returnObjects: true }) as string[],
+      icon: Building2,
+    },
+    {
+      id: "PRO" as const,
+      name: t("landingPage.pricing.plans.pro.name"),
+      description: t("landingPage.pricing.plans.pro.description"),
+      price: t("landingPage.pricing.plans.pro.price"),
+      period: t("landingPage.pricing.plans.pro.period"),
+      limit: t("landingPage.pricing.plans.pro.limit"),
+      customText: t("landingPage.pricing.plans.pro.customText"),
+      exceedPrice: t("landingPage.pricing.plans.pro.exceedPrice"),
+      featuresTitle: t("landingPage.pricing.plans.pro.featuresTitle"),
+      includes: t("landingPage.pricing.plans.pro.includes", { returnObjects: true }) as string[],
+      supportTitle: t("landingPage.pricing.plans.pro.supportTitle"),
+      support: t("landingPage.pricing.plans.pro.support", { returnObjects: true }) as string[],
+      icon: Zap,
+      popular: true,
+    },
+    {
+      id: "ENTERPRISE" as const,
+      name: t("landingPage.pricing.plans.enterprise.name"),
+      description: t("landingPage.pricing.plans.enterprise.description"),
+      price: t("landingPage.pricing.plans.enterprise.price"),
+      period: t("landingPage.pricing.plans.enterprise.period"),
+      limit: t("landingPage.pricing.plans.enterprise.limit"),
+      customText: t("landingPage.pricing.plans.enterprise.customText"),
+      exceedPrice: t("landingPage.pricing.plans.enterprise.exceedPrice"),
+      featuresTitle: t("landingPage.pricing.plans.enterprise.featuresTitle"),
+      includes: t("landingPage.pricing.plans.enterprise.includes", { returnObjects: true }) as string[],
+      supportTitle: t("landingPage.pricing.plans.enterprise.supportTitle"),
+      support: t("landingPage.pricing.plans.enterprise.support", { returnObjects: true }) as string[],
+      icon: ShieldCheck,
+    },
+  ];
 
   const [formData, setFormData] = useState<CreateOrganizationRequest>({
     name: "",
@@ -92,7 +154,7 @@ export default function CreateOrganizationPage() {
     contactName: "",
     contactEmail: "",
     contactPhone: "",
-    servicePlan: "FREE",
+    servicePlan: "BASIC",
   });
 
   // Logo file state
@@ -234,7 +296,7 @@ export default function CreateOrganizationPage() {
                     isCompleted
                       ? "bg-primary"
                       : isActive
-                          ? "bg-primary/80"
+                        ? "bg-primary/80"
                         : "bg-gray-100",
                   )}
                 />
@@ -574,52 +636,85 @@ export default function CreateOrganizationPage() {
 
         {/* Step 2: Service Plans */}
         {step === 2 && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-in fade-in slide-in-from-right-2 duration-300">
-            {PLANS.map((p) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-in fade-in slide-in-from-right-2 duration-300 items-stretch max-w-5xl mx-auto pt-6">
+            {PLANS.map((p) => {
+              const styles = PLAN_STYLES[p.id];
+              const isSelected = formData.servicePlan === p.id;
+              
+              return (
               <div
                 key={p.id}
                 onClick={() => setFormData({ ...formData, servicePlan: p.id })}
                 className={cn(
-                  "relative flex flex-col p-6 rounded-xl border-2 cursor-pointer transition-all hover:shadow-md",
-                  formData.servicePlan === p.id
-                    ? "border-primary-600 bg-primary-50/30"
-                    : "border-gray-100 bg-white hover:border-gray-200",
+                  "relative flex flex-col p-6 rounded-3xl border-2 cursor-pointer transition-all duration-300",
+                  isSelected
+                    ? styles.borderActive
+                    : cn("bg-white", styles.border)
                 )}
               >
                 {p.popular && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-primary-600 text-white text-[0.65rem] font-bold uppercase tracking-wider rounded-full">
-                    Khuyên dùng
-                  </span>
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-max">
+                     <span className={cn("px-4 py-1.5 text-[0.65rem] font-bold uppercase tracking-wider rounded-full", styles.badge)}>
+                       {t("landingPage.pricing.recommended")}
+                     </span>
+                  </div>
                 )}
                 <div
                   className={cn(
-                    "w-10 h-10 rounded-lg flex items-center justify-center mb-4 transition-colors",
-                    formData.servicePlan === p.id
-                      ? "bg-primary-600 text-white"
-                      : "bg-gray-100 text-gray-500",
+                    "w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-colors mx-auto shadow-sm",
+                    isSelected ? styles.iconBgActive : styles.iconBg,
                   )}
                 >
-                  <p.icon size={20} />
+                  <p.icon size={24} />
                 </div>
-                <h4 className="font-bold text-gray-900 mb-1">{p.name}</h4>
-                <p className="text-xs text-gray-500 mb-4">{p.description}</p>
-                <p className="text-lg font-bold text-gray-900 mb-4">
-                  {p.price}
+                <h4 className={cn("font-bold mb-1 text-center text-xl uppercase", styles.title)}>{p.name}</h4>
+                <p className={cn("text-[0.85rem] mb-4 text-center", styles.desc)}>{p.description}</p>
+                
+                <div className={cn("text-center mb-1 font-bold transition-colors", styles.price)}>
+                  <span className="text-xl md:text-2xl font-black">{p.price}</span>
+                  {p.period && <span className="text-[0.95rem] font-semibold ml-1 opacity-80">{p.period}</span>}
+                </div>
+                
+                {p.customText && (
+                   <p className={cn("text-sm text-center mb-1 font-medium", styles.title)}>{p.customText}</p>
+                )}
+
+                {p.limit && (
+                   <p className={cn("text-sm text-center mb-1 font-semibold", styles.title)}>{p.limit}</p>
+                )}
+
+                <p className={cn("text-sm font-semibold mb-6 text-center", styles.exceedPrice)}>
+                  {p.exceedPrice}
                 </p>
 
-                <div className="space-y-2 mt-auto">
-                  {p.features.map((f, i) => (
-                    <div
-                      key={i}
-                      className="flex items-center gap-2 text-[0.75rem] text-gray-600"
-                    >
-                      <Check size={12} className="text-primary-600 shrink-0" />
-                      <span>{f}</span>
+                <div className="mt-auto w-full flex justify-center pb-2">
+                  <div className="w-fit text-left">
+                    <div>
+                      <h5 className={cn("font-bold text-[0.95rem] mb-3", styles.title)}>{p.featuresTitle}</h5>
+                      <div className="space-y-2.5 flex flex-col">
+                        {p.includes.map((f, i) => (
+                          <div key={i} className="flex items-start text-[0.9rem] text-gray-600 gap-2.5">
+                            <Check size={16} className={cn("mt-[1px] shrink-0", isSelected ? styles.title : "text-gray-300")} strokeWidth={2.5} />
+                            <span>{f}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ))}
+                    <div className="pt-6">
+                      <h5 className={cn("font-bold text-[0.95rem] mb-3", styles.title)}>{p.supportTitle}</h5>
+                      <div className="space-y-2.5 flex flex-col">
+                        {p.support.map((f, i) => (
+                          <div key={i} className="flex items-start text-[0.9rem] text-gray-600 gap-2.5">
+                            <Check size={16} className={cn("mt-[1px] shrink-0", isSelected ? styles.title : "text-gray-300")} strokeWidth={2.5} />
+                            <span>{f}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            ))}
+            )})}
           </div>
         )}
 

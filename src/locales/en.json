@@ -6,6 +6,7 @@
       "intro": "About",
       "about": "About Us",
       "verify": "Verification",
+      "pricing": "Pricing",
       "contact": "Contact",
       "openMenu": "Open menu",
       "closeMenu": "Close menu"
@@ -123,6 +124,75 @@
         "close": "Close"
       }
     },
+    "pricing": {
+      "title": "Business Model",
+      "recommended": "Recommended",
+      "plans": {
+        "basic": {
+          "name": "BASIC",
+          "description": "Suitable for small centers",
+          "price": "Free",
+          "period": "",
+          "limit": "First 100 certificates",
+          "customText": "",
+          "exceedPrice": "799 VND / cert (if exceeded)",
+          "featuresTitle": "Features:",
+          "includes": [
+            "PDF cert issuance",
+            "File hash verification",
+            "S3 Storage (Off-chain)",
+            "Basic API"
+          ],
+          "supportTitle": "Support:",
+          "support": [
+            "Email support",
+            "Documentation"
+          ]
+        },
+        "pro": {
+          "name": "PRO",
+          "description": "Suitable for universities",
+          "price": "11,990,000đ",
+          "period": "/ year",
+          "limit": "30,000 certificates / year",
+          "customText": "",
+          "exceedPrice": "399 VND / cert",
+          "featuresTitle": "Features:",
+          "includes": [
+            "Includes Basic",
+            "Hash on blockchain",
+            "Admin management",
+            "Full API support"
+          ],
+          "supportTitle": "Support:",
+          "support": [
+            "24/7 Support",
+            "Deployment guide",
+            "Basic statistics"
+          ]
+        },
+        "enterprise": {
+          "name": "ENTERPRISE",
+          "description": "Suitable for organizations",
+          "price": "20.0M ~ 30.0M VND",
+          "period": "/ year",
+          "customText": "(Custom)",
+          "limit": "",
+          "exceedPrice": "200 ~ 300 VND / cert",
+          "featuresTitle": "Features:",
+          "includes": [
+            "Includes Pro",
+            "Private blockchain",
+            "Private server"
+          ],
+          "supportTitle": "Support:",
+          "support": [
+            "Dedicated support",
+            "Technical consulting"
+          ]
+        }
+      }
+    },
     "footer": {
       "description": "A green diploma and certificate management and verification system built on Blockchain and digital signatures, creating real value for a sustainable future.",
       "linksTitle": "Links",
@@ -138,9 +208,9 @@
   "auth": {
     "sidebar": {
       "badge": "Next-Gen Verification",
-      "titleLine1": "New Era For",
-      "titleLine2": "Digital ",
-      "titleLine3": "Certificates",
+      "titleLine1": "Verify trust",
+      "titleLine2": "Create ",
+      "titleLine3": "value",
       "subtitle": "Welcome to the global certificate verification ecosystem. All your data is secured and immutable on the Blockchain platform.",
       "features": [
         {
@@ -220,6 +290,31 @@
         "hasAccount": "Already have an account?",
         "loginNow": "Sign in"
       }
+    }
+  },
+  "dashboard": {
+    "header": {
+      "titles": {
+        "overview": "Overview",
+        "certificates": "Certificates",
+        "organizations": "Organization Management",
+        "account": "User Account"
+      }
+    },
+    "userMenu": {
+      "defaultName": "User",
+      "account": "Account",
+      "logout": "Log Out"
+    },
+    "sidebar": {
+      "usr": {
+        "category": "Categories",
+        "settings": "Settings",
+        "general": "General",
+        "certificates": "Certificates",
+        "organizations": "Organizations"
+      },
+      "account": "Account"
     }
   }
 }

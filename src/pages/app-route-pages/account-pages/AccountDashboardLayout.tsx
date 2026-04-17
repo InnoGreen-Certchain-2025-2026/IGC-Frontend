@@ -1,5 +1,7 @@
 import { Outlet } from "react-router";
+import { useTranslation } from "react-i18next";
 import UserMenu from "@/components/custom/user-menu/UserMenu";
+import LanguageToggle from "@/components/custom/header/LanguageToggle";
 import AppSidebar from "@/components/custom/sidebar/AppSidebar";
 import { useAppSelector } from "@/features/hooks";
 import {
@@ -14,6 +16,7 @@ import { getOrgNavSections } from "@/components/custom/sidebar/orgNavItems";
  * alongside account sub-pages.
  */
 export default function AccountDashboardLayout() {
+  const { t } = useTranslation();
   const selectedOrg = useAppSelector(
     (state) => state.organization.selectedOrganization,
   );
@@ -33,9 +36,12 @@ export default function AccountDashboardLayout() {
       <main className="flex-1 flex flex-col bg-[#f8fbf9] overflow-hidden">
         <header className="flex items-center justify-between px-7 py-4 border-b border-[#d2e1da] bg-white/95 min-h-16 backdrop-blur-sm">
           <h1 className="text-lg font-bold text-[#214e41]">
-            Tài khoản người dùng
+            {t("dashboard.header.titles.account", "Tài khoản người dùng")}
           </h1>
-          <UserMenu />
+          <div className="flex items-center gap-3">
+            <LanguageToggle />
+            <UserMenu />
+          </div>
         </header>
 
         <div className="flex-1 overflow-y-auto p-7 bg-[#eef5f1]">

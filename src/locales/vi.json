@@ -6,6 +6,7 @@
       "intro": "Giới thiệu",
       "about": "Về chúng tôi",
       "verify": "Xác thực",
+      "pricing": "Gói dịch vụ",
       "contact": "Liên hệ",
       "openMenu": "Mở menu",
       "closeMenu": "Đóng menu"
@@ -123,6 +124,75 @@
         "close": "Đóng"
       }
     },
+    "pricing": {
+      "title": "Mô hình kinh doanh",
+      "recommended": "Khuyên dùng",
+      "plans": {
+        "basic": {
+          "name": "BASIC",
+          "description": "Phù hợp trung tâm nhỏ",
+          "price": "Miễn phí",
+          "period": "",
+          "limit": "100 chứng chỉ đầu tiên",
+          "customText": "",
+          "exceedPrice": "799 đồng / chứng chỉ (nếu vượt)",
+          "featuresTitle": "Tính năng:",
+          "includes": [
+            "Cấp chứng chỉ PDF",
+            "Xác thực bằng file hash",
+            "Lưu trữ S3 (Off-chain)",
+            "API cơ bản"
+          ],
+          "supportTitle": "Hỗ trợ:",
+          "support": [
+            "Email support",
+            "Tài liệu hướng dẫn"
+          ]
+        },
+        "pro": {
+          "name": "PRO",
+          "description": "Phù hợp trường đại học",
+          "price": "11.990.000đ",
+          "period": "/ năm",
+          "limit": "30,000 chứng chỉ /năm",
+          "customText": "",
+          "exceedPrice": "399 đồng/ chứng chỉ",
+          "featuresTitle": "Tính năng:",
+          "includes": [
+            "Bao gồm basic",
+            "Ghi hash lên blockchain",
+            "Quản trị cho admin",
+            "Hỗ trợ full API"
+          ],
+          "supportTitle": "Hỗ trợ:",
+          "support": [
+            "Support 24/07",
+            "Hướng dẫn triển khai",
+            "Thống kê cơ bản"
+          ]
+        },
+        "enterprise": {
+          "name": "ENTERPRISE",
+          "description": "Phù hợp tổ chức",
+          "price": "20.000.000đ ~ 30.000.000đ",
+          "period": "/ năm",
+          "customText": "(Custom)",
+          "limit": "",
+          "exceedPrice": "200 ~ 300 đồng/ chứng chỉ",
+          "featuresTitle": "Tính năng:",
+          "includes": [
+            "Bao gồm Pro",
+            "Blockchain riêng",
+            "Sever riêng"
+          ],
+          "supportTitle": "Hỗ trợ:",
+          "support": [
+            "Hỗ trợ riêng",
+            "Tư vấn kỹ thuật"
+          ]
+        }
+      }
+    },
     "footer": {
       "description": "Hệ thống quản lý xác thực văn bằng/chứng chỉ xanh dựa trên nền tảng Blockchain và chữ ký số, kiến tạo giá trị thực cho tương lai bền vững.",
       "linksTitle": "Liên kết",
@@ -138,9 +208,9 @@
   "auth": {
     "sidebar": {
       "badge": "Bảo Mật Thế Hệ Mới",
-      "titleLine1": "Kỷ Nguyên Mới Cho",
-      "titleLine2": "Chứng Chỉ ",
-      "titleLine3": "Số",
+      "titleLine1": "Xác minh niềm tin",
+      "titleLine2": "Kiến tạo ",
+      "titleLine3": "giá trị",
       "subtitle": "Chào mừng bạn đến với hệ sinh thái xác minh chứng chỉ toàn cầu. Mọi dữ liệu của bạn đều được bảo mật và bất biến trên nền tảng Blockchain.",
       "features": [
         {
@@ -220,6 +290,31 @@
         "hasAccount": "Bạn đã có tài khoản?",
         "loginNow": "Đăng nhập"
       }
+    }
+  },
+  "dashboard": {
+    "header": {
+      "titles": {
+        "overview": "Tổng quan",
+        "certificates": "Danh sách bằng cấp",
+        "organizations": "Quản lý tổ chức",
+        "account": "Tài khoản người dùng"
+      }
+    },
+    "userMenu": {
+      "defaultName": "Người dùng",
+      "account": "Tài khoản",
+      "logout": "Đăng xuất"
+    },
+    "sidebar": {
+      "usr": {
+        "category": "Danh mục",
+        "settings": "Cài đặt",
+        "general": "Chung",
+        "certificates": "Danh sách bằng cấp",
+        "organizations": "Tổ chức"
+      },
+      "account": "Tài khoản"
     }
   }
 }
