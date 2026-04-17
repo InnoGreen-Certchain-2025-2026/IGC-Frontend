@@ -37,6 +37,12 @@ export default function HeaderNavigation() {
       onClick: scrollTo("story"),
     },
     {
+      label: t("landingPage.header.pricing", "Gói dịch vụ"),
+      to: "/#pricing",
+      isActive: false,
+      onClick: scrollTo("pricing"),
+    },
+    {
       label: t("landingPage.header.contact", "Liên hệ"),
       to: "/#contact",
       isActive: false,

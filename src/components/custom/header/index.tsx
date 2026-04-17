@@ -179,6 +179,24 @@ export default function Header() {
                 {t("landingPage.header.verify", "Xác thực")}
               </Link>
               <Link
+                to="/#pricing"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsMobileMenuOpen(false);
+                  if (location.pathname === "/") {
+                    document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
+                  } else {
+                    navigate("/");
+                    setTimeout(() => {
+                      document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
+                    }, 400);
+                  }
+                }}
+                className="block rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 hover:text-[#214e41] transition-colors"
+              >
+                {t("landingPage.header.pricing", "Gói dịch vụ")}
+              </Link>
+              <Link
                 to="/#contact"
                 onClick={scrollToContact}
                 className="block rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 hover:text-[#214e41] transition-colors"

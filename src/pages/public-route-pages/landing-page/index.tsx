@@ -7,6 +7,7 @@ import ProblemSolutionSection from "./components/ProblemSolutionSection";
 import TargetAudienceSection from "./components/TargetAudienceSection";
 import FeaturesSection from "./components/FeaturesSection";
 import StorySection from "./components/StorySection";
+import PricingSection from "./components/PricingSection";
 import ContactSection from "./components/ContactSection";
 
 export default function LandingPage() {
@@ -21,6 +22,7 @@ export default function LandingPage() {
         <StorySection />
         <ProblemSolutionSection />
         <TargetAudienceSection />
+        <PricingSection />
         <ContactSection />
       </main>
 
