@@ -57,8 +57,9 @@ const performRefreshToken = async (): Promise<string> => {
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("access_token");
+    const isContactRequest = config.url?.includes("/contact");
 
-    if (token && !config.url?.includes("/auth/refresh")) {
+    if (token && !config.url?.includes("/auth/refresh") && !isContactRequest) {
       config.headers = config.headers ?? {};
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -87,7 +88,8 @@ axiosInstance.interceptors.response.use(
     // Không retry cho login / refresh
     if (
       originalRequest.url?.includes("/auth/login") ||
-      originalRequest.url?.includes("/auth/refresh")
+      originalRequest.url?.includes("/auth/refresh") ||
+      originalRequest.url?.includes("/contact")
     ) {
       return Promise.reject(error);
     }
