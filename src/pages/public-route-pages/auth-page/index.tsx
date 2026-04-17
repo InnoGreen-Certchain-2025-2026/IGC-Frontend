@@ -20,20 +20,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  ShieldCheck,
-  ArrowLeft,
-  Globe,
-  Zap,
-  Loader2,
-  Eye,
-  EyeOff,
-} from "lucide-react";
+import { ShieldCheck, ArrowLeft, Loader2, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "@/features/hooks";
 import { executeRegister, executeLogin } from "@/features/auth/authThunk";
 import { clearError, setTokens } from "@/features/auth/authSlice";
-import { AuthenticationDetails, CognitoUser, CognitoUserAttribute } from "amazon-cognito-identity-js";
+import {
+  AuthenticationDetails,
+  CognitoUser,
+  CognitoUserAttribute,
+} from "amazon-cognito-identity-js";
 import { getCognitoUser, userPool } from "@/services/cognitoService";
 import { QRCodeSVG } from "qrcode.react";
 import axiosInstance from "@/lib/axiosInstance";
@@ -73,10 +69,14 @@ export default function AuthPage() {
   const [registerLoading, setRegisterLoading] = useState(false);
 
   // Cognito MFA State
-  const [mfaStep, setMfaStep] = useState<"NONE" | "SETUP" | "VERIFY" | "CONFIRM_SIGNUP">("NONE");
+  const [mfaStep, setMfaStep] = useState<
+    "NONE" | "SETUP" | "VERIFY" | "CONFIRM_SIGNUP"
+  >("NONE");
   const [mfaCode, setMfaCode] = useState("");
   const [mfaQrCode, setMfaQrCode] = useState("");
-  const [cognitoUserRef, setCognitoUserRef] = useState<CognitoUser | null>(null);
+  const [cognitoUserRef, setCognitoUserRef] = useState<CognitoUser | null>(
+    null,
+  );
   const [pendingRegData, setPendingRegData] = useState<{
     name: string;
     email: string;
@@ -127,12 +127,16 @@ export default function AuthPage() {
       },
       onFailure: async (err) => {
         if (err.code === "UserNotConfirmedException") {
-          toast.warning("Tài khoản chưa được xác nhận, vui lòng kiểm tra email.");
+          toast.warning(
+            "Tài khoản chưa được xác nhận, vui lòng kiểm tra email.",
+          );
           return;
         }
         // Fallback to local auth
         try {
-          await dispatch(executeLogin({ email: normalizedEmail, password: loginPassword })).unwrap();
+          await dispatch(
+            executeLogin({ email: normalizedEmail, password: loginPassword }),
+          ).unwrap();
           setLoginEmail("");
           setLoginPassword("");
           toast.success("Đăng nhập thành công!");
@@ -145,7 +149,9 @@ export default function AuthPage() {
         // User never set up TOTP — associate software token
         cognitoUser.associateSoftwareToken({
           associateSecretCode: (secretCode) => {
-            setMfaQrCode(`otpauth://totp/InnoGreen:${normalizedEmail}?secret=${secretCode}&issuer=InnoGreen`);
+            setMfaQrCode(
+              `otpauth://totp/InnoGreen:${normalizedEmail}?secret=${secretCode}&issuer=InnoGreen`,
+            );
             setMfaStep("SETUP");
             setCognitoUserRef(cognitoUser);
           },
@@ -183,9 +189,16 @@ export default function AuthPage() {
             setMfaStep("NONE");
             setMfaCode("");
             setMfaQrCode("");
-            setRegName(""); setRegEmail(""); setRegPassword(""); setRegPhone("");
-            setRegAddress(""); setRegCitizenIdNumber(""); setRegDob("");
-            toast.success("Đăng ký và thiết lập 2FA thành công! Vui lòng đăng nhập.");
+            setRegName("");
+            setRegEmail("");
+            setRegPassword("");
+            setRegPhone("");
+            setRegAddress("");
+            setRegCitizenIdNumber("");
+            setRegDob("");
+            toast.success(
+              "Đăng ký và thiết lập 2FA thành công! Vui lòng đăng nhập.",
+            );
             navigate("/auth?mode=sign-in");
             setLoginEmail(email);
           } catch {
@@ -207,29 +220,33 @@ export default function AuthPage() {
 
   const handleVerifyMfaLogin = () => {
     if (!cognitoUserRef || !mfaCode) return;
-    cognitoUserRef.sendMFACode(mfaCode, {
-      onSuccess: async (result) => {
-        const payload = result.getIdToken().payload;
-        try {
-          const syncRes = await axiosInstance.post("/auth/sync", {
-            cognitoSub: payload.sub,
-            email: loginEmail.toLowerCase(),
-            name: payload.name || loginEmail.toLowerCase(),
-          });
-          const { accessToken, userSessionResponse } = syncRes.data.data;
-          dispatch(setTokens({ accessToken, userSessionResponse }));
-          setMfaCode("");
-          setMfaStep("NONE");
-          setLoginEmail("");
-          setLoginPassword("");
-          toast.success("Đăng nhập thành công!");
-          navigate("/usr");
-        } catch {
-          toast.error("Lỗi đồng bộ dữ liệu tài khoản.");
-        }
+    cognitoUserRef.sendMFACode(
+      mfaCode,
+      {
+        onSuccess: async (result) => {
+          const payload = result.getIdToken().payload;
+          try {
+            const syncRes = await axiosInstance.post("/auth/sync", {
+              cognitoSub: payload.sub,
+              email: loginEmail.toLowerCase(),
+              name: payload.name || loginEmail.toLowerCase(),
+            });
+            const { accessToken, userSessionResponse } = syncRes.data.data;
+            dispatch(setTokens({ accessToken, userSessionResponse }));
+            setMfaCode("");
+            setMfaStep("NONE");
+            setLoginEmail("");
+            setLoginPassword("");
+            toast.success("Đăng nhập thành công!");
+            navigate("/usr");
+          } catch {
+            toast.error("Lỗi đồng bộ dữ liệu tài khoản.");
+          }
+        },
+        onFailure: (err) => toast.error("Sai mã OTP: " + err.message),
       },
-      onFailure: (err) => toast.error("Sai mã OTP: " + err.message),
-    }, "SOFTWARE_TOKEN_MFA");
+      "SOFTWARE_TOKEN_MFA",
+    );
   };
 
   const handleConfirmSignup = () => {
@@ -250,10 +267,14 @@ export default function AuthPage() {
         mfaSetup: () => {
           user.associateSoftwareToken({
             associateSecretCode: (secretCode) => {
-              setMfaQrCode(`otpauth://totp/InnoGreen:${pendingRegData.email}?secret=${secretCode}&issuer=InnoGreen`);
+              setMfaQrCode(
+                `otpauth://totp/InnoGreen:${pendingRegData.email}?secret=${secretCode}&issuer=InnoGreen`,
+              );
               setMfaStep("SETUP");
               setCognitoUserRef(user);
-              toast.info("Quét mã QR bằng Google Authenticator để hoàn tất đăng ký.");
+              toast.info(
+                "Quét mã QR bằng Google Authenticator để hoàn tất đăng ký.",
+              );
             },
             onFailure: (e) => toast.error("Lỗi thiết lập 2FA: " + e.message),
           });
@@ -337,7 +358,9 @@ export default function AuthPage() {
               <span className="text-3xl font-black tracking-tighter text-white font-display italic uppercase">
                 InnoGreen
               </span>
-              <span className="text-[8px] font-black tracking-[0.4em] uppercase text-[#f2ce3c]">Certchain Platform</span>
+              <span className="text-[8px] font-black tracking-[0.4em] uppercase text-[#f2ce3c]">
+                Certchain Platform
+              </span>
             </div>
           </Link>
 
@@ -350,12 +373,16 @@ export default function AuthPage() {
             <h1 className="text-6xl md:text-8xl font-black leading-[1.05] tracking-tighter text-white">
               {t("auth.sidebar.titleLine1")} <br />
               <span className="text-white">{t("auth.sidebar.titleLine2")}</span>
-              <span className="text-[#f2ce3c] drop-shadow-[0_0_15px_rgba(34,211,238,0.5)] uppercase italic">{t("auth.sidebar.titleLine3")}</span>
+              <span className="text-[#f2ce3c] drop-shadow-[0_0_15px_rgba(34,211,238,0.5)] uppercase italic">
+                {t("auth.sidebar.titleLine3")}
+              </span>
             </h1>
 
-            <p className="text-xl text-slate-200 leading-relaxed font-medium">{t("auth.sidebar.subtitle")}</p>
+            <p className="text-xl text-slate-200 leading-relaxed font-medium">
+              {t("auth.sidebar.subtitle")}
+            </p>
 
-            <div className="grid grid-cols-1 gap-10 pt-10">
+            {/* <div className="grid grid-cols-1 gap-10 pt-10">
               {[
                 {
                   icon: <Globe className="w-6 h-6" />,
@@ -378,13 +405,13 @@ export default function AuthPage() {
                   </div>
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
         </div>
 
-        <div className="relative z-10 text-[10px] font-bold uppercase tracking-[0.3em] text-slate-600 pt-12">
+        {/* <div className="relative z-10 text-[10px] font-bold uppercase tracking-[0.3em] text-slate-600 pt-12">
           {t("auth.sidebar.footer")}
-        </div>
+        </div> */}
       </div>
 
       {/* Form Area */}
@@ -412,27 +439,43 @@ export default function AuthPage() {
         {/* Back Button Desktop */}
         <div className="hidden lg:flex items-center absolute top-8 right-8 z-10">
           {/* Language Toggle */}
-          <button 
+          <button
             type="button"
-            onClick={() => i18n.changeLanguage(i18n.language === "vi" ? "en" : "vi")}
+            onClick={() =>
+              i18n.changeLanguage(i18n.language === "vi" ? "en" : "vi")
+            }
             className="flex items-center justify-center gap-2 h-10 px-4 py-2 bg-slate-50 hover:bg-slate-200 border border-slate-200 rounded-2xl transition-colors font-bold text-sm text-slate-800 shadow-sm mr-4"
           >
             {i18n.language === "vi" ? (
-               <>
-                 <img src="https://flagcdn.com/w40/vn.png" alt="Việt Nam" className="w-5 h-auto rounded-sm" />
-                 <span>VI</span>
-               </>
+              <>
+                <img
+                  src="https://flagcdn.com/w40/vn.png"
+                  alt="Việt Nam"
+                  className="w-5 h-auto rounded-sm"
+                />
+                <span>VI</span>
+              </>
             ) : (
-               <>
-                 <img src="https://flagcdn.com/w40/us.png" alt="English" className="w-5 h-auto rounded-sm" />
-                 <span>EN</span>
-               </>
+              <>
+                <img
+                  src="https://flagcdn.com/w40/us.png"
+                  alt="English"
+                  className="w-5 h-auto rounded-sm"
+                />
+                <span>EN</span>
+              </>
             )}
           </button>
 
-           <Button variant="ghost" asChild className="rounded-full px-6 font-bold text-slate-400 hover:text-slate-900">
-             <Link to="/"><ArrowLeft className="w-4 h-4 mr-2" /> {t("auth.form.home")}</Link>
-           </Button>
+          <Button
+            variant="ghost"
+            asChild
+            className="rounded-full px-6 font-bold text-slate-400 hover:text-slate-900"
+          >
+            <Link to="/">
+              <ArrowLeft className="w-4 h-4 mr-2" /> {t("auth.form.home")}
+            </Link>
+          </Button>
         </div>
 
         {/* Auth Form Area */}
@@ -444,7 +487,12 @@ export default function AuthPage() {
           >
             <Card className="border-none shadow-2xl shadow-slate-200/50 bg-white rounded-[3rem] overflow-hidden">
               <CardHeader className="space-y-3 pt-12 pb-8 text-center px-10">
-                <CardTitle className="text-4xl font-black text-slate-950 tracking-tight"> {activeTab === "sign-in" ? t("auth.form.tabs.signIn") : t("auth.form.tabs.signUp")} </CardTitle>
+                <CardTitle className="text-4xl font-black text-slate-950 tracking-tight">
+                  {" "}
+                  {activeTab === "sign-in"
+                    ? t("auth.form.tabs.signIn")
+                    : t("auth.form.tabs.signUp")}{" "}
+                </CardTitle>
                 <CardDescription className="text-slate-500 font-medium text-lg leading-snug">
                   {activeTab === "sign-in"
                     ? t("auth.form.signInDesc")
@@ -461,7 +509,9 @@ export default function AuthPage() {
                         ? "bg-white text-[#214e41] shadow-xl shadow-slate-200/50"
                         : "text-slate-400 hover:text-slate-600 hover:bg-slate-100"
                     }`}
-                  >{t("auth.form.tabs.signIn")}</button>
+                  >
+                    {t("auth.form.tabs.signIn")}
+                  </button>
                   <button
                     onClick={() => handleTabChange("sign-up")}
                     className={`py-3 text-xs font-black uppercase tracking-widest rounded-xl transition-all duration-300 ${
@@ -469,14 +519,27 @@ export default function AuthPage() {
                         ? "bg-white text-[#214e41] shadow-xl shadow-slate-200/50"
                         : "text-slate-400 hover:text-slate-600 hover:bg-slate-100"
                     }`}
-                  >{t("auth.form.tabs.signUp")}</button>
+                  >
+                    {t("auth.form.tabs.signUp")}
+                  </button>
                 </div>
 
-                {activeTab === "sign-in" || mfaStep === "CONFIRM_SIGNUP" || mfaStep === "SETUP" ? (
+                {activeTab === "sign-in" ||
+                mfaStep === "CONFIRM_SIGNUP" ||
+                mfaStep === "SETUP" ? (
                   mfaStep === "CONFIRM_SIGNUP" ? (
                     <div className="space-y-6 text-center">
-                      <h3 className="text-xl font-bold"> {t("auth.form.mfa.confirmEmail")} </h3>
-                      <p className="text-sm text-slate-500">{t("auth.form.mfa.confirmEmailDesc")}<span className="font-bold text-slate-800">{pendingRegData?.email}</span>{t("auth.form.mfa.confirmEmailDesc2")}</p>
+                      <h3 className="text-xl font-bold">
+                        {" "}
+                        {t("auth.form.mfa.confirmEmail")}{" "}
+                      </h3>
+                      <p className="text-sm text-slate-500">
+                        {t("auth.form.mfa.confirmEmailDesc")}
+                        <span className="font-bold text-slate-800">
+                          {pendingRegData?.email}
+                        </span>
+                        {t("auth.form.mfa.confirmEmailDesc2")}
+                      </p>
                       <Input
                         placeholder={t("auth.form.mfa.enterOtp")}
                         value={mfaCode}
@@ -484,15 +547,35 @@ export default function AuthPage() {
                         className="text-center tracking-[0.5em] font-black text-xl h-14"
                         maxLength={6}
                       />
-                      <Button onClick={handleConfirmSignup} className="w-full bg-[#214e41] hover:bg-black h-16 rounded-2xl text-lg font-black shadow-lg">{t("auth.form.mfa.confirmBtn")}</Button>
-                      <button onClick={() => { setMfaStep("NONE"); setMfaCode(""); setPendingRegData(null); }} className="text-sm text-[#214e41] font-bold mt-4">{t("auth.form.mfa.cancelBtn")}</button>
+                      <Button
+                        onClick={handleConfirmSignup}
+                        className="w-full bg-[#214e41] hover:bg-black h-16 rounded-2xl text-lg font-black shadow-lg"
+                      >
+                        {t("auth.form.mfa.confirmBtn")}
+                      </Button>
+                      <button
+                        onClick={() => {
+                          setMfaStep("NONE");
+                          setMfaCode("");
+                          setPendingRegData(null);
+                        }}
+                        className="text-sm text-[#214e41] font-bold mt-4"
+                      >
+                        {t("auth.form.mfa.cancelBtn")}
+                      </button>
                     </div>
                   ) : mfaStep === "SETUP" ? (
                     <div className="space-y-6 text-center">
-                      <h3 className="text-xl font-bold">{t("auth.form.mfa.setupTitle")}</h3>
-                      <p className="text-sm text-slate-500">{t("auth.form.mfa.setupDesc")}</p>
+                      <h3 className="text-xl font-bold">
+                        {t("auth.form.mfa.setupTitle")}
+                      </h3>
+                      <p className="text-sm text-slate-500">
+                        {t("auth.form.mfa.setupDesc")}
+                      </p>
                       <div className="flex justify-center p-4">
-                         {mfaQrCode && <QRCodeSVG value={mfaQrCode} size={200} />}
+                        {mfaQrCode && (
+                          <QRCodeSVG value={mfaQrCode} size={200} />
+                        )}
                       </div>
                       <Input
                         placeholder={t("auth.form.mfa.enterAppCode")}
@@ -501,13 +584,27 @@ export default function AuthPage() {
                         className="text-center tracking-[0.5em] font-black text-xl h-14"
                         maxLength={6}
                       />
-                      <Button onClick={handleVerifyMfaSetup} className="w-full bg-[#214e41] hover:bg-black h-16 rounded-2xl text-lg font-black shadow-lg">{t("auth.form.mfa.setupBtn")}</Button>
-                      <button onClick={() => setMfaStep("NONE")} className="text-sm text-[#214e41] font-bold mt-4">Quay lại</button>
+                      <Button
+                        onClick={handleVerifyMfaSetup}
+                        className="w-full bg-[#214e41] hover:bg-black h-16 rounded-2xl text-lg font-black shadow-lg"
+                      >
+                        {t("auth.form.mfa.setupBtn")}
+                      </Button>
+                      <button
+                        onClick={() => setMfaStep("NONE")}
+                        className="text-sm text-[#214e41] font-bold mt-4"
+                      >
+                        Quay lại
+                      </button>
                     </div>
                   ) : mfaStep === "VERIFY" ? (
                     <div className="space-y-6 text-center">
-                      <h3 className="text-xl font-bold">{t("auth.form.mfa.verifyTitle")}</h3>
-                      <p className="text-sm text-slate-500">{t("auth.form.mfa.verifyDesc")}</p>
+                      <h3 className="text-xl font-bold">
+                        {t("auth.form.mfa.verifyTitle")}
+                      </h3>
+                      <p className="text-sm text-slate-500">
+                        {t("auth.form.mfa.verifyDesc")}
+                      </p>
                       <Input
                         placeholder="••••••"
                         value={mfaCode}
@@ -515,71 +612,93 @@ export default function AuthPage() {
                         className="text-center tracking-[0.5em] font-black text-xl h-14"
                         maxLength={6}
                       />
-                      <Button onClick={handleVerifyMfaLogin} className="w-full bg-[#214e41] hover:bg-black h-16 rounded-2xl text-lg font-black shadow-lg">{t("auth.form.mfa.confirmBtn")}</Button>
-                      <button onClick={() => setMfaStep("NONE")} className="text-sm text-[#214e41] font-bold mt-4">{t("auth.form.mfa.cancelBtn")}</button>
+                      <Button
+                        onClick={handleVerifyMfaLogin}
+                        className="w-full bg-[#214e41] hover:bg-black h-16 rounded-2xl text-lg font-black shadow-lg"
+                      >
+                        {t("auth.form.mfa.confirmBtn")}
+                      </Button>
+                      <button
+                        onClick={() => setMfaStep("NONE")}
+                        className="text-sm text-[#214e41] font-bold mt-4"
+                      >
+                        {t("auth.form.mfa.cancelBtn")}
+                      </button>
                     </div>
                   ) : (
-                  <div className="space-y-8">
-                    <div className="space-y-3">
-                      <Label
-                        htmlFor="email"
-                        className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 pl-1"
-                      >{t("auth.form.fields.email")} <span className="text-[#f2ce3c]">*</span>
-                      </Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder={t("auth.form.fields.placeholders.email")}
-                        value={loginEmail}
-                        onChange={(e) => setLoginEmail(e.target.value)}
-                        className="h-14 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-[#214e41] focus:ring-4 focus:ring-[#214e41]/10 rounded-2xl text-lg font-medium transition-all"
-                      />
-                    </div>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between pl-1">
+                    <div className="space-y-8">
+                      <div className="space-y-3">
                         <Label
-                          htmlFor="password"
-                          className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400"
-                        >{t("auth.form.fields.password")} <span className="text-[#f2ce3c]">*</span>
-                        </Label>
-                        <button className="text-[10px] font-black uppercase tracking-widest text-[#214e41] hover:text-[#f2ce3c] transition-colors">{t("auth.form.fields.forgotPwd")}</button>
-                      </div>
-                      <div className="relative">
-                        <Input
-                          id="password"
-                          type={showLoginPassword ? "text" : "password"}
-                          placeholder="••••••••"
-                          value={loginPassword}
-                          onChange={(e) => setLoginPassword(e.target.value)}
-                          onKeyDown={(e) => e.key === "Enter" && handleLogin()}
-                          className="h-14 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-[#214e41] focus:ring-4 focus:ring-[#214e41]/10 rounded-2xl text-lg font-medium pr-12 transition-all"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowLoginPassword(!showLoginPassword)}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                          htmlFor="email"
+                          className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 pl-1"
                         >
-                          {showLoginPassword ? (
-                            <EyeOff className="w-5 h-5" />
-                          ) : (
-                            <Eye className="w-5 h-5" />
-                          )}
-                        </button>
+                          {t("auth.form.fields.email")}{" "}
+                          <span className="text-[#f2ce3c]">*</span>
+                        </Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          placeholder={t("auth.form.fields.placeholders.email")}
+                          value={loginEmail}
+                          onChange={(e) => setLoginEmail(e.target.value)}
+                          className="h-14 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-[#214e41] focus:ring-4 focus:ring-[#214e41]/10 rounded-2xl text-lg font-medium transition-all"
+                        />
                       </div>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between pl-1">
+                          <Label
+                            htmlFor="password"
+                            className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400"
+                          >
+                            {t("auth.form.fields.password")}{" "}
+                            <span className="text-[#f2ce3c]">*</span>
+                          </Label>
+                          <button className="text-[10px] font-black uppercase tracking-widest text-[#214e41] hover:text-[#f2ce3c] transition-colors">
+                            {t("auth.form.fields.forgotPwd")}
+                          </button>
+                        </div>
+                        <div className="relative">
+                          <Input
+                            id="password"
+                            type={showLoginPassword ? "text" : "password"}
+                            placeholder="••••••••"
+                            value={loginPassword}
+                            onChange={(e) => setLoginPassword(e.target.value)}
+                            onKeyDown={(e) =>
+                              e.key === "Enter" && handleLogin()
+                            }
+                            className="h-14 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-[#214e41] focus:ring-4 focus:ring-[#214e41]/10 rounded-2xl text-lg font-medium pr-12 transition-all"
+                          />
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setShowLoginPassword(!showLoginPassword)
+                            }
+                            className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                          >
+                            {showLoginPassword ? (
+                              <EyeOff className="w-5 h-5" />
+                            ) : (
+                              <Eye className="w-5 h-5" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                      <Button
+                        onClick={handleLogin}
+                        disabled={loading}
+                        className="w-full bg-[#214e41] hover:bg-black h-16 rounded-2xl text-lg font-black shadow-2xl shadow-slate-900/10 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-70 disabled:hover:scale-100"
+                      >
+                        {loading ? (
+                          <>
+                            <Loader2 className="w-5 h-5 mr-3 animate-spin" />{" "}
+                            {t("auth.form.buttons.processing")}{" "}
+                          </>
+                        ) : (
+                          t("auth.form.buttons.continue")
+                        )}
+                      </Button>
                     </div>
-                    <Button
-                      onClick={handleLogin}
-                      disabled={loading}
-                      className="w-full bg-[#214e41] hover:bg-black h-16 rounded-2xl text-lg font-black shadow-2xl shadow-slate-900/10 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-70 disabled:hover:scale-100"
-                    >
-                      {loading ? (
-                        <>
-                          <Loader2 className="w-5 h-5 mr-3 animate-spin" /> {t("auth.form.buttons.processing")} </>
-                      ) : (
-                        t("auth.form.buttons.continue")
-                      )}
-                    </Button>
-                  </div>
                   )
                 ) : (
                   <div className="space-y-6">
@@ -587,7 +706,9 @@ export default function AuthPage() {
                       <Label
                         htmlFor="fullname"
                         className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
-                      >{t("auth.form.fields.fullname")} <span className="text-[#f2ce3c]">*</span>
+                      >
+                        {t("auth.form.fields.fullname")}{" "}
+                        <span className="text-[#f2ce3c]">*</span>
                       </Label>
                       <Input
                         id="fullname"
@@ -600,7 +721,9 @@ export default function AuthPage() {
                       <Label
                         htmlFor="reg-email"
                         className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
-                      >{t("auth.form.fields.regEmail")} <span className="text-[#f2ce3c]">*</span>
+                      >
+                        {t("auth.form.fields.regEmail")}{" "}
+                        <span className="text-[#f2ce3c]">*</span>
                       </Label>
                       <Input
                         id="reg-email"
@@ -615,84 +738,114 @@ export default function AuthPage() {
                         <Label
                           htmlFor="reg-citizen-id"
                           className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
-                        >{t("auth.form.fields.citizenId")} <span className="text-[#f2ce3c]">*</span>
+                        >
+                          {t("auth.form.fields.citizenId")}{" "}
+                          <span className="text-[#f2ce3c]">*</span>
                         </Label>
-                        <span className={`text-[10px] font-black tracking-widest ${regCitizenIdNumber.length === 12 ? 'text-green-500' : 'text-slate-400'}`}>
+                        <span
+                          className={`text-[10px] font-black tracking-widest ${regCitizenIdNumber.length === 12 ? "text-green-500" : "text-slate-400"}`}
+                        >
                           {regCitizenIdNumber.length}/12
                         </span>
                       </div>
                       <Input
                         id="reg-citizen-id"
                         type="text"
-                        placeholder={t("auth.form.fields.placeholders.citizenId")}
+                        placeholder={t(
+                          "auth.form.fields.placeholders.citizenId",
+                        )}
                         value={regCitizenIdNumber}
-                        onChange={(e) => setRegCitizenIdNumber(e.target.value.replace(/\D/g, '').slice(0, 12))}
+                        onChange={(e) =>
+                          setRegCitizenIdNumber(
+                            e.target.value.replace(/\D/g, "").slice(0, 12),
+                          )
+                        }
                         className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-[#214e41] rounded-2xl font-medium tracking-widest"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label
-                            htmlFor="reg-phone"
-                            className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
-                          >{t("auth.form.fields.phone")} <span className="text-[#f2ce3c]">*</span>
-                          </Label>
-                          <Input
-                            id="reg-phone"
-                            type="tel"
-                            value={regPhone}
-                            onChange={(e) => setRegPhone(e.target.value.replace(/\D/g, ''))}
-                            className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-[#214e41] rounded-2xl font-medium"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label
-                            htmlFor="reg-dob"
-                            className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
-                          >{t("auth.form.fields.dob")} <span className="text-[#f2ce3c]">*</span>
-                          </Label>
-                          <Input
-                            id="reg-dob"
-                            type="date"
-                            value={regDob}
-                            onChange={(e) => setRegDob(e.target.value)}
-                            className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-[#214e41] rounded-2xl font-medium"
-                          />
-                        </div>
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="reg-phone"
+                          className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
+                        >
+                          {t("auth.form.fields.phone")}{" "}
+                          <span className="text-[#f2ce3c]">*</span>
+                        </Label>
+                        <Input
+                          id="reg-phone"
+                          type="tel"
+                          value={regPhone}
+                          onChange={(e) =>
+                            setRegPhone(e.target.value.replace(/\D/g, ""))
+                          }
+                          className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-[#214e41] rounded-2xl font-medium"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="reg-dob"
+                          className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
+                        >
+                          {t("auth.form.fields.dob")}{" "}
+                          <span className="text-[#f2ce3c]">*</span>
+                        </Label>
+                        <Input
+                          id="reg-dob"
+                          type="date"
+                          value={regDob}
+                          onChange={(e) => setRegDob(e.target.value)}
+                          className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-[#214e41] rounded-2xl font-medium"
+                        />
+                      </div>
                     </div>
 
                     <div className="space-y-2">
-                       <Label
-                         htmlFor="gender"
-                         className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
-                       >{t("auth.form.fields.gender")} <span className="text-[#f2ce3c]">*</span>
-                       </Label>
-                       <Select
-                         value={regGender}
-                         onValueChange={(val) =>
-                           setRegGender(val as "MALE" | "FEMALE" | "OTHER")
-                         }
-                       >
-                         <SelectTrigger
-                           id="gender"
-                           className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white rounded-2xl text-slate-700 font-medium"
-                         >
-                           <SelectValue placeholder={t("auth.form.fields.placeholders.gender")} />
-                         </SelectTrigger>
-                         <SelectContent className="rounded-2xl border-slate-100 shadow-2xl">
-                           <SelectItem value="MALE">{t("auth.form.fields.genderOpts.male")}</SelectItem>
-                           <SelectItem value="FEMALE">{t("auth.form.fields.genderOpts.female")}</SelectItem>
-                           <SelectItem value="OTHER">{t("auth.form.fields.genderOpts.other")}</SelectItem>
-                         </SelectContent>
-                       </Select>
+                      <Label
+                        htmlFor="gender"
+                        className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
+                      >
+                        {t("auth.form.fields.gender")}{" "}
+                        <span className="text-[#f2ce3c]">*</span>
+                      </Label>
+                      <Select
+                        value={regGender}
+                        onValueChange={(val) =>
+                          setRegGender(val as "MALE" | "FEMALE" | "OTHER")
+                        }
+                      >
+                        <SelectTrigger
+                          id="gender"
+                          className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white rounded-2xl text-slate-700 font-medium"
+                        >
+                          <SelectValue
+                            placeholder={t(
+                              "auth.form.fields.placeholders.gender",
+                            )}
+                          />
+                        </SelectTrigger>
+                        <SelectContent className="rounded-2xl border-slate-100 shadow-2xl">
+                          <SelectItem value="MALE">
+                            {t("auth.form.fields.genderOpts.male")}
+                          </SelectItem>
+                          <SelectItem value="FEMALE">
+                            {t("auth.form.fields.genderOpts.female")}
+                          </SelectItem>
+                          <SelectItem value="OTHER">
+                            {t("auth.form.fields.genderOpts.other")}
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
 
                     <div className="space-y-2">
                       <Label
                         htmlFor="reg-address"
                         className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
-                      >{t("auth.form.fields.address")} <span className="text-[#f2ce3c]">*</span>
+                      >
+                        {t("auth.form.fields.address")}{" "}
+                        <span className="text-[#f2ce3c]">*</span>
                       </Label>
                       <Input
                         id="reg-address"
@@ -706,7 +859,9 @@ export default function AuthPage() {
                       <Label
                         htmlFor="reg-password"
                         className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1"
-                      >{t("auth.form.fields.securePassword")} <span className="text-[#f2ce3c]">*</span>
+                      >
+                        {t("auth.form.fields.securePassword")}{" "}
+                        <span className="text-[#f2ce3c]">*</span>
                       </Label>
                       <div className="relative">
                         <Input
@@ -714,7 +869,9 @@ export default function AuthPage() {
                           type={showRegPassword ? "text" : "password"}
                           value={regPassword}
                           onChange={(e) => setRegPassword(e.target.value)}
-                          onKeyDown={(e) => e.key === "Enter" && handleRegister()}
+                          onKeyDown={(e) =>
+                            e.key === "Enter" && handleRegister()
+                          }
                           className="h-12 border-slate-100 bg-slate-50/50 focus:bg-white focus:border-[#214e41] rounded-2xl font-medium pr-12"
                         />
                         <button
@@ -738,7 +895,9 @@ export default function AuthPage() {
                     >
                       {registerLoading ? (
                         <>
-                          <Loader2 className="w-5 h-5 mr-3 animate-spin" /> {t("auth.form.buttons.processing")} </>
+                          <Loader2 className="w-5 h-5 mr-3 animate-spin" />{" "}
+                          {t("auth.form.buttons.processing")}{" "}
+                        </>
                       ) : (
                         t("auth.form.buttons.createAccount")
                       )}
@@ -751,18 +910,22 @@ export default function AuthPage() {
                   {activeTab === "sign-in" ? (
                     <>
                       {t("auth.form.footer.noAccount")}{" "}
-                    <button
+                      <button
                         onClick={() => handleTabChange("sign-up")}
                         className="text-[#214e41] font-black hover:text-[#f2ce3c] transition-colors"
-                      >{t("auth.form.footer.registerNow")}</button>
+                      >
+                        {t("auth.form.footer.registerNow")}
+                      </button>
                     </>
                   ) : (
                     <>
                       {t("auth.form.footer.hasAccount")}{" "}
-                    <button
+                      <button
                         onClick={() => handleTabChange("sign-in")}
                         className="text-[#214e41] font-black hover:text-[#f2ce3c] transition-colors"
-                      >{t("auth.form.footer.loginNow")}</button>
+                      >
+                        {t("auth.form.footer.loginNow")}
+                      </button>
                     </>
                   )}
                 </div>

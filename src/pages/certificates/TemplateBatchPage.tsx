@@ -292,11 +292,16 @@ export default function TemplateBatchPage() {
 
     const isSuccessTerminal =
       ["COMPLETED", "SUCCESS", "DONE"].includes(upperStatus) &&
-      progress.failureCount === 0 &&
       progress.successCount > 0;
 
     if (isSuccessTerminal) {
-      toast.success("Tạo batch thành công");
+      if (progress.failureCount > 0) {
+        toast.warning(
+          `Batch hoàn tất: ${progress.successCount} thành công, ${progress.failureCount} thất bại.`,
+        );
+      } else {
+        toast.success("Tạo batch thành công");
+      }
       navigate(`/org/${orgCode}/certificates`, {
         replace: true,
         state: {

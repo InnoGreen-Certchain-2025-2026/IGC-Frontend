@@ -15,6 +15,31 @@ function toPercent(valuePx: number, totalPx: number) {
   return Number(((valuePx / totalPx) * 100).toFixed(2));
 }
 
+function mapFontFamily(fontFamily?: string) {
+  const key = (fontFamily ?? "helvetica").toLowerCase();
+  const mapping: Record<string, string> = {
+    helvetica: "Helvetica, Arial, sans-serif",
+    "helvetica-bold": "Helvetica, Arial, sans-serif",
+    times: "Times New Roman, serif",
+    "times-bold": "Times New Roman, serif",
+    courier: "Courier New, monospace",
+    "courier-bold": "Courier New, monospace",
+    arial: "Arial, sans-serif",
+    "arial-bold": "Arial, sans-serif",
+    "sans-serif": "sans-serif",
+    "sans-bold": "sans-serif",
+    serif: "serif",
+    "serif-bold": "serif",
+    monospace: "monospace",
+    "mono-bold": "monospace",
+  };
+  return mapping[key] ?? "Helvetica, Arial, sans-serif";
+}
+
+function mapFontWeight(fontFamily?: string) {
+  return (fontFamily ?? "").toLowerCase().includes("bold") ? 700 : 500;
+}
+
 interface PdfCanvasViewerProps {
   pdfUrl: string | null;
   fields: TemplateField[];
@@ -137,10 +162,32 @@ export default function PdfCanvasViewer({
                 className={`border ${selected ? "border-blue-600" : "border-blue-400"} bg-blue-100/20`}
                 enableUserSelectHack={false}
               >
-                <div className="relative flex h-full w-full items-center justify-center text-[11px] font-medium text-blue-700">
-                  <span className="rounded bg-white/90 px-2 py-0.5">
+                <div className="relative flex h-full w-full px-2 py-1">
+                  <div
+                    className="w-full overflow-hidden whitespace-nowrap"
+                    style={{
+                      textAlign: (field.align ?? "left") as
+                        | "left"
+                        | "center"
+                        | "right",
+                      alignSelf: "center",
+                      fontFamily: mapFontFamily(field.fontFamily),
+                      fontWeight: mapFontWeight(field.fontFamily),
+                      fontSize: `${field.fontSize ?? 11}px`,
+                      color:
+                        field.type === "image"
+                          ? "#0f766e"
+                          : (field.color ?? "#1A1A1A"),
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    {field.type === "image" ? "[signature]" : "Example"}
+                  </div>
+
+                  <span className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded bg-white/95 px-1.5 py-0 text-[10px] font-medium text-blue-700">
                     {field.name}
                   </span>
+
                   {selected ? (
                     <button
                       type="button"

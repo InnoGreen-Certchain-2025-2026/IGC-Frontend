@@ -12,6 +12,27 @@ interface VerificationResultModalProps {
   onClose: () => void;
 }
 
+function formatIssueTimestamp(value: string | number, locale: string): string {
+  const raw = typeof value === "string" ? Number(value.trim()) : value;
+
+  if (Number.isFinite(raw)) {
+    // 10-digit Unix timestamp (seconds) from backend => convert to ms.
+    const normalizedMs = raw < 1e12 ? raw * 1000 : raw;
+    const dateFromNumber = new Date(normalizedMs);
+    if (!Number.isNaN(dateFromNumber.getTime())) {
+      return dateFromNumber.toLocaleDateString(locale);
+    }
+  }
+
+  // Fallback for ISO/date-like strings.
+  const dateFromString = new Date(value);
+  if (!Number.isNaN(dateFromString.getTime())) {
+    return dateFromString.toLocaleDateString(locale);
+  }
+
+  return "-";
+}
+
 export default function VerificationResultModal({
   result,
   isOpen,
@@ -135,20 +156,6 @@ export default function VerificationResultModal({
                       </span>
                     </div>
                   )}
-                  {result?.studentName && (
-                    <div className="flex justify-between">
-                      <span className="font-medium text-slate-600">
-                        {t("landingPage.verification.modal.student")}:
-                      </span>
-                      <span
-                        className={
-                          result?.valid ? "text-emerald-700" : "text-red-700"
-                        }
-                      >
-                        {result.studentName}
-                      </span>
-                    </div>
-                  )}
                   {result?.issuer && (
                     <div className="flex justify-between">
                       <span className="font-medium text-slate-600">
@@ -173,7 +180,8 @@ export default function VerificationResultModal({
                           result?.valid ? "text-emerald-700" : "text-red-700"
                         }
                       >
-                        {new Date(result.issueTimestamp).toLocaleDateString(
+                        {formatIssueTimestamp(
+                          result.issueTimestamp,
                           i18n.language === "vi" ? "vi-VN" : "en-US",
                         )}
                       </span>

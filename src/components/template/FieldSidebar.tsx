@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -9,10 +9,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import type { TemplateField, TemplateFieldType } from "@/types/template";
+import type {
+  SchemaOptionsResponse,
+  TemplateField,
+  TemplateFieldType,
+} from "@/types/template";
 
 interface FieldSidebarProps {
   fields: TemplateField[];
+  schemaOptions: SchemaOptionsResponse;
+  optionsLoading?: boolean;
   selectedFieldId: string | null;
   onSelectField: (id: string) => void;
   onDeleteField: (id: string) => void;
@@ -22,6 +28,8 @@ interface FieldSidebarProps {
 
 export default function FieldSidebar({
   fields,
+  schemaOptions,
+  optionsLoading = false,
   selectedFieldId,
   onSelectField,
   onDeleteField,
@@ -30,9 +38,69 @@ export default function FieldSidebar({
 }: FieldSidebarProps) {
   const [newFieldName, setNewFieldName] = useState("");
   const [newFieldType, setNewFieldType] = useState<TemplateFieldType>("text");
+  const [fontSizeInput, setFontSizeInput] = useState("");
 
   const selectedField =
     fields.find((field) => field.id === selectedFieldId) ?? null;
+
+  useEffect(() => {
+    if (!selectedField || selectedField.type === "image") {
+      setFontSizeInput("");
+      return;
+    }
+
+    setFontSizeInput(
+      String(selectedField.fontSize ?? schemaOptions.defaultFontSize),
+    );
+  }, [
+    schemaOptions.defaultFontSize,
+    selectedField?.fontSize,
+    selectedField?.id,
+    selectedField?.type,
+  ]);
+
+  const commitFontSizeInput = () => {
+    if (!selectedField || selectedField.type === "image") return;
+
+    const raw = fontSizeInput.trim();
+    const fallback = selectedField.fontSize ?? schemaOptions.defaultFontSize;
+
+    if (!raw) {
+      setFontSizeInput(String(fallback));
+      return;
+    }
+
+    const parsed = Number(raw);
+    if (!Number.isFinite(parsed)) {
+      setFontSizeInput(String(fallback));
+      return;
+    }
+
+    const bounded = Math.max(
+      schemaOptions.minFontSize,
+      Math.min(schemaOptions.maxFontSize, parsed),
+    );
+
+    onUpdateField(selectedField.id, { fontSize: bounded });
+    setFontSizeInput(String(bounded));
+  };
+
+  const previewFontMap: Record<string, string> = {
+    helvetica: "Helvetica, Arial, sans-serif",
+    "helvetica-bold": "Helvetica, Arial, sans-serif",
+    times: "Times New Roman, serif",
+    "times-bold": "Times New Roman, serif",
+    courier: "Courier New, monospace",
+    "courier-bold": "Courier New, monospace",
+    arial: "Arial, sans-serif",
+    "arial-bold": "Arial, sans-serif",
+    "sans-serif": "sans-serif",
+    "sans-bold": "sans-serif",
+    serif: "serif",
+    "serif-bold": "serif",
+    monospace: "monospace",
+    "mono-bold": "monospace",
+  };
 
   const createHint = useMemo(() => {
     if (newFieldType !== "image") return null;
@@ -189,13 +257,18 @@ export default function FieldSidebar({
                   Font size
                 </label>
                 <Input
-                  type="number"
-                  value={selectedField.fontSize ?? 12}
-                  onChange={(event) =>
-                    onUpdateField(selectedField.id, {
-                      fontSize: Number(event.target.value),
-                    })
-                  }
+                  type="text"
+                  inputMode="numeric"
+                  value={fontSizeInput}
+                  onChange={(event) => setFontSizeInput(event.target.value)}
+                  onBlur={commitFontSizeInput}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      event.preventDefault();
+                      commitFontSizeInput();
+                    }
+                  }}
+                  disabled={selectedField.type === "image"}
                 />
               </div>
               <div className="space-y-1.5">
@@ -209,9 +282,95 @@ export default function FieldSidebar({
                       color: event.target.value,
                     })
                   }
+                  disabled={selectedField.type === "image"}
                 />
               </div>
             </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-slate-600">
+                Font family
+              </label>
+              <Select
+                value={
+                  selectedField.fontFamily ?? schemaOptions.fontFamilies[0]
+                }
+                onValueChange={(value) =>
+                  onUpdateField(selectedField.id, { fontFamily: value })
+                }
+                disabled={selectedField.type === "image" || optionsLoading}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {schemaOptions.fontFamilies.map((font) => (
+                    <SelectItem key={font} value={font}>
+                      {font}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-slate-600">
+                Align
+              </label>
+              <Select
+                value={selectedField.align ?? schemaOptions.alignments[0]}
+                onValueChange={(value) =>
+                  onUpdateField(selectedField.id, {
+                    align: value as TemplateField["align"],
+                  })
+                }
+                disabled={selectedField.type === "image" || optionsLoading}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {schemaOptions.alignments.map((alignment) => (
+                    <SelectItem key={alignment} value={alignment}>
+                      {alignment}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {selectedField.type === "image" ? (
+              <div className="rounded-md border border-sky-200 bg-sky-50 p-2 text-xs text-sky-700">
+                Field image không chỉnh style text.
+              </div>
+            ) : (
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-slate-600">
+                  Demo kiểu chữ
+                </label>
+                <div
+                  className="rounded-md border bg-slate-50 px-3 py-2"
+                  style={{
+                    fontFamily:
+                      previewFontMap[selectedField.fontFamily ?? "helvetica"] ??
+                      "Helvetica, Arial, sans-serif",
+                    fontWeight: (selectedField.fontFamily ?? "").includes(
+                      "bold",
+                    )
+                      ? 700
+                      : 500,
+                    fontSize: `${selectedField.fontSize ?? schemaOptions.defaultFontSize}px`,
+                    color: selectedField.color ?? "#1A1A1A",
+                    textAlign: (selectedField.align ?? "left") as
+                      | "left"
+                      | "center"
+                      | "right",
+                  }}
+                >
+                  Example
+                </div>
+              </div>
+            )}
 
             <Button
               type="button"

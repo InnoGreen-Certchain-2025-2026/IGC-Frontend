@@ -6,6 +6,7 @@ import type {
   BatchStartResponse,
   BulkCertificateUploadPayload,
   SaveSchemaRequest,
+  SchemaOptionsResponse,
   TemplateFieldRequest,
   TemplateResponse,
   TemplateUploadPayload,
@@ -51,6 +52,13 @@ function getBlobFilename(
 }
 
 export const templateApi = {
+  async getSchemaOptions(): Promise<SchemaOptionsResponse> {
+    const response = await axiosInstance.get<
+      ApiResponse<SchemaOptionsResponse>
+    >("/api/templates/schema/options");
+    return response.data.data;
+  },
+
   async getTemplates(orgId: number, keyword = "") {
     const response = await axiosInstance.get<ApiResponse<TemplateResponse[]>>(
       "/api/templates",

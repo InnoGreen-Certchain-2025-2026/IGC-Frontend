@@ -82,6 +82,8 @@ export default function TemplateEditorPage() {
     metadataLoading,
     pdfLoading,
     saveLoading,
+    schemaOptions,
+    optionsLoading,
     error,
     lastSavedAt,
     setSelectedFieldId,
@@ -224,6 +226,8 @@ export default function TemplateEditorPage() {
 
           <FieldSidebar
             fields={fields}
+            schemaOptions={schemaOptions}
+            optionsLoading={optionsLoading}
             selectedFieldId={selectedFieldId}
             onSelectField={setSelectedFieldId}
             onDeleteField={removeField}

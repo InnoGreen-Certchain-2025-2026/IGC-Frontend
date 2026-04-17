@@ -13,10 +13,93 @@ import FieldsListTab from "./FieldsListTab";
 import { templateSchemaService } from "@/services/templateSchemaService";
 import { templateApi } from "@/services/templateApi";
 import type { EditorMode, FieldType, TemplateField } from "./types";
+import type {
+  SchemaOptionsResponse,
+  TemplateFieldAlign,
+} from "@/types/template";
 import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 
 const PDF_WIDTH_BASE = 600;
+const DEFAULT_SCHEMA_OPTIONS: SchemaOptionsResponse = {
+  fontFamilies: [
+    "helvetica",
+    "helvetica-bold",
+    "times",
+    "times-bold",
+    "courier",
+    "courier-bold",
+    "arial",
+    "arial-bold",
+    "sans-serif",
+    "sans-bold",
+    "serif",
+    "serif-bold",
+    "monospace",
+    "mono-bold",
+  ],
+  alignments: ["left", "center", "right"],
+  minFontSize: 6,
+  maxFontSize: 72,
+  defaultFontSize: 11,
+};
+
+function clampPercent(value: number) {
+  if (!Number.isFinite(value)) return 0;
+  return Math.max(0, Math.min(100, Number(value.toFixed(2))));
+}
+
+function normalizeField(
+  field: TemplateField,
+  options: SchemaOptionsResponse,
+): TemplateField {
+  const normalized: TemplateField = {
+    ...field,
+    x: clampPercent(field.x),
+    y: clampPercent(field.y),
+    w: clampPercent(field.w),
+    h: clampPercent(field.h),
+  };
+
+  if (normalized.type === "image") {
+    return {
+      ...normalized,
+      name: "signature",
+      fontFamily: undefined,
+      fontSize: undefined,
+      align: undefined,
+      color: undefined,
+    };
+  }
+
+  const fontFamily =
+    normalized.fontFamily &&
+    options.fontFamilies.includes(normalized.fontFamily)
+      ? normalized.fontFamily
+      : (options.fontFamilies[0] ?? "helvetica");
+
+  const align =
+    normalized.align && options.alignments.includes(normalized.align)
+      ? normalized.align
+      : (options.alignments[0] ?? "left");
+
+  const fontSize = Number(normalized.fontSize ?? options.defaultFontSize);
+  const boundedFontSize = Math.max(
+    options.minFontSize,
+    Math.min(
+      options.maxFontSize,
+      Number.isFinite(fontSize) ? fontSize : options.defaultFontSize,
+    ),
+  );
+
+  return {
+    ...normalized,
+    fontFamily,
+    align: align as TemplateFieldAlign,
+    fontSize: boundedFontSize,
+    color: normalized.color ?? "#1A1A1A",
+  };
+}
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
@@ -47,11 +130,37 @@ export default function TemplateEditor({
   const [templateName, setTemplateName] = useState<string>("");
   const [isAutoSaving, setIsAutoSaving] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [schemaOptions, setSchemaOptions] = useState<SchemaOptionsResponse>(
+    DEFAULT_SCHEMA_OPTIONS,
+  );
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
 
   const pdfWidth = Math.round(PDF_WIDTH_BASE * zoomLevel);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadSchemaOptions = async () => {
+      try {
+        const response = await templateApi.getSchemaOptions();
+        if (!cancelled) {
+          setSchemaOptions(response);
+        }
+      } catch {
+        if (!cancelled) {
+          setSchemaOptions(DEFAULT_SCHEMA_OPTIONS);
+        }
+      }
+    };
+
+    loadSchemaOptions();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     if (!templateId || !orgId) {
@@ -72,7 +181,11 @@ export default function TemplateEditor({
 
         setActiveTemplateId(response.id);
         setTemplateName(response.name);
-        setFields(response.fields ?? []);
+        setFields(
+          (response.fields ?? []).map((field) =>
+            normalizeField(field, schemaOptions),
+          ),
+        );
 
         if (response.pdfUrl) {
           setTemplatePdfUrl(response.pdfUrl);
@@ -103,7 +216,7 @@ export default function TemplateEditor({
         URL.revokeObjectURL(objectUrl);
       }
     };
-  }, [orgId, templateId]);
+  }, [orgId, schemaOptions, templateId]);
 
   // Auto-save schema when fields change
   useEffect(() => {
@@ -305,9 +418,13 @@ export default function TemplateEditor({
       y: field.y,
       w: field.w,
       h: field.h,
+      fontFamily: schemaOptions.fontFamilies[0] ?? "helvetica",
+      fontSize: schemaOptions.defaultFontSize,
+      align: (schemaOptions.alignments[0] ?? "left") as TemplateFieldAlign,
+      color: "#1A1A1A",
     };
 
-    setFields((prev) => [...prev, newField]);
+    setFields((prev) => [...prev, normalizeField(newField, schemaOptions)]);
     setSelectedId(newField.id);
     setMode("select");
     setPendingName(null);
@@ -330,7 +447,9 @@ export default function TemplateEditor({
   const updateField = (fieldId: string, updates: Partial<TemplateField>) => {
     setFields((prev) =>
       prev.map((field) =>
-        field.id === fieldId ? { ...field, ...updates } : field,
+        field.id === fieldId
+          ? normalizeField({ ...field, ...updates }, schemaOptions)
+          : field,
       ),
     );
   };
@@ -580,6 +699,7 @@ export default function TemplateEditor({
 
               <FieldSidebar
                 fields={fields}
+                schemaOptions={schemaOptions}
                 selectedId={selectedId}
                 onSelect={(fieldId) => {
                   setSelectedId(fieldId);
@@ -588,6 +708,7 @@ export default function TemplateEditor({
                 }}
                 onRename={(fieldId, name) => updateField(fieldId, { name })}
                 onTypeChange={(fieldId, type) => updateField(fieldId, { type })}
+                onUpdateField={updateField}
                 onDelete={deleteField}
                 onCreateManualField={handleCreateManualField}
               />

@@ -42,6 +42,14 @@ export interface TemplateUploadPayload {
   pdfFile: File;
 }
 
+export interface SchemaOptionsResponse {
+  fontFamilies: string[];
+  alignments: TemplateFieldAlign[];
+  minFontSize: number;
+  maxFontSize: number;
+  defaultFontSize: number;
+}
+
 export interface BatchStartResponse {
   batchId: string;
   status: string;
