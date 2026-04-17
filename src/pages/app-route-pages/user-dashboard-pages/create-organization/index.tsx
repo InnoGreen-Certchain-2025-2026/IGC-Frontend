@@ -35,66 +35,7 @@ const STEPS = [
   { title: "Hoàn tất", description: "Kiểm tra & Tạo", icon: ShieldCheck },
 ];
 
-const PLANS = [
-  {
-    id: "BASIC" as const,
-    name: "Gói Basic",
-    description: "Phù hợp trung tâm nhỏ",
-    price: "299k",
-    period: "1 tháng",
-    limit: "2000 chứng chỉ 1 năm",
-    includes: [
-      "Cấp chứng chỉ PDF",
-      "Xác thực bằng file hash",
-      "Lưu trữ S3",
-      "API cơ bản",
-    ],
-    support: [
-      "Email support",
-      "Tài liệu hướng dẫn",
-    ],
-    icon: Building2,
-  },
-  {
-    id: "PRO" as const,
-    name: "Gói Pro",
-    description: "Phù hợp trường đại học",
-    price: "1.999.999đ",
-    period: "/ tháng",
-    limit: "10, 000 chứng chỉ năm",
-    includes: [
-      "Bao gồm basic",
-      "Ghi hash lên blockchain",
-      "Quản trị cho admin",
-      "Hỗ trợ full API",
-    ],
-    support: [
-      "Support 24/07",
-      "Hướng dẫn triển khai",
-      "Thống kê cơ bản",
-    ],
-    icon: Zap,
-    popular: true,
-  },
-  {
-    id: "ENTERPRISE" as const,
-    name: "Gói Enterprise",
-    description: "Tổ chức lớn",
-    price: "9.999.999đ",
-    period: "tháng hoặc custom",
-    limit: "Không giới hạn",
-    includes: [
-      "Bao gồm Pro",
-      "Blockchain riêng",
-      "Sever riêng",
-    ],
-    support: [
-      "Hỗ trợ riêng",
-      "Tư vấn kỹ thuật",
-    ],
-    icon: ShieldCheck,
-  },
-];
+import { useTranslation } from "react-i18next";
 
 const PLAN_STYLES: Record<string, {
   border: string;
@@ -105,9 +46,10 @@ const PLAN_STYLES: Record<string, {
   price: string;
   badge: string;
   desc: string;
+  exceedPrice: string;
 }> = {
   BASIC: {
-    border: "hover:border-slate-400 hover:shadow-slate-200 hover:-translate-y-1 border-gray-100",
+    border: "hover:border-slate-400 hover:shadow-slate-200 hover:-translate-y-1 border-gray-200",
     borderActive: "border-slate-500 bg-slate-50/70 shadow-slate-200 ring-4 ring-slate-500/10 -translate-y-1",
     iconBg: "bg-slate-100 text-slate-500",
     iconBgActive: "bg-slate-600 text-white",
@@ -115,19 +57,21 @@ const PLAN_STYLES: Record<string, {
     price: "text-slate-800",
     badge: "bg-slate-600 text-white",
     desc: "text-slate-500",
+    exceedPrice: "text-red-600",
   },
   PRO: {
-    border: "hover:border-emerald-400 hover:shadow-emerald-200 hover:-translate-y-2 border-emerald-100",
-    borderActive: "border-emerald-500 bg-emerald-50/90 shadow-emerald-200 shadow-xl ring-4 ring-emerald-500/20 -translate-y-2",
-    iconBg: "bg-emerald-100 text-emerald-500",
-    iconBgActive: "bg-emerald-500 text-white",
-    title: "text-emerald-700",
-    price: "text-emerald-700",
-    badge: "bg-emerald-500 text-white shadow-md shadow-emerald-500/20",
-    desc: "text-emerald-600/80",
+    border: "hover:border-[#2d6a4f] hover:shadow-[#2d6a4f]/20 hover:-translate-y-2 border-[#2d6a4f]/30",
+    borderActive: "border-[#2d6a4f] bg-emerald-50/50 shadow-[#2d6a4f]/20 shadow-xl ring-4 ring-[#2d6a4f]/20 -translate-y-2 z-10",
+    iconBg: "bg-emerald-100 text-[#2d6a4f]",
+    iconBgActive: "bg-[#2d6a4f] text-white",
+    title: "text-[#2d6a4f]",
+    price: "text-[#2d6a4f]",
+    badge: "bg-[#2d6a4f] text-white shadow-md shadow-[#2d6a4f]/20",
+    desc: "text-emerald-700/80",
+    exceedPrice: "text-red-500",
   },
   ENTERPRISE: {
-    border: "hover:border-indigo-400 hover:shadow-indigo-200 hover:-translate-y-1 border-indigo-100",
+    border: "hover:border-indigo-400 hover:shadow-indigo-200 hover:-translate-y-1 border-indigo-200",
     borderActive: "border-indigo-500 bg-indigo-50/70 shadow-indigo-200 ring-4 ring-indigo-500/10 -translate-y-1",
     iconBg: "bg-indigo-100 text-indigo-500",
     iconBgActive: "bg-indigo-600 text-white",
@@ -135,10 +79,12 @@ const PLAN_STYLES: Record<string, {
     price: "text-indigo-800",
     badge: "bg-indigo-600 text-white",
     desc: "text-indigo-500/80",
+    exceedPrice: "text-red-600",
   }
 };
 
 export default function CreateOrganizationPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const step = parseInt(searchParams.get("step") || "1", 10);
@@ -146,6 +92,55 @@ export default function CreateOrganizationPage() {
   const setStep = (newStep: number) => {
     setSearchParams({ step: newStep.toString() }, { replace: true });
   };
+
+  const PLANS = [
+    {
+      id: "BASIC" as const,
+      name: t("landingPage.pricing.plans.basic.name"),
+      description: t("landingPage.pricing.plans.basic.description"),
+      price: t("landingPage.pricing.plans.basic.price"),
+      period: t("landingPage.pricing.plans.basic.period"),
+      limit: t("landingPage.pricing.plans.basic.limit"),
+      customText: t("landingPage.pricing.plans.basic.customText"),
+      exceedPrice: t("landingPage.pricing.plans.basic.exceedPrice"),
+      featuresTitle: t("landingPage.pricing.plans.basic.featuresTitle"),
+      includes: t("landingPage.pricing.plans.basic.includes", { returnObjects: true }) as string[],
+      supportTitle: t("landingPage.pricing.plans.basic.supportTitle"),
+      support: t("landingPage.pricing.plans.basic.support", { returnObjects: true }) as string[],
+      icon: Building2,
+    },
+    {
+      id: "PRO" as const,
+      name: t("landingPage.pricing.plans.pro.name"),
+      description: t("landingPage.pricing.plans.pro.description"),
+      price: t("landingPage.pricing.plans.pro.price"),
+      period: t("landingPage.pricing.plans.pro.period"),
+      limit: t("landingPage.pricing.plans.pro.limit"),
+      customText: t("landingPage.pricing.plans.pro.customText"),
+      exceedPrice: t("landingPage.pricing.plans.pro.exceedPrice"),
+      featuresTitle: t("landingPage.pricing.plans.pro.featuresTitle"),
+      includes: t("landingPage.pricing.plans.pro.includes", { returnObjects: true }) as string[],
+      supportTitle: t("landingPage.pricing.plans.pro.supportTitle"),
+      support: t("landingPage.pricing.plans.pro.support", { returnObjects: true }) as string[],
+      icon: Zap,
+      popular: true,
+    },
+    {
+      id: "ENTERPRISE" as const,
+      name: t("landingPage.pricing.plans.enterprise.name"),
+      description: t("landingPage.pricing.plans.enterprise.description"),
+      price: t("landingPage.pricing.plans.enterprise.price"),
+      period: t("landingPage.pricing.plans.enterprise.period"),
+      limit: t("landingPage.pricing.plans.enterprise.limit"),
+      customText: t("landingPage.pricing.plans.enterprise.customText"),
+      exceedPrice: t("landingPage.pricing.plans.enterprise.exceedPrice"),
+      featuresTitle: t("landingPage.pricing.plans.enterprise.featuresTitle"),
+      includes: t("landingPage.pricing.plans.enterprise.includes", { returnObjects: true }) as string[],
+      supportTitle: t("landingPage.pricing.plans.enterprise.supportTitle"),
+      support: t("landingPage.pricing.plans.enterprise.support", { returnObjects: true }) as string[],
+      icon: ShieldCheck,
+    },
+  ];
 
   const [formData, setFormData] = useState<CreateOrganizationRequest>({
     name: "",
@@ -641,7 +636,7 @@ export default function CreateOrganizationPage() {
 
         {/* Step 2: Service Plans */}
         {step === 2 && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-in fade-in slide-in-from-right-2 duration-300 md:items-end">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-in fade-in slide-in-from-right-2 duration-300 items-stretch max-w-5xl mx-auto pt-6">
             {PLANS.map((p) => {
               const styles = PLAN_STYLES[p.id];
               const isSelected = formData.servicePlan === p.id;
@@ -651,56 +646,70 @@ export default function CreateOrganizationPage() {
                 key={p.id}
                 onClick={() => setFormData({ ...formData, servicePlan: p.id })}
                 className={cn(
-                  "relative flex flex-col p-6 rounded-2xl border-2 cursor-pointer transition-all duration-300",
+                  "relative flex flex-col p-6 rounded-3xl border-2 cursor-pointer transition-all duration-300",
                   isSelected
                     ? styles.borderActive
                     : cn("bg-white", styles.border)
                 )}
               >
                 {p.popular && (
-                  <span className={cn("absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 text-[0.65rem] font-bold uppercase tracking-wider rounded-full", styles.badge)}>
-                    Khuyên dùng
-                  </span>
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-max">
+                     <span className={cn("px-4 py-1.5 text-[0.65rem] font-bold uppercase tracking-wider rounded-full", styles.badge)}>
+                       {t("landingPage.pricing.recommended")}
+                     </span>
+                  </div>
                 )}
                 <div
                   className={cn(
-                    "w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-colors mx-auto shadow-sm",
+                    "w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-colors mx-auto shadow-sm",
                     isSelected ? styles.iconBgActive : styles.iconBg,
                   )}
                 >
                   <p.icon size={24} />
                 </div>
-                <h4 className={cn("font-extrabold mb-2 text-center text-xl", styles.title)}>{p.name}</h4>
-                <p className={cn("text-[0.85rem] italic mb-4 text-center px-4", styles.desc)}>{p.description}</p>
+                <h4 className={cn("font-bold mb-1 text-center text-xl uppercase", styles.title)}>{p.name}</h4>
+                <p className={cn("text-[0.85rem] mb-4 text-center", styles.desc)}>{p.description}</p>
                 
-                <div className={cn("text-center mb-4 transition-colors", styles.price)}>
-                  <span className="text-2xl font-black">{p.price}</span>
-                  <span className="text-[0.95rem] font-semibold ml-1 opacity-80">{p.period}</span>
+                <div className={cn("text-center mb-1 font-bold transition-colors", styles.price)}>
+                  <span className="text-xl md:text-2xl font-black">{p.price}</span>
+                  {p.period && <span className="text-[0.95rem] font-semibold ml-1 opacity-80">{p.period}</span>}
                 </div>
                 
-                <p className={cn("text-[0.95rem] font-bold mb-6 text-center pb-6 border-b border-gray-100", styles.title)}>{p.limit}</p>
+                {p.customText && (
+                   <p className={cn("text-sm text-center mb-1 font-medium", styles.title)}>{p.customText}</p>
+                )}
 
-                <div className="space-y-4 mt-auto px-2">
-                  <div>
-                    <h5 className={cn("font-bold text-[0.95rem] mb-3 text-center", styles.title)}>Bao gồm:</h5>
-                    <div className="space-y-2.5 flex flex-col items-center">
-                      {p.includes.map((f, i) => (
-                        <div key={i} className="flex items-center text-[0.9rem] text-gray-600 text-center gap-2">
-                          <Check size={14} className={isSelected ? styles.title : "text-gray-300"} />
-                          <span>{f}</span>
-                        </div>
-                      ))}
+                {p.limit && (
+                   <p className={cn("text-sm text-center mb-1 font-semibold", styles.title)}>{p.limit}</p>
+                )}
+
+                <p className={cn("text-sm font-semibold mb-6 text-center", styles.exceedPrice)}>
+                  {p.exceedPrice}
+                </p>
+
+                <div className="mt-auto w-full flex justify-center pb-2">
+                  <div className="w-fit text-left">
+                    <div>
+                      <h5 className={cn("font-bold text-[0.95rem] mb-3", styles.title)}>{p.featuresTitle}</h5>
+                      <div className="space-y-2.5 flex flex-col">
+                        {p.includes.map((f, i) => (
+                          <div key={i} className="flex items-start text-[0.9rem] text-gray-600 gap-2.5">
+                            <Check size={16} className={cn("mt-[1px] shrink-0", isSelected ? styles.title : "text-gray-300")} strokeWidth={2.5} />
+                            <span>{f}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                  <div className="pt-2">
-                    <h5 className={cn("font-bold text-[0.95rem] mb-3 mt-4 text-center", styles.title)}>Hỗ trợ</h5>
-                    <div className="space-y-2.5 flex flex-col items-center">
-                      {p.support.map((f, i) => (
-                        <div key={i} className="flex items-center text-[0.9rem] text-gray-600 text-center gap-2">
-                          <Check size={14} className={isSelected ? styles.title : "text-gray-300"} />
-                          <span>{f}</span>
-                        </div>
-                      ))}
+                    <div className="pt-6">
+                      <h5 className={cn("font-bold text-[0.95rem] mb-3", styles.title)}>{p.supportTitle}</h5>
+                      <div className="space-y-2.5 flex flex-col">
+                        {p.support.map((f, i) => (
+                          <div key={i} className="flex items-start text-[0.9rem] text-gray-600 gap-2.5">
+                            <Check size={16} className={cn("mt-[1px] shrink-0", isSelected ? styles.title : "text-gray-300")} strokeWidth={2.5} />
+                            <span>{f}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>

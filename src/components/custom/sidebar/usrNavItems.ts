@@ -3,17 +3,17 @@ import type { NavSectionConfig } from "./navTypes";
 
 export const USR_MAIN_SECTIONS: NavSectionConfig[] = [
   {
-    title: "Danh mục",
+    title: "dashboard.sidebar.usr.category",
     items: [
       {
         to: "/usr",
-        label: "Chung",
+        label: "dashboard.sidebar.usr.general",
         icon: LayoutDashboard,
         end: true,
       },
       {
         to: "/usr/certificates",
-        label: "Danh sách bằng cấp",
+        label: "dashboard.sidebar.usr.certificates",
         icon: ScrollText,
       },
     ],
@@ -22,11 +22,11 @@ export const USR_MAIN_SECTIONS: NavSectionConfig[] = [
 
 export const USR_BOTTOM_SECTIONS: NavSectionConfig[] = [
   {
-    title: "Cài đặt",
+    title: "dashboard.sidebar.usr.settings",
     items: [
       {
         to: "/usr/organizations",
-        label: "Tổ chức",
+        label: "dashboard.sidebar.usr.organizations",
         icon: Building2,
       },
     ],

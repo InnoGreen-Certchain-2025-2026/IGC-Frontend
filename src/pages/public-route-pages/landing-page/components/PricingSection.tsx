@@ -1,113 +1,111 @@
 import { motion } from "framer-motion";
-import { ShieldCheck, Zap, Building2 } from "lucide-react";
+import { ShieldCheck, Zap, Building2, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const PLANS = [
-  {
-    id: "BASIC" as const,
-    name: "Gói Basic",
-    description: "Phù hợp trung tâm nhỏ",
-    price: "299k",
-    period: "1 tháng",
-    limit: "2000 chứng chỉ 1 năm",
-    includes: [
-      "Cấp chứng chỉ PDF",
-      "Xác thực bằng file hash",
-      "Lưu trữ S3",
-      "API cơ bản",
-    ],
-    support: [
-      "Email support",
-      "Tài liệu hướng dẫn",
-    ],
-    icon: Building2,
-  },
-  {
-    id: "PRO" as const,
-    name: "Gói Pro",
-    description: "Phù hợp trường đại học",
-    price: "1.999.999đ",
-    period: "/ tháng",
-    limit: "10, 000 chứng chỉ năm",
-    includes: [
-      "Bao gồm basic",
-      "Ghi hash lên blockchain",
-      "Quản trị cho admin",
-      "Hỗ trợ full API",
-    ],
-    support: [
-      "Support 24/07",
-      "Hướng dẫn triển khai",
-      "Thống kê cơ bản",
-    ],
-    icon: Zap,
-    popular: true,
-  },
-  {
-    id: "ENTERPRISE" as const,
-    name: "Gói Enterprise",
-    description: "Tổ chức lớn",
-    price: "9.999.999đ",
-    period: "tháng hoặc custom",
-    limit: "Không giới hạn",
-    includes: [
-      "Bao gồm Pro",
-      "Blockchain riêng",
-      "Sever riêng",
-    ],
-    support: [
-      "Hỗ trợ riêng",
-      "Tư vấn kỹ thuật",
-    ],
-    icon: ShieldCheck,
-  },
-];
+import { useTranslation } from "react-i18next";
 
 const PLAN_STYLES: Record<string, {
-  border: string;
-  iconBg: string;
+  container: string;
+  iconColor: string;
   title: string;
   price: string;
   badge: string;
   desc: string;
+  check: string;
+  exceedPrice: string;
 }> = {
   BASIC: {
-    border: "border-[#1E504A] border-t-8 border-x-2 border-b-2 hover:-translate-y-2 bg-white",
-    iconBg: "bg-slate-100 text-slate-500",
-    title: "text-[#1E504A]",
-    price: "text-[#1E504A]",
-    badge: "bg-slate-600 text-white",
-    desc: "text-[#3c524c]",
+    container: "border-gray-500 border bg-white rounded-3xl",
+    iconColor: "text-gray-900",
+    title: "text-black",
+    price: "text-black",
+    badge: "",
+    desc: "text-gray-800",
+    check: "text-black",
+    exceedPrice: "text-red-600",
   },
   PRO: {
-    border: "border-[#1E504A] border-t-8 border-x-2 border-b-2 hover:-translate-y-3 bg-[#f2fcf9]",
-    iconBg: "bg-[#1E504A] text-white",
-    title: "text-[#1E504A]",
-    price: "text-[#1E504A]",
-    badge: "bg-[#214e41] text-[#f2ce3c] shadow-md shadow-emerald-500/20",
-    desc: "text-[#3c524c]",
+    container: "border-[#2d6a4f] border-[1.5px] bg-white rounded-3xl z-10 md:-translate-y-2",
+    iconColor: "text-[#2d6a4f]",
+    title: "text-[#2d6a4f]",
+    price: "text-[#2d6a4f]",
+    badge: "bg-[#2d6a4f] text-white px-5 py-1.5 rounded-full font-bold uppercase tracking-wide text-xs shadow-md",
+    desc: "text-[#2d6a4f]",
+    check: "text-[#2d6a4f]",
+    exceedPrice: "text-red-500",
   },
   ENTERPRISE: {
-    border: "border-[#1E504A] border-t-8 border-x-2 border-b-2 hover:-translate-y-2 bg-white",
-    iconBg: "bg-indigo-100 text-indigo-500",
-    title: "text-[#1E504A]",
-    price: "text-[#1E504A]",
-    badge: "bg-indigo-600 text-white",
-    desc: "text-[#3c524c]",
+    container: "border-indigo-400 border bg-white rounded-3xl",
+    iconColor: "text-indigo-800",
+    title: "text-indigo-900",
+    price: "text-indigo-900",
+    badge: "",
+    desc: "text-indigo-800",
+    check: "text-indigo-800",
+    exceedPrice: "text-red-600",
   }
 };
 
 export default function PricingSection() {
+  const { t } = useTranslation();
+
+  const PLANS = [
+    {
+      id: "BASIC" as const,
+      name: t("landingPage.pricing.plans.basic.name"),
+      description: t("landingPage.pricing.plans.basic.description"),
+      price: t("landingPage.pricing.plans.basic.price"),
+      period: t("landingPage.pricing.plans.basic.period"),
+      limit: t("landingPage.pricing.plans.basic.limit"),
+      customText: t("landingPage.pricing.plans.basic.customText"),
+      exceedPrice: t("landingPage.pricing.plans.basic.exceedPrice"),
+      featuresTitle: t("landingPage.pricing.plans.basic.featuresTitle"),
+      includes: t("landingPage.pricing.plans.basic.includes", { returnObjects: true }) as string[],
+      supportTitle: t("landingPage.pricing.plans.basic.supportTitle"),
+      support: t("landingPage.pricing.plans.basic.support", { returnObjects: true }) as string[],
+      icon: Building2,
+    },
+    {
+      id: "PRO" as const,
+      name: t("landingPage.pricing.plans.pro.name"),
+      description: t("landingPage.pricing.plans.pro.description"),
+      price: t("landingPage.pricing.plans.pro.price"),
+      period: t("landingPage.pricing.plans.pro.period"),
+      limit: t("landingPage.pricing.plans.pro.limit"),
+      customText: t("landingPage.pricing.plans.pro.customText"),
+      exceedPrice: t("landingPage.pricing.plans.pro.exceedPrice"),
+      featuresTitle: t("landingPage.pricing.plans.pro.featuresTitle"),
+      includes: t("landingPage.pricing.plans.pro.includes", { returnObjects: true }) as string[],
+      supportTitle: t("landingPage.pricing.plans.pro.supportTitle"),
+      support: t("landingPage.pricing.plans.pro.support", { returnObjects: true }) as string[],
+      icon: Zap,
+      popular: true,
+    },
+    {
+      id: "ENTERPRISE" as const,
+      name: t("landingPage.pricing.plans.enterprise.name"),
+      description: t("landingPage.pricing.plans.enterprise.description"),
+      price: t("landingPage.pricing.plans.enterprise.price"),
+      period: t("landingPage.pricing.plans.enterprise.period"),
+      limit: t("landingPage.pricing.plans.enterprise.limit"),
+      customText: t("landingPage.pricing.plans.enterprise.customText"),
+      exceedPrice: t("landingPage.pricing.plans.enterprise.exceedPrice"),
+      featuresTitle: t("landingPage.pricing.plans.enterprise.featuresTitle"),
+      includes: t("landingPage.pricing.plans.enterprise.includes", { returnObjects: true }) as string[],
+      supportTitle: t("landingPage.pricing.plans.enterprise.supportTitle"),
+      support: t("landingPage.pricing.plans.enterprise.support", { returnObjects: true }) as string[],
+      icon: ShieldCheck,
+    },
+  ];
+
   return (
-    <section id="pricing" className="py-24 bg-slate-50/50">
+    <section id="pricing" className="py-24 bg-white">
       <div className="container mx-auto px-4">
-        <div className="text-center max-w-3xl mx-auto mb-16 md:mb-24">
-           <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-[#214e41] uppercase tracking-tight">Gói dịch vụ</h2>
-           <div className="h-1.5 w-16 md:w-24 bg-[#f2ce3c] mx-auto mt-4 md:mt-6" />
-           <p className="mt-6 text-lg text-slate-600">Đa dạng lựa chọn, phù hợp mọi quy mô tổ chức</p>
+        <div className="max-w-6xl mx-auto mb-16 md:mb-20 flex items-center gap-4">
+           <div className="w-1.5 h-10 bg-[#f2ce3c]" />
+           <h2 className="text-3xl sm:text-4xl md:text-4xl font-extrabold text-[#214e41] uppercase tracking-tight">{t("landingPage.pricing.title")}</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto md:items-end">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto pt-4">
           {PLANS.map((p, index) => {
             const styles = PLAN_STYLES[p.id];
             
@@ -119,45 +117,65 @@ export default function PricingSection() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1, duration: 0.5 }}
                 className={cn(
-                  "relative flex flex-col p-8 md:p-10 cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-300",
-                  styles.border
+                  "relative flex flex-col p-6 sm:p-8 cursor-pointer transition-all duration-300 hover:shadow-xl",
+                  styles.container
                 )}
               >
                 {p.popular && (
-                  <span className={cn("absolute -top-4 left-1/2 -translate-x-1/2 px-5 py-1.5 text-xs font-bold uppercase tracking-wider rounded-none", styles.badge)}>
-                    Khuyên dùng
-                  </span>
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-max">
+                     <span className={cn(styles.badge)}>
+                       {t("landingPage.pricing.recommended")}
+                     </span>
+                  </div>
                 )}
                 
-                <h4 className={cn("font-extrabold mb-3 text-center text-3xl", styles.title)}>{p.name}</h4>
-                <p className={cn("text-base italic mb-6 text-center px-4", styles.desc)}>{p.description}</p>
-                
-                <div className={cn("text-center mb-6 transition-colors", styles.price)}>
-                  <span className="text-4xl font-black">{p.price}</span>
-                  <span className="text-lg font-semibold ml-1 opacity-80">{p.period !== 'tháng hoặc custom' ? p.period : ' / tháng...'}</span>
+                <div className="flex justify-center mb-4">
+                  <p.icon className={cn("w-10 h-10 sm:w-12 sm:h-12", styles.iconColor)} strokeWidth={1.5} />
                 </div>
                 
-                <p className={cn("text-lg font-bold mb-8 text-center pb-8 border-b border-gray-200", styles.title)}>{p.limit}</p>
+                <h4 className={cn("font-bold mb-1 text-center text-xl sm:text-2xl uppercase", styles.title)}>{p.name}</h4>
+                <p className={cn("text-sm sm:text-base mb-4 text-center", styles.desc)}>{p.description}</p>
+                
+                <div className={cn("text-center mb-1 font-bold", styles.price)}>
+                  <span className="text-xl sm:text-2xl leading-none">{p.price}</span>
+                  {p.period && <span className="text-lg sm:text-xl ml-1">{p.period}</span>}
+                </div>
+                
+                {p.customText && (
+                   <p className={cn("text-sm sm:text-base text-center mb-1 font-medium", styles.title)}>{p.customText}</p>
+                )}
 
-                <div className="space-y-6 mt-auto px-2">
-                  <div>
-                    <h5 className={cn("font-bold text-lg mb-4 text-center", styles.title)}>Bao gồm:</h5>
-                    <div className="space-y-3 flex flex-col items-center">
-                      {p.includes.map((f, i) => (
-                        <div key={i} className="flex items-center text-base text-gray-600 text-center gap-2">
-                          <span>{f}</span>
-                        </div>
-                      ))}
+                {p.limit && (
+                   <p className={cn("text-sm sm:text-base text-center mb-1", styles.title)}>{p.limit}</p>
+                )}
+
+                <p className={cn("text-sm sm:text-base font-semibold mb-8 text-center", styles.exceedPrice)}>
+                  {p.exceedPrice}
+                </p>
+
+                <div className="mt-auto w-full flex justify-center">
+                  <div className="w-fit">
+                    <div>
+                      <h5 className={cn("font-bold text-sm sm:text-base mb-3", styles.title)}>{p.featuresTitle}</h5>
+                      <div className="space-y-2 flex flex-col">
+                        {p.includes.map((f, i) => (
+                          <div key={i} className="flex items-start text-sm sm:text-base text-gray-700 gap-2.5">
+                            <Check className={cn("w-4 h-4 sm:w-5 sm:h-5 shrink-0 mt-[2px]", styles.check)} strokeWidth={2.5} />
+                            <span>{f}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                  <div className="pt-4">
-                    <h5 className={cn("font-bold text-lg mb-4 text-center", styles.title)}>Hỗ trợ</h5>
-                    <div className="space-y-3 flex flex-col items-center">
-                      {p.support.map((f, i) => (
-                        <div key={i} className="flex items-center text-base text-gray-600 text-center gap-2">
-                          <span>{f}</span>
-                        </div>
-                      ))}
+                    <div className="pt-6">
+                      <h5 className={cn("font-bold text-sm sm:text-base mb-3", styles.title)}>{p.supportTitle}</h5>
+                      <div className="space-y-2 flex flex-col">
+                        {p.support.map((f, i) => (
+                          <div key={i} className="flex items-start text-sm sm:text-base text-gray-700 gap-2.5">
+                            <Check className={cn("w-4 h-4 sm:w-5 sm:h-5 shrink-0 mt-[2px]", styles.check)} strokeWidth={2.5} />
+                            <span>{f}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -169,3 +187,4 @@ export default function PricingSection() {
     </section>
   );
 }
+

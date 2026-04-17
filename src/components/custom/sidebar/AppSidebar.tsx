@@ -1,5 +1,6 @@
 import { NavLink } from "react-router";
 import { UserCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import OrganizationSelector from "@/pages/app-route-pages/user-dashboard-pages/components/OrganizationSelector";
 import type { NavSectionConfig } from "./navTypes";
 
@@ -16,6 +17,8 @@ export default function AppSidebar({
   mainSections,
   bottomSections,
 }: AppSidebarProps) {
+  const { t } = useTranslation();
+
   return (
     <aside className="w-68 min-w-68 bg-linear-to-b from-[#214e41] to-[#183930] text-white flex flex-col overflow-y-auto">
       {/* Branding */}
@@ -36,7 +39,7 @@ export default function AppSidebar({
         {mainSections.map((section) => (
           <div key={section.title}>
             <span className="text-[0.7rem] uppercase tracking-wider text-white/55 px-2 pt-3 pb-1.5 font-semibold block">
-              {section.title}
+              {t(section.title, section.title)}
             </span>
             {section.items.map((item) => (
               <NavLink
@@ -52,7 +55,7 @@ export default function AppSidebar({
                 }
               >
                 <item.icon />
-                {item.label}
+                {t(item.label, item.label)}
               </NavLink>
             ))}
           </div>
@@ -63,7 +66,7 @@ export default function AppSidebar({
           {bottomSections?.map((section) => (
             <div key={section.title}>
               <span className="text-[0.7rem] uppercase tracking-wider text-white/55 px-2 pb-1.5 font-semibold block">
-                {section.title}
+                {t(section.title, section.title)}
               </span>
               {section.items.map((item) => (
                 <NavLink
@@ -79,7 +82,7 @@ export default function AppSidebar({
                   }
                 >
                   <item.icon />
-                  {item.label}
+                  {t(item.label, item.label)}
                 </NavLink>
               ))}
             </div>
@@ -97,7 +100,7 @@ export default function AppSidebar({
             }
           >
             <UserCircle />
-            Tài khoản
+            {t("dashboard.sidebar.account", "Tài khoản")}
           </NavLink>
         </div>
       </nav>
