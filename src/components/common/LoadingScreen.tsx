@@ -77,7 +77,7 @@ export default function LoadingScreen() {
           className="flex flex-col items-center space-y-4 w-full max-w-xs"
         >
           <h1 className="text-xl md:text-2xl font-black tracking-[0.2em] text-[#214e41] uppercase">
-            InnoGreen <span className="text-[#f2ce3c]">Certchain</span>
+            CertChain
           </h1>
           
           <div className="flex items-center justify-center space-x-2 text-slate-500 font-medium text-xs md:text-sm tracking-widest uppercase mb-2">

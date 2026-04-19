@@ -5,4 +5,4 @@ Allow: /
 Disallow: /usr/
 Disallow: /org/
 
-Sitemap: https://innogreencertchain.com/sitemap.xml
+Sitemap: https://certchain.click/sitemap.xml

@@ -25,7 +25,7 @@ export default function OrgDashboardLayout() {
   if (!orgCode) return null;
 
   return (
-    <div className="igc-app-theme flex h-screen overflow-hidden bg-[#edf4f0]">
+    <div className="certchain-app-theme flex h-screen overflow-hidden bg-[#edf4f0]">
       {/* ── Sidebar ── */}
       <OrgSidebar />
 

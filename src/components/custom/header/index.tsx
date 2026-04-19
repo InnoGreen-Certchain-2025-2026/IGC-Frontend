@@ -42,12 +42,12 @@ export default function Header() {
           <motion.div whileHover={{ scale: 1.05 }}>
             <img
               src="/logo/logo_icon.png"
-              alt="InnoGreen Icon"
+              alt="CertChain Icon"
               className="h-9 w-9 sm:h-10 sm:w-10 md:h-12 md:w-12 object-contain"
             />
           </motion.div>
           <span className="text-2xl sm:text-3xl md:text-4xl font-black text-[#214e41] tracking-tight leading-none">
-            IGC
+            CertChain
           </span>
         </Link>
 

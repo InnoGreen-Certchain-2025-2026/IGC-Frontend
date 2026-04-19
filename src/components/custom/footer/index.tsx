@@ -15,11 +15,11 @@ export default function Footer() {
             <Link to="/" className="inline-flex items-center gap-4">
               <img
                 src="/logo/logo_icon.png"
-                alt="InnoGreen Icon"
+                alt="CertChain Icon"
                 className="h-20 w-20 object-contain"
               />
               <span className="text-5xl font-black text-[#214e41] tracking-tight leading-none">
-                IGC
+                CertChain
               </span>
             </Link>
             <p className="text-slate-600 max-w-sm leading-relaxed font-medium">

@@ -58,7 +58,7 @@
     },
     "story": {
       "missionTitle": "Mission",
-      "missionDesc": "InnoGreen CertChain envisions a future where all certificates are verified instantly, transparently, and securely — contributing to a modern, green, and sustainable education system, and increasing the high-quality workforce.",
+      "missionDesc": "CertChain envisions a future where all certificates are verified instantly, transparently, and securely — contributing to a modern, green, and sustainable education system, and increasing the high-quality workforce.",
       "aboutTitle": "About the Project",
       "aboutDesc": "A green certificate management and verification system based on Blockchain and digital signature technology to digitize the entire issuance, storage, and verification process, thereby minimizing fraud, saving operational costs, and protecting the environment by reducing traditional paper certificates.",
       "storyTitle": "Inspiring Story",
@@ -202,7 +202,7 @@
       "legalTitle": "Legal",
       "terms": "Terms of use",
       "privacy": "Privacy policy",
-      "copyright": "© {{year}} InnoGreen Certchain. All rights reserved."
+      "copyright": "© {{year}} CertChain. All rights reserved."
     }
   },
   "auth": {
@@ -222,7 +222,7 @@
           "desc": "Data is immutably encrypted and processed instantly on Blockchain technology."
         }
       ],
-      "footer": "© 2026 InnoGreen Certchain • Immutable Digital Identity"
+      "footer": "© 2026 CertChain • Immutable Digital Identity"
     },
     "form": {
       "back": "Back",
@@ -268,7 +268,7 @@
         "address": "Residential Address",
         "securePassword": "Secure Password",
         "placeholders": {
-          "email": "example@innogreen.com",
+          "email": "example@certchain.com",
           "password": "••••••••",
           "citizenId": "Enter 12 digits ID",
           "gender": "Select"

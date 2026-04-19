@@ -150,7 +150,7 @@ export default function AuthPage() {
         cognitoUser.associateSoftwareToken({
           associateSecretCode: (secretCode) => {
             setMfaQrCode(
-              `otpauth://totp/InnoGreen:${normalizedEmail}?secret=${secretCode}&issuer=InnoGreen`,
+              `otpauth://totp/CertChain:${normalizedEmail}?secret=${secretCode}&issuer=CertChain`,
             );
             setMfaStep("SETUP");
             setCognitoUserRef(cognitoUser);
@@ -268,7 +268,7 @@ export default function AuthPage() {
           user.associateSoftwareToken({
             associateSecretCode: (secretCode) => {
               setMfaQrCode(
-                `otpauth://totp/InnoGreen:${pendingRegData.email}?secret=${secretCode}&issuer=InnoGreen`,
+                `otpauth://totp/CertChain:${pendingRegData.email}?secret=${secretCode}&issuer=CertChain`,
               );
               setMfaStep("SETUP");
               setCognitoUserRef(user);
@@ -351,12 +351,12 @@ export default function AuthPage() {
           <Link to="/" className="flex items-center space-x-3 mb-24 group">
             <img
               src="/logo/logo_icon.png"
-              alt="IGC Logo"
+              alt="CertChain Icon"
               className="h-12 w-12 object-contain group-hover:scale-105 transition-transform"
             />
             <div className="flex flex-col -space-y-1 border-l border-white/20 pl-4">
               <span className="text-3xl font-black tracking-tighter text-white font-display italic uppercase">
-                InnoGreen
+                CertChain
               </span>
               <span className="text-[8px] font-black tracking-[0.4em] uppercase text-[#f2ce3c]">
                 Certchain Platform
@@ -421,11 +421,11 @@ export default function AuthPage() {
           <Link to="/" className="flex items-center space-x-2">
             <img
               src="/logo/logo_icon.png"
-              alt="IGC Logo"
+              alt="CertChain Icon"
               className="h-8 w-8 object-contain"
             />
             <span className="text-xl font-black tracking-tighter text-slate-900 uppercase italic">
-              InnoGreen
+              CertChain
             </span>
           </Link>
           <Link

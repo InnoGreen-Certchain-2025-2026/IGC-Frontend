@@ -21,14 +21,13 @@ export default function AppSidebar({
 
   return (
     <aside className="w-68 min-w-68 bg-linear-to-b from-[#214e41] to-[#183930] text-white flex flex-col overflow-y-auto">
-      {/* Branding */}
       <div className="flex items-center gap-2.5 px-5 pt-6 pb-4 text-lg font-bold tracking-tight border-b border-white/15">
         <img
-          src="/logo/logo_original.png"
-          alt="IGC Logo"
+          src="/logo/logo_icon.png"
+          alt="CertChain Icon"
           className="h-20 w-20 object-cover"
         />
-        <span>IGC Platform</span>
+        <span>CertChain Platform</span>
       </div>
 
       {/* Organization selector */}
@@ -106,7 +105,7 @@ export default function AppSidebar({
       </nav>
 
       <div className="px-4 py-3 border-t border-white/15 text-[0.7rem] text-white/50 text-center">
-        © 2026 InnoGreen Certchain
+        © 2026 CertChain
       </div>
     </aside>
   );

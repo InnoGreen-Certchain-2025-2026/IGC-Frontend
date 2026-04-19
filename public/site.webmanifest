@@ -1,6 +1,6 @@
 {
-  "name": "InnoGreen Certchain",
-  "short_name": "IGC",
+  "name": "CertChain",
+  "short_name": "CertChain",
   "icons": [
     {
       "src": "/favicon/android-chrome-192x192.png",

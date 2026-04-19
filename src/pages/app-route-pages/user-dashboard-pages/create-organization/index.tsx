@@ -357,7 +357,7 @@ export default function CreateOrganizationPage() {
                       </Label>
                       <Input
                         id="name"
-                        placeholder="Ví dụ: Công ty Công nghệ InnoGreen"
+                        placeholder="Ví dụ: Công ty Công nghệ CertChain"
                         value={formData.name}
                         onChange={(e) =>
                           setFormData({ ...formData, name: e.target.value })
@@ -370,7 +370,7 @@ export default function CreateOrganizationPage() {
                       </Label>
                       <Input
                         id="code"
-                        placeholder="Ví dụ: INNOGREEN_CORP"
+                        placeholder="Ví dụ: CERTCHAIN_CORP"
                         value={formData.code}
                         onChange={(e) =>
                           setFormData({
@@ -392,7 +392,7 @@ export default function CreateOrganizationPage() {
                         />
                         <Input
                           id="domain"
-                          placeholder="innogreen.com"
+                          placeholder="certchain.click"
                           className="pl-10"
                           value={formData.domain}
                           onChange={(e) =>
@@ -787,7 +787,7 @@ export default function CreateOrganizationPage() {
               <ShieldCheck className="h-5 w-5 shrink-0" />
               <p>
                 Bằng việc nhấn <strong>Xác nhận</strong>, bạn đồng ý với các
-                Điều khoản dịch vụ và Chính sách quyền riêng tư của IGC
+                Điều khoản dịch vụ và Chính sách quyền riêng tư của CertChain
                 Platform.
               </p>
             </div>

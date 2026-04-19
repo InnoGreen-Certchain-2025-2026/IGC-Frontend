@@ -22,7 +22,7 @@ export default function UserDashboardLayout() {
   const pageTitle = usePageTitle();
 
   return (
-    <div className="igc-app-theme flex h-screen overflow-hidden bg-[#edf4f0]">
+    <div className="certchain-app-theme flex h-screen overflow-hidden bg-[#edf4f0]">
       {/* ── Sidebar ── */}
       <Sidebar />
 

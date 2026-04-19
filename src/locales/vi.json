@@ -58,7 +58,7 @@
     },
     "story": {
       "missionTitle": "Sứ mệnh",
-      "missionDesc": "InnoGreen CertChain hướng đến một tương lai nơi mọi văn bằng/chứng chỉ đều được xác thực tức thời, minh bạch và đáng tin cậy — góp phần xây dựng nền giáo dục hiện đại, xanh và bền vững, gia tăng nguồn lao động chất lượng cao.",
+      "missionDesc": "CertChain hướng đến một tương lai nơi mọi văn bằng/chứng chỉ đều được xác thực tức thời, minh bạch và đáng tin cậy — góp phần xây dựng nền giáo dục hiện đại, xanh và bền vững, gia tăng nguồn lao động chất lượng cao.",
       "aboutTitle": "Về dự án",
       "aboutDesc": "Hệ thống quản lý xác thực văn bằng/chứng chỉ xanh dựa trên nền tảng Blockchain và chữ ký số nhằm số hóa toàn bộ quy trình cấp phát, lưu trữ và xác thực văn bằng/chứng chỉ, từ đó hạn chế gian lận trong sử dụng, giúp tiết kiệm chi phí vận hành và góp phần bảo vệ môi trường thông qua việc giảm sử dụng văn bằng/chứng chỉ giấy truyền thống.",
       "storyTitle": "Câu chuyện truyền cảm hứng",
@@ -202,7 +202,7 @@
       "legalTitle": "Pháp lý",
       "terms": "Điều khoản sử dụng",
       "privacy": "Chính sách bảo mật",
-      "copyright": "© {{year}} InnoGreen Certchain. All rights reserved."
+      "copyright": "© {{year}} CertChain. All rights reserved."
     }
   },
   "auth": {
@@ -222,7 +222,7 @@
           "desc": "Dữ liệu được mã hóa bất biến, xử lý tức thì trên công nghệ Blockchain."
         }
       ],
-      "footer": "© 2026 InnoGreen Certchain • Danh Tính Số Bất Biến"
+      "footer": "© 2026 CertChain • Danh Tính Số Bất Biến"
     },
     "form": {
       "back": "Quay lại",
@@ -268,7 +268,7 @@
         "address": "Địa chỉ cư trú",
         "securePassword": "Mật khẩu bảo mật",
         "placeholders": {
-          "email": "example@innogreen.com",
+          "email": "example@certchain.com",
           "password": "••••••••",
           "citizenId": "Nhập 12 số CCCD",
           "gender": "Chọn"

@@ -28,7 +28,7 @@ export default function AccountDashboardLayout() {
   const bottomSections = selectedOrg ? undefined : USR_BOTTOM_SECTIONS;
 
   return (
-    <div className="igc-app-theme flex h-screen overflow-hidden bg-[#edf4f0]">
+    <div className="certchain-app-theme flex h-screen overflow-hidden bg-[#edf4f0]">
       {/* ── Sidebar (same as last context) ── */}
       <AppSidebar mainSections={mainSections} bottomSections={bottomSections} />
 

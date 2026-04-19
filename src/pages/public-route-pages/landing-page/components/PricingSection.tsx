@@ -4,43 +4,47 @@ import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 
 const PLAN_STYLES: Record<string, {
-  container: string;
-  iconColor: string;
+  border: string;
+  borderActive: string;
+  iconBg: string;
+  iconBgActive: string;
   title: string;
   price: string;
   badge: string;
   desc: string;
-  check: string;
   exceedPrice: string;
 }> = {
   BASIC: {
-    container: "border-gray-500 border bg-white rounded-3xl",
-    iconColor: "text-gray-900",
-    title: "text-black",
-    price: "text-black",
-    badge: "",
-    desc: "text-gray-800",
-    check: "text-black",
+    border: "hover:border-slate-400 hover:shadow-slate-200 hover:-translate-y-1 border-gray-200",
+    borderActive: "border-slate-500 bg-slate-50/70 shadow-slate-200 ring-4 ring-slate-500/10 -translate-y-1",
+    iconBg: "bg-slate-100 text-slate-500",
+    iconBgActive: "bg-slate-600 text-white",
+    title: "text-slate-800",
+    price: "text-slate-800",
+    badge: "bg-slate-600 text-white",
+    desc: "text-slate-500",
     exceedPrice: "text-red-600",
   },
   PRO: {
-    container: "border-[#2d6a4f] border-[1.5px] bg-white rounded-3xl z-10 md:-translate-y-2",
-    iconColor: "text-[#2d6a4f]",
+    border: "hover:border-[#2d6a4f] hover:shadow-[#2d6a4f]/20 hover:-translate-y-2 border-[#2d6a4f]/30",
+    borderActive: "border-[#2d6a4f] bg-emerald-50/50 shadow-[#2d6a4f]/20 shadow-xl ring-4 ring-[#2d6a4f]/20 -translate-y-2 z-10",
+    iconBg: "bg-emerald-100 text-[#2d6a4f]",
+    iconBgActive: "bg-[#2d6a4f] text-white",
     title: "text-[#2d6a4f]",
     price: "text-[#2d6a4f]",
-    badge: "bg-[#2d6a4f] text-white px-5 py-1.5 rounded-full font-bold uppercase tracking-wide text-xs shadow-md",
-    desc: "text-[#2d6a4f]",
-    check: "text-[#2d6a4f]",
+    badge: "bg-[#2d6a4f] text-white shadow-md shadow-[#2d6a4f]/20",
+    desc: "text-emerald-700/80",
     exceedPrice: "text-red-500",
   },
   ENTERPRISE: {
-    container: "border-indigo-400 border bg-white rounded-3xl",
-    iconColor: "text-indigo-800",
-    title: "text-indigo-900",
-    price: "text-indigo-900",
-    badge: "",
-    desc: "text-indigo-800",
-    check: "text-indigo-800",
+    border: "hover:border-indigo-400 hover:shadow-indigo-200 hover:-translate-y-1 border-indigo-200",
+    borderActive: "border-indigo-500 bg-indigo-50/70 shadow-indigo-200 ring-4 ring-indigo-500/10 -translate-y-1",
+    iconBg: "bg-indigo-100 text-indigo-500",
+    iconBgActive: "bg-indigo-600 text-white",
+    title: "text-indigo-800",
+    price: "text-indigo-800",
+    badge: "bg-indigo-600 text-white",
+    desc: "text-indigo-500/80",
     exceedPrice: "text-red-600",
   }
 };
@@ -105,9 +109,10 @@ export default function PricingSection() {
            <h2 className="text-3xl sm:text-4xl md:text-4xl font-extrabold text-[#214e41] uppercase tracking-tight">{t("landingPage.pricing.title")}</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto pt-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch max-w-5xl mx-auto pt-6">
           {PLANS.map((p, index) => {
             const styles = PLAN_STYLES[p.id];
+            const isSelected = p.popular;
             
             return (
               <motion.div
@@ -117,61 +122,68 @@ export default function PricingSection() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1, duration: 0.5 }}
                 className={cn(
-                  "relative flex flex-col p-6 sm:p-8 cursor-pointer transition-all duration-300 hover:shadow-xl",
-                  styles.container
+                  "relative flex flex-col p-6 rounded-3xl border-2 transition-all duration-300",
+                  isSelected
+                    ? styles.borderActive
+                    : cn("bg-white", styles.border)
                 )}
               >
                 {p.popular && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-max">
-                     <span className={cn(styles.badge)}>
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-max">
+                     <span className={cn("px-4 py-1.5 text-[0.65rem] font-bold uppercase tracking-wider rounded-full", styles.badge)}>
                        {t("landingPage.pricing.recommended")}
                      </span>
                   </div>
                 )}
                 
-                <div className="flex justify-center mb-4">
-                  <p.icon className={cn("w-10 h-10 sm:w-12 sm:h-12", styles.iconColor)} strokeWidth={1.5} />
+                <div
+                  className={cn(
+                    "w-12 h-12 rounded-xl flex items-center justify-center mb-4 mx-auto shadow-sm transition-colors",
+                    isSelected ? styles.iconBgActive : styles.iconBg,
+                  )}
+                >
+                  <p.icon size={24} />
                 </div>
                 
-                <h4 className={cn("font-bold mb-1 text-center text-xl sm:text-2xl uppercase", styles.title)}>{p.name}</h4>
-                <p className={cn("text-sm sm:text-base mb-4 text-center", styles.desc)}>{p.description}</p>
+                <h4 className={cn("font-bold mb-1 text-center text-xl uppercase", styles.title)}>{p.name}</h4>
+                <p className={cn("text-[0.85rem] mb-4 text-center", styles.desc)}>{p.description}</p>
                 
-                <div className={cn("text-center mb-1 font-bold", styles.price)}>
-                  <span className="text-xl sm:text-2xl leading-none">{p.price}</span>
-                  {p.period && <span className="text-lg sm:text-xl ml-1">{p.period}</span>}
+                <div className={cn("text-center mb-1 font-bold transition-colors", styles.price)}>
+                  <span className="text-xl md:text-2xl font-black">{p.price}</span>
+                  {p.period && <span className="text-[0.95rem] font-semibold ml-1 opacity-80">{p.period}</span>}
                 </div>
                 
                 {p.customText && (
-                   <p className={cn("text-sm sm:text-base text-center mb-1 font-medium", styles.title)}>{p.customText}</p>
+                   <p className={cn("text-sm text-center mb-1 font-medium", styles.title)}>{p.customText}</p>
                 )}
 
                 {p.limit && (
-                   <p className={cn("text-sm sm:text-base text-center mb-1", styles.title)}>{p.limit}</p>
+                   <p className={cn("text-sm text-center mb-1 font-semibold", styles.title)}>{p.limit}</p>
                 )}
 
-                <p className={cn("text-sm sm:text-base font-semibold mb-8 text-center", styles.exceedPrice)}>
+                <p className={cn("text-sm font-semibold mb-6 text-center", styles.exceedPrice)}>
                   {p.exceedPrice}
                 </p>
 
-                <div className="mt-auto w-full flex justify-center">
-                  <div className="w-fit">
+                <div className="mt-auto w-full flex justify-center pb-2">
+                  <div className="w-fit text-left">
                     <div>
-                      <h5 className={cn("font-bold text-sm sm:text-base mb-3", styles.title)}>{p.featuresTitle}</h5>
-                      <div className="space-y-2 flex flex-col">
+                      <h5 className={cn("font-bold text-[0.95rem] mb-3", styles.title)}>{p.featuresTitle}</h5>
+                      <div className="space-y-2.5 flex flex-col">
                         {p.includes.map((f, i) => (
-                          <div key={i} className="flex items-start text-sm sm:text-base text-gray-700 gap-2.5">
-                            <Check className={cn("w-4 h-4 sm:w-5 sm:h-5 shrink-0 mt-[2px]", styles.check)} strokeWidth={2.5} />
+                          <div key={i} className="flex items-start text-[0.9rem] text-gray-600 gap-2.5">
+                            <Check size={16} className={cn("mt-[1px] shrink-0", isSelected ? styles.title : "text-gray-300")} strokeWidth={2.5} />
                             <span>{f}</span>
                           </div>
                         ))}
                       </div>
                     </div>
                     <div className="pt-6">
-                      <h5 className={cn("font-bold text-sm sm:text-base mb-3", styles.title)}>{p.supportTitle}</h5>
-                      <div className="space-y-2 flex flex-col">
+                      <h5 className={cn("font-bold text-[0.95rem] mb-3", styles.title)}>{p.supportTitle}</h5>
+                      <div className="space-y-2.5 flex flex-col">
                         {p.support.map((f, i) => (
-                          <div key={i} className="flex items-start text-sm sm:text-base text-gray-700 gap-2.5">
-                            <Check className={cn("w-4 h-4 sm:w-5 sm:h-5 shrink-0 mt-[2px]", styles.check)} strokeWidth={2.5} />
+                          <div key={i} className="flex items-start text-[0.9rem] text-gray-600 gap-2.5">
+                            <Check size={16} className={cn("mt-[1px] shrink-0", isSelected ? styles.title : "text-gray-300")} strokeWidth={2.5} />
                             <span>{f}</span>
                           </div>
                         ))}

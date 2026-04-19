@@ -3,8 +3,8 @@ import { Badge } from "@/components/ui/badge";
 
 export default function UserDashboard() {
   const dummyCerts = [
-    { id: "IGC-10023", name: "Nền tảng Blockchain", date: "2025-10-12", status: "Đã xác minh" },
-    { id: "IGC-20045", name: "React Chuyên nghiệp", date: "2025-12-05", status: "Đang chờ" },
+    { id: "CertChain-10023", name: "Nền tảng Blockchain", date: "2025-10-12", status: "Đã xác minh" },
+    { id: "CertChain-20045", name: "React Chuyên nghiệp", date: "2025-12-05", status: "Đang chờ" },
   ];
 
   return (

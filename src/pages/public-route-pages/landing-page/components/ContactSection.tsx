@@ -103,7 +103,7 @@ export default function ContactSection() {
     },
     {
       icon: <Mail className="h-5 w-5" />,
-      label: "igcertchain@gmail.com",
+      label: "certchain@gmail.com",
       highlight: false,
     },
     {
@@ -219,13 +219,13 @@ export default function ContactSection() {
                 </div>
 
                 <a
-                  href="https://www.igcert.click"
+                  href="https://www.certchain.click"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-sm font-bold text-[#4f9b5a] hover:text-[#214e41] transition-colors"
                 >
                   <Globe className="h-4 w-4" />
-                  www.igcert.click
+                  www.certchain.click
                 </a>
               </div>
 
